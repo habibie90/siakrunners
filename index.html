@@ -29,7 +29,7 @@
     <nav class="glass-panel sticky top-0 z-50 border-b border-gray-700/50">
         <div class="max-w-5xl mx-auto px-2 md:px-4 py-2.5 md:py-3 flex justify-between items-center">
             <div class="flex items-center gap-2 md:gap-3 cursor-pointer shrink-0" onclick="switchPage('klasemen')">
-                <img src="Logo SR.jpeg" alt="Logo" class="h-7 md:h-8 rounded object-contain bg-white/95 p-1" />
+                <img src="Logo SR.jpeg" alt="Logo" class="h-7 md:h-8 rounded object-contain bg-white/95 p-1" onerror="this.src='https://via.placeholder.com/150'"/>
                 <span class="font-bold text-white tracking-widest text-sm md:text-base hidden sm:block">SIAK <span class="text-red-500">RUNNERS</span></span>
             </div>
             <div class="flex gap-1 md:gap-4 text-[10px] md:text-sm font-semibold tracking-wider overflow-x-auto">
@@ -44,19 +44,24 @@
     <div class="max-w-5xl mx-auto p-3 md:p-8 mt-2">
 
         <section id="page-klasemen" class="page-section page-active">
-            <div class="glass-panel rounded-2xl mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-center p-5 md:p-6 gap-5">
-                <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto text-center md:text-left">
+            <div class="glass-panel rounded-2xl mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-center p-5 md:p-6 gap-5 relative overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto text-center md:text-left z-10">
                     <div class="p-2 bg-white/95 backdrop-blur-md rounded-xl shadow-lg shrink-0 transform transition hover:scale-105">
-                        <img src="Logo SR.jpeg" alt="Logo" class="h-14 md:h-20 rounded object-contain" />
+                        <img src="Logo SR.jpeg" alt="Logo" class="h-14 md:h-20 rounded object-contain" onerror="this.src='https://via.placeholder.com/150'"/>
                     </div>
                     <div class="flex flex-col justify-center">
                         <h1 class="text-xl md:text-4xl font-extrabold tracking-wider uppercase leading-tight drop-shadow-md text-gray-300 mt-2 md:mt-0">
                             TOP 50 LEADERBOARD<br />
                             <span class="text-shine-white">SIAK</span> <span class="text-pulse-red">RUNNERS</span>
                         </h1>
+                        <!-- TOMBOL LOGIN STRAVA -->
+                        <a id="btn-connect-strava" href="#" class="mt-3 inline-flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-all shadow-lg border border-orange-500 w-fit mx-auto md:mx-0">
+                            <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+                            Hubungkan Strava Saya
+                        </a>
                     </div>
                 </div>
-                <div class="flex flex-col w-full md:w-auto items-center md:items-end border-t md:border-t-0 border-gray-700/80 pt-5 md:pt-0 mt-2 md:mt-0">
+                <div class="flex flex-col w-full md:w-auto items-center md:items-end border-t md:border-t-0 border-gray-700/80 pt-5 md:pt-0 mt-2 md:mt-0 z-10">
                     <p class="text-[10px] md:text-xs text-yellow-400 uppercase font-bold tracking-widest mb-1">Total Jarak Terfilter</p>
                     <p id="stat-distance" class="text-3xl md:text-4xl font-black text-white tracking-tight">0 <span class="text-lg md:text-xl text-gray-400 font-bold">km</span></p>
                 </div>
@@ -207,7 +212,7 @@
         <!-- Section Tentang -->
         <section id="page-tentang" class="page-section">
             <div class="glass-panel p-8 md:p-12 rounded-2xl text-center shadow-2xl border-t-4 border-red-500">
-                <img src="Logo SR.jpeg" alt="Logo" class="h-24 mx-auto rounded-xl mb-6 bg-white p-2 object-contain shadow-lg" />
+                <img src="Logo SR.jpeg" alt="Logo" class="h-24 mx-auto rounded-xl mb-6 bg-white p-2 object-contain shadow-lg" onerror="this.src='https://via.placeholder.com/150'"/>
                 <h2 class="text-3xl font-black text-white uppercase tracking-widest mb-6">Siak <span class="text-pulse-red">Runners</span></h2>
                 <div class="mt-8 text-gray-300 leading-relaxed text-center max-w-2xl mx-auto space-y-4">
                     <p><span class="text-red-500 font-bold italic tracking-wider">SIAK RUNNERS</span> telah aktif menggerakkan semangat pola hidup sehat di Kabupaten Siak sejak tahun <span class="text-white font-bold">2023</span>.</p>
@@ -231,9 +236,14 @@
     </div>
 
     <script>
-        // === PENTING: GANTI DENGAN URL DEPLOYMENT APPS SCRIPT YANG BARU ===
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzOPSq5S21QhX5Vo1-2uFyrSLi1lJX1v0UZmgOEcZ81RNF42aTGkqsGchTTTW2gF7eEyg/exec';
+        // =========================================================================
+        // PENTING: GANTI TEKS DI BAWAH INI DENGAN URL APPS SCRIPT BAPAK YANG BARU!
+        // =========================================================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycby0v-8vDpnEYlw0uOe7yYg5rv30zWH6h8gNFlzePvcrSqz47Me_AzxnEHqaHuCZwvYBFw/exec';
         
+        // Kodingan untuk menyuntikkan URL otomatis ke tombol Login Strava
+        document.getElementById('btn-connect-strava').href = `https://www.strava.com/oauth/authorize?client_id=221203&response_type=code&redirect_uri=${API_URL}&approval_prompt=force&scope=activity:read_all`;
+
         let rawRunData = []; let profilesData = {}; let currentSortedData = []; let activeRunnerName = ""; let activeRunnerAllRuns = [];
 
         function switchPage(pageId) {
@@ -248,7 +258,7 @@
             try {
                 const response = await fetch(API_URL + "?page=klasemen");
                 const result = await response.json();
-                rawRunData = result.data; profilesData = result.profiles || {};
+                rawRunData = result.data || []; profilesData = result.profiles || {};
                 const optGroup = document.getElementById('month-options'); optGroup.innerHTML = '';
                 const namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
                 let bulanTersedia = new Set();
@@ -288,7 +298,15 @@
             currentSortedData = Object.values(stats).sort((a,b) => b.distance - a.distance);
             document.getElementById('stat-distance').innerHTML = `${totalKolektif.toFixed(1)} <span class="text-xl text-yellow-500 font-bold">km</span>`;
             const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = '';
-            if (currentSortedData.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-gray-500 italic">Data Kosong.</td></tr>'; return; }
+            
+            // JIKA BELUM ADA DATA
+            if (currentSortedData.length === 0) { 
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-12">
+                    <p class="text-gray-400 font-bold mb-2">Belum ada data terekam.</p>
+                    <p class="text-xs text-gray-500">Ayo klik tombol 'Hubungkan Strava' di atas untuk mulai bersaing!</p>
+                </td></tr>`; 
+                return; 
+            }
 
             currentSortedData.forEach((runner, i) => {
                 let rank = i + 1, icon = rank === 1 ? '🥇' : (rank === 2 ? '🥈' : (rank === 3 ? '🥉' : rank));
@@ -363,7 +381,7 @@
 
         async function loadEventData() {
             try {
-                const res = await fetch(API_URL + "?page=event"); const data = (await res.json()).data;
+                const res = await fetch(API_URL + "?page=event"); const data = (await res.json()).data || [];
                 const c = document.getElementById('event-container'); c.innerHTML = '';
                 data.forEach(e => {
                     let img = e.linkFoto ? `<div class="w-full h-64 md:h-72 bg-black p-4 flex justify-center border-b border-gray-700/50"><img src="${e.linkFoto}" class="w-full h-full object-contain"></div>` : '';
