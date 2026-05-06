@@ -1,1 +1,386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siak Runners - Sehat Bersama Sejak 2023</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .animated-bg { background: linear-gradient(-45deg, #0f172a, #111827, #0f172a, #1e3a8a); background-size: 400% 400%; animation: gradientBG 15s ease infinite; min-height: 100vh; }
+        .glass-panel { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); }
+        .text-shine-white { background: linear-gradient(to right, #f3f4f6 20%, #ffffff 40%, #ffffff 60%, #f3f4f6 80%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 3s linear infinite; }
+        .text-pulse-red { color: #dc2626; text-shadow: 0 0 15px rgba(220, 38, 38, 0.6); animation: pulseRed 2s infinite; }
+        @keyframes shine { to { background-position: 200% center; } }
+        @keyframes pulseRed { 0%, 100% { text-shadow: 0 0 15px rgba(220, 38, 38, 0.6); opacity: 1; } 50% { text-shadow: 0 0 25px rgba(220, 38, 38, 0.9); opacity: 0.8; } }
+        .page-section { display: none; opacity: 0; transition: opacity 0.4s ease-in-out; }
+        .page-active { display: block; opacity: 1; animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #detail-modal { display: none; }
+        .modal-open { display: flex !important; animation: fadeIn 0.3s; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+    </style>
+</head>
+<body class="animated-bg text-gray-200 font-sans antialiased selection:bg-red-500 selection:text-white">
 
+    <nav class="glass-panel sticky top-0 z-50 border-b border-gray-700/50">
+        <div class="max-w-5xl mx-auto px-2 md:px-4 py-2.5 md:py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2 md:gap-3 cursor-pointer shrink-0" onclick="switchPage('klasemen')">
+                <img src="Logo SR.jpeg" alt="Logo" class="h-7 md:h-8 rounded object-contain bg-white/95 p-1" />
+                <span class="font-bold text-white tracking-widest text-sm md:text-base hidden sm:block">SIAK <span class="text-red-500">RUNNERS</span></span>
+            </div>
+            <div class="flex gap-1 md:gap-4 text-[10px] md:text-sm font-semibold tracking-wider overflow-x-auto">
+                <button onclick="switchPage('klasemen')" id="nav-klasemen" class="text-white bg-white/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">KLASEMEN</button>
+                <button onclick="switchPage('event')" id="nav-event" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">EVENT</button>
+                <button onclick="switchPage('upload')" id="nav-upload" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">UPLOAD FOTO</button>
+                <button onclick="switchPage('tentang')" id="nav-tentang" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">TENTANG</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto p-3 md:p-8 mt-2">
+
+        <section id="page-klasemen" class="page-section page-active">
+            <div class="glass-panel rounded-2xl mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-center p-5 md:p-6 gap-5">
+                <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto text-center md:text-left">
+                    <div class="p-2 bg-white/95 backdrop-blur-md rounded-xl shadow-lg shrink-0 transform transition hover:scale-105">
+                        <img src="Logo SR.jpeg" alt="Logo" class="h-14 md:h-20 rounded object-contain" />
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <h1 class="text-xl md:text-4xl font-extrabold tracking-wider uppercase leading-tight drop-shadow-md text-gray-300 mt-2 md:mt-0">
+                            TOP 50 LEADERBOARD<br />
+                            <span class="text-shine-white">SIAK</span> <span class="text-pulse-red">RUNNERS</span>
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex flex-col w-full md:w-auto items-center md:items-end border-t md:border-t-0 border-gray-700/80 pt-5 md:pt-0 mt-2 md:mt-0">
+                    <p class="text-[10px] md:text-xs text-yellow-400 uppercase font-bold tracking-widest mb-1">Total Jarak Terfilter</p>
+                    <p id="stat-distance" class="text-3xl md:text-4xl font-black text-white tracking-tight">0 <span class="text-lg md:text-xl text-gray-400 font-bold">km</span></p>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl">
+                <div class="bg-gray-900/80 px-4 md:px-6 py-4 md:py-5 flex flex-col md:flex-row justify-between items-center border-b border-gray-700/50 gap-4">
+                    <h2 class="text-sm md:text-xl font-black text-white uppercase tracking-widest flex items-center gap-2 md:gap-3 w-full md:w-auto">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                        Klasemen Resmi
+                    </h2>
+                    <div class="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+                        <select id="time-filter" onchange="handleFilterChange()" class="bg-gray-800 border border-gray-600 text-white text-xs md:text-sm rounded-lg block p-2 w-full md:w-auto outline-none cursor-pointer font-semibold">
+                            <option value="bulan_ini" selected>📅 Bulan Saat Ini</option>
+                            <option value="bulan_lalu">⏮️ Bulan Lalu</option>
+                            <option value="minggu_ini">🔥 Minggu Ini (Sen - Min)</option>
+                            <option value="kustom">⚙️ Pilih Tanggal Kustom...</option>
+                            <optgroup label="Histori Bulanan" id="month-options"></optgroup>
+                        </select>
+                        <div id="custom-date-container" class="hidden items-center gap-2 w-full md:w-auto bg-gray-800 p-1.5 rounded-lg border border-gray-600">
+                            <input type="date" id="start-date" onchange="renderLeaderboardTable()" class="bg-gray-900 text-gray-300 text-xs p-1.5 rounded outline-none border border-gray-700 w-full md:w-auto">
+                            <span class="text-gray-400 text-xs font-bold">s/d</span>
+                            <input type="date" id="end-date" onchange="renderLeaderboardTable()" class="bg-gray-900 text-gray-300 text-xs p-1.5 rounded outline-none border border-gray-700 w-full md:w-auto">
+                        </div>
+                        <button onclick="exportToExcel()" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white text-xs md:text-sm font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs md:text-sm text-left whitespace-nowrap">
+                        <thead class="bg-gray-950/50 text-gray-500 uppercase text-[10px] md:text-xs tracking-widest border-b border-gray-800">
+                            <tr><th class="px-4 py-3 md:px-6 md:py-5 text-center w-12 md:w-20 font-bold">Pos</th><th class="px-4 py-3 md:px-6 md:py-5 font-bold">Nama Pelari</th><th class="px-4 py-3 md:px-6 md:py-5 text-right font-bold">Total Jarak</th></tr>
+                        </thead>
+                        <tbody id="leaderboard-body" class="divide-y divide-gray-800/60">
+                            <tr><td colspan="3" class="text-center py-12 text-gray-500 animate-pulse font-bold">Menarik & Memfilter data dari satelit Strava...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal Detail Profil -->
+        <div id="detail-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md justify-center items-center p-4">
+            <div class="glass-panel w-full max-w-md rounded-2xl overflow-hidden border border-gray-700 flex flex-col max-h-[90vh] shadow-2xl">
+                <div class="bg-gradient-to-b from-gray-800 to-gray-900 px-6 py-6 border-b border-gray-700 relative">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">&times;</button>
+                    <div class="flex items-center gap-4">
+                        <div class="relative group cursor-pointer" onclick="document.getElementById('upload-profile-pic').click()">
+                            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-gray-700 overflow-hidden bg-gray-800 flex items-center justify-center shadow-lg">
+                                <img id="modal-runner-img" src="" alt="Profile" class="w-full h-full object-cover hidden" />
+                                <span id="modal-runner-initial" class="text-3xl md:text-4xl font-black text-gray-500 uppercase"></span>
+                            </div>
+                            <div class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <input type="file" id="upload-profile-pic" accept="image/*" class="hidden" onchange="handleProfilePicUpload(event)">
+                        </div>
+                        <div class="flex-1">
+                            <h3 id="modal-runner-name" class="text-xl md:text-2xl font-black text-white uppercase tracking-wider leading-tight">Nama Pelari</h3>
+                            <div class="mt-1 flex items-center gap-2 text-xs font-bold">
+                                <span class="bg-gray-800 text-yellow-500 px-2 py-0.5 rounded border border-gray-700">🏆 ALL TIME:</span>
+                                <span id="modal-runner-alltime" class="text-gray-300">0 KM</span>
+                            </div>
+                            <div class="mt-2 relative">
+                                <input type="text" id="modal-runner-bio" placeholder="Tulis bio singkat..." class="w-full bg-transparent border-b border-gray-600 focus:border-red-500 text-xs text-gray-400 focus:text-white outline-none py-1 pr-6" onchange="handleBioUpdate()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="profil-update-status" class="hidden bg-green-600/20 text-green-400 text-[10px] text-center py-1 font-bold tracking-widest uppercase">Memperbarui Data...</div>
+                <div class="bg-gray-900 px-4 md:px-6 py-3 border-b border-gray-800 flex justify-between items-center text-xs gap-2">
+                    <select id="modal-time-filter" onchange="renderModalHistory()" class="bg-gray-800 border border-gray-600 text-gray-300 text-[10px] md:text-xs rounded p-1.5 outline-none font-bold">
+                        <option value="semua" selected>🌟 Lihat Semua (All-Time)</option>
+                        <option value="bulan_ini">📅 Bulan Saat Ini</option>
+                        <option value="bulan_lalu">⏮️ Bulan Lalu</option>
+                        <option value="minggu_ini">🔥 Minggu Ini (Sen - Min)</option>
+                    </select>
+                    <span id="modal-runner-stats" class="text-blue-400 font-black shrink-0"></span>
+                </div>
+                <div class="overflow-y-auto p-4 space-y-2 flex-1" id="modal-history-list"></div>
+                <div class="p-4 bg-gray-900 border-t border-gray-700">
+                    <button onclick="closeModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl tracking-widest uppercase transition-colors">TUTUP PROFIL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Event -->
+        <section id="page-event" class="page-section">
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Kalender <span class="text-red-500">Event</span></h2>
+                <p class="text-sm md:text-base text-gray-400 mt-2 max-w-2xl mx-auto tracking-wide">Jadwal perlombaan dan agenda kegiatan komunitas Siak Runners.</p>
+            </div>
+            <div id="event-container" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-panel p-6 rounded-2xl text-center text-gray-400 animate-pulse col-span-full">Mengambil data...</div>
+            </div>
+        </section>
+
+        <!-- Section Upload -->
+        <section id="page-upload" class="page-section">
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Upload <span class="text-red-500">Foto Event</span></h2>
+                <p class="text-sm md:text-base text-gray-400 mt-2 max-w-2xl mx-auto tracking-wide">Unggah foto selfie lari terbaikmu untuk bahan flyer dukungan!</p>
+            </div>
+            <div class="glass-panel p-6 md:p-8 rounded-2xl max-w-2xl mx-auto border-t-4 border-red-500 shadow-2xl">
+                <form id="foto-form" class="flex flex-col gap-5" onsubmit="event.preventDefault(); submitData();">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap</label>
+                            <input type="text" id="up-nama" required class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-red-500" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Kategori Lari</label>
+                            <select id="up-kategori" required class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white cursor-pointer font-semibold">
+                                <option value="">Pilih...</option>
+                                <option value="5K">5K</option>
+                                <option value="10K">10K</option>
+                                <option value="HM">HM (Half Marathon)</option>
+                                <option value="Marathon">Marathon</option>
+                                <option value="Ultra/Trail Run">Ultra/Trail Run</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Event</label>
+                            <input type="text" id="up-event" required placeholder="Contoh: BTN Jakim" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white focus:border-red-500" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Tanggal</label>
+                            <input type="date" id="up-tanggal" required class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white cursor-pointer" />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Lokasi Race</label>
+                        <input type="text" id="up-lokasi" required placeholder="Contoh: Jakarta" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white focus:border-red-500" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Foto Selfie</label>
+                        <input type="file" id="up-foto" accept="image/*" required class="w-full text-xs text-gray-400 cursor-pointer border border-gray-700 p-2 rounded-xl bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-gray-700 file:text-white hover:file:bg-gray-600 transition-all" />
+                    </div>
+                    <button id="btn-submit" type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-black py-4 rounded-xl uppercase tracking-widest transition-all transform hover:scale-[1.02] shadow-lg">Kirim Data & Foto</button>
+                    <p id="submit-status" class="text-center text-sm font-bold mt-2 hidden"></p>
+                </form>
+            </div>
+        </section>
+
+        <!-- Section Tentang -->
+        <section id="page-tentang" class="page-section">
+            <div class="glass-panel p-8 md:p-12 rounded-2xl text-center shadow-2xl border-t-4 border-red-500">
+                <img src="Logo SR.jpeg" alt="Logo" class="h-24 mx-auto rounded-xl mb-6 bg-white p-2 object-contain shadow-lg" />
+                <h2 class="text-3xl font-black text-white uppercase tracking-widest mb-6">Siak <span class="text-pulse-red">Runners</span></h2>
+                <div class="mt-8 text-gray-300 leading-relaxed text-center max-w-2xl mx-auto space-y-4">
+                    <p><span class="text-red-500 font-bold italic tracking-wider">SIAK RUNNERS</span> telah aktif menggerakkan semangat pola hidup sehat di Kabupaten Siak sejak tahun <span class="text-white font-bold">2023</span>.</p>
+                    <p>Dimulai dari sekumpulan penghobi lari, kini kami tumbuh menjadi wadah bagi ratusan pelari dari berbagai kalangan. Bukan sekadar lari, kami berkomitmen membangun komunitas yang inklusif, rutin menyelenggarakan lari bersama (Sunday Morning Run), hingga berpartisipasi dalam berbagai event race nasional.</p>
+                    <p class="text-gray-400 italic text-sm">"Bersama kami, setiap langkah adalah progres menuju diri yang lebih baik."</p>
+                </div>
+                <div class="flex justify-center space-x-8 mt-10 border-t border-gray-800 pt-8">
+                    <a href="https://www.instagram.com/siakrunners/" target="_blank" class="group flex flex-col items-center gap-2">
+                        <div class="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center border border-gray-700 group-hover:border-pink-500 group-hover:bg-pink-500/10 transition-all shadow-lg">
+                            <svg class="w-7 h-7 text-gray-400 group-hover:text-pink-500 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest group-hover:text-pink-500">Instagram</span>
+                    </a>
+                    <a href="https://www.facebook.com/groups/siakrunners" target="_blank" class="group flex flex-col items-center gap-2">
+                        <div class="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center border border-gray-700 group-hover:border-blue-500 group-hover:bg-blue-500/10 transition-all shadow-lg">
+                            <svg class="w-7 h-7 text-gray-400 group-hover:text-blue-500 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest group-hover:text-blue-500">Facebook</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // === PENTING: GANTI DENGAN URL DEPLOYMENT APPS SCRIPT YANG BARU ===
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzOPSq5S21QhX5Vo1-2uFyrSLi1lJX1v0UZmgOEcZ81RNF42aTGkqsGchTTTW2gF7eEyg/exec';
+        
+        let rawRunData = []; let profilesData = {}; let currentSortedData = []; let activeRunnerName = ""; let activeRunnerAllRuns = [];
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
+            document.getElementById('page-' + pageId).classList.add('page-active');
+            document.querySelectorAll('nav button').forEach(btn => { btn.classList.remove('text-white', 'bg-white/10'); btn.classList.add('text-gray-400'); });
+            document.getElementById('nav-' + pageId).classList.add('text-white', 'bg-white/10');
+            if (pageId === 'event') loadEventData();
+        }
+
+        async function loadLeaderboardData() {
+            try {
+                const response = await fetch(API_URL + "?page=klasemen");
+                const result = await response.json();
+                rawRunData = result.data; profilesData = result.profiles || {};
+                const optGroup = document.getElementById('month-options'); optGroup.innerHTML = '';
+                const namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                let bulanTersedia = new Set();
+                rawRunData.forEach(r => { let d = new Date(r.date); bulanTersedia.add(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`); });
+                Array.from(bulanTersedia).sort().reverse().forEach(val => { let [y, m] = val.split('-'); optGroup.innerHTML += `<option value="${val}">${namaBulan[m-1]} ${y}</option>`; });
+                renderLeaderboardTable();
+            } catch (error) { document.getElementById('leaderboard-body').innerHTML = `<tr><td colspan="3" class="text-center py-10 text-red-400 font-bold">Error: ${error.message}</td></tr>`; }
+        }
+
+        function handleFilterChange() {
+            const filterVal = document.getElementById('time-filter').value;
+            const customContainer = document.getElementById('custom-date-container');
+            if (filterVal === 'kustom') { customContainer.classList.replace('hidden', 'flex'); } 
+            else { customContainer.classList.replace('flex', 'hidden'); renderLeaderboardTable(); }
+        }
+
+        function renderLeaderboardTable() {
+            const filterVal = document.getElementById('time-filter').value;
+            const now = new Date(); let startDate, endDate;
+            if (filterVal === 'kustom') {
+                let s = document.getElementById('start-date').value, e = document.getElementById('end-date').value;
+                if (!s || !e) return; startDate = new Date(s); endDate = new Date(e); endDate.setHours(23,59,59);
+            } else if (filterVal === 'minggu_ini') {
+                let d = now.getDay() || 7; startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d + 1); endDate = new Date(startDate); endDate.setDate(startDate.getDate() + 6); endDate.setHours(23,59,59);
+            } else if (filterVal === 'bulan_ini') { startDate = new Date(now.getFullYear(), now.getMonth(), 1); endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59);
+            } else if (filterVal === 'bulan_lalu') { startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1); endDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59);
+            } else { let [y, m] = filterVal.split('-'); startDate = new Date(y, m-1, 1); endDate = new Date(y, m, 0, 23, 59); }
+
+            let stats = {}, totalKolektif = 0, allTimeStats = {};
+            rawRunData.forEach(r => { allTimeStats[r.name] = (allTimeStats[r.name] || 0) + r.distance; });
+            rawRunData.filter(r => { let d = new Date(r.date); return d >= startDate && d <= endDate; }).forEach(r => {
+                totalKolektif += r.distance;
+                if (!stats[r.name]) stats[r.name] = { name: r.name, runs: 0, distance: 0, allTimeDist: allTimeStats[r.name] };
+                stats[r.name].runs++; stats[r.name].distance += r.distance;
+            });
+
+            currentSortedData = Object.values(stats).sort((a,b) => b.distance - a.distance);
+            document.getElementById('stat-distance').innerHTML = `${totalKolektif.toFixed(1)} <span class="text-xl text-yellow-500 font-bold">km</span>`;
+            const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = '';
+            if (currentSortedData.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-gray-500 italic">Data Kosong.</td></tr>'; return; }
+
+            currentSortedData.forEach((runner, i) => {
+                let rank = i + 1, icon = rank === 1 ? '🥇' : (rank === 2 ? '🥈' : (rank === 3 ? '🥉' : rank));
+                let pic = profilesData[runner.name]?.foto;
+                let avatar = pic ? `<img src="${pic}" class="w-8 h-8 rounded-full object-cover">` : `<div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-gray-600 text-xs font-bold text-gray-400">${runner.name[0]}</div>`;
+                tbody.innerHTML += `<tr onclick="showRunnerDetail(${i})" class="hover:bg-gray-800/80 cursor-pointer border-b border-gray-800/40"><td class="px-4 py-4 text-center font-bold text-gray-500">${icon}</td><td class="px-4 py-4"><div class="flex items-center gap-3">${avatar}<div><span class="font-bold text-gray-100">${runner.name}</span><br><span class="text-[10px] text-gray-400 bg-gray-900 border border-gray-700 px-2 py-0.5 rounded-full">${runner.runs}x Lari</span></div></div></td><td class="px-4 py-4 text-right text-blue-400 font-black text-base">${runner.distance.toFixed(2)}</td></tr>`;
+            });
+        }
+
+        function showRunnerDetail(i) {
+            const runner = currentSortedData[i]; activeRunnerName = runner.name; activeRunnerAllRuns = rawRunData.filter(r => r.name === runner.name);
+            document.getElementById('modal-runner-name').innerText = runner.name; document.getElementById('modal-runner-alltime').innerText = `${runner.allTimeDist.toFixed(2)} KM`;
+            const prof = profilesData[runner.name] || {};
+            document.getElementById('modal-runner-bio').value = prof.bio || "";
+            if (prof.foto) { document.getElementById('modal-runner-img').src = prof.foto; document.getElementById('modal-runner-img').classList.remove('hidden'); document.getElementById('modal-runner-initial').classList.add('hidden'); }
+            else { document.getElementById('modal-runner-img').classList.add('hidden'); document.getElementById('modal-runner-initial').classList.remove('hidden'); document.getElementById('modal-runner-initial').innerText = runner.name[0]; }
+            document.getElementById('modal-time-filter').value = 'semua'; renderModalHistory();
+            document.getElementById('detail-modal').classList.add('modal-open');
+        }
+
+        function renderModalHistory() {
+            const f = document.getElementById('modal-time-filter').value, now = new Date(); let s, e, all = f === 'semua';
+            if (f === 'minggu_ini') { let d = now.getDay() || 7; s = new Date(now.getFullYear(), now.getMonth(), now.getDate()-d+1); e = new Date(s); e.setDate(s.getDate()+6); e.setHours(23,59,59); }
+            else if (f === 'bulan_ini') { s = new Date(now.getFullYear(), now.getMonth(), 1); e = new Date(now.getFullYear(), now.getMonth()+1, 0, 23, 59); }
+            else if (f === 'bulan_lalu') { s = new Date(now.getFullYear(), now.getMonth()-1, 1); e = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59); }
+            
+            let filtered = all ? activeRunnerAllRuns : activeRunnerAllRuns.filter(r => { let rd = new Date(r.date); return rd >= s && rd <= e; });
+            filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+            let total = 0; const list = document.getElementById('modal-history-list'); list.innerHTML = '';
+            filtered.forEach((r, i) => { total += r.distance; list.innerHTML += `<div class="flex justify-between bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 hover:border-red-500 transition-colors"><span class="text-sm font-bold text-gray-400">#${filtered.length-i} - ${new Date(r.date).toLocaleDateString('id-ID')}</span><span class="text-sm font-black text-white">${r.distance.toFixed(2)} KM</span></div>`; });
+            document.getElementById('modal-runner-stats').innerText = `${filtered.length} KALI | ${total.toFixed(2)} KM`;
+        }
+
+        function closeModal() { document.getElementById('detail-modal').classList.remove('modal-open'); }
+
+        async function updateProfilKeServer(n, b, f) {
+            const s = document.getElementById('profil-update-status'); s.classList.remove('hidden'); s.innerText = "⏳ Menyimpan...";
+            const payload = { action: "update_profil", nama: n }; if(b !== null) payload.bio = b; if(f !== null) payload.fotoBase64 = f;
+            try {
+                const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+                if ((await res.json()).status === "success") { s.innerText = "✅ Berhasil"; if(b !== null) profilesData[n].bio = b; if(f !== null) profilesData[n].foto = f; renderLeaderboardTable(); }
+            } catch (e) { s.innerText = "❌ Gagal"; } finally { setTimeout(() => s.classList.add('hidden'), 2000); }
+        }
+
+        function handleBioUpdate() { updateProfilKeServer(activeRunnerName, document.getElementById('modal-runner-bio').value, null); }
+        function handleProfilePicUpload(ev) {
+            const f = ev.target.files[0]; if(!f) return;
+            const r = new FileReader(); r.onload = e => {
+                const img = new Image(); img.onload = () => {
+                    const c = document.createElement('canvas'), ctx = c.getContext('2d'), s = Math.min(img.width, img.height);
+                    c.width = 200; c.height = 200; ctx.drawImage(img, (img.width-s)/2, (img.height-s)/2, s, s, 0, 0, 200, 200);
+                    const b64 = c.toDataURL('image/jpeg', 0.7);
+                    document.getElementById('modal-runner-img').src = b64; document.getElementById('modal-runner-img').classList.remove('hidden'); document.getElementById('modal-runner-initial').classList.add('hidden');
+                    updateProfilKeServer(activeRunnerName, null, b64);
+                }; img.src = e.target.result;
+            }; r.readAsDataURL(f);
+        }
+
+        async function submitData() {
+            const b = document.getElementById('btn-submit'), s = document.getElementById('submit-status'), f = document.getElementById('up-foto').files[0];
+            const CN = "dsai9btzj", UP = "ml_default"; if(!f) return;
+            b.innerHTML = `<span>⏳ Mengirim...</span>`; b.disabled = true; s.classList.add('hidden');
+            try {
+                const fd = new FormData(); fd.append("file", f); fd.append("upload_preset", UP);
+                const cr = await fetch(`https://api.cloudinary.com/v1_1/${CN}/image/upload`, { method: "POST", body: fd });
+                const furl = (await cr.json()).secure_url;
+                const sr = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "upload_foto_v2", nama: document.getElementById('up-nama').value, namaEvent: document.getElementById('up-event').value, tanggalEvent: document.getElementById('up-tanggal').value, lokasiEvent: document.getElementById('up-lokasi').value, kategori: document.getElementById('up-kategori').value, fotoUrl: furl }) });
+                if ((await sr.json()).status === "success") { s.innerText = "✅ Terkirim!"; s.className = "text-center text-green-400 font-bold mt-2"; document.getElementById('foto-form').reset(); }
+            } catch (e) { s.innerText = "❌ Gagal: " + e.message; s.className = "text-center text-red-400 font-bold mt-2"; }
+            finally { b.innerHTML = `<span>Kirim Data & Foto</span>`; b.disabled = false; s.classList.remove('hidden'); }
+        }
+
+        async function loadEventData() {
+            try {
+                const res = await fetch(API_URL + "?page=event"); const data = (await res.json()).data;
+                const c = document.getElementById('event-container'); c.innerHTML = '';
+                data.forEach(e => {
+                    let img = e.linkFoto ? `<div class="w-full h-64 md:h-72 bg-black p-4 flex justify-center border-b border-gray-700/50"><img src="${e.linkFoto}" class="w-full h-full object-contain"></div>` : '';
+                    c.innerHTML += `<div class="glass-panel rounded-2xl border-t-4 border-red-500 overflow-hidden shadow-2xl">${img}<div class="p-6"><div class="flex justify-between items-center mb-4"><span class="text-[10px] font-black px-2 py-1 rounded bg-red-600 text-white uppercase">${e.status}</span><span class="text-xs text-yellow-400 font-bold bg-gray-900 px-2 py-1 rounded border border-gray-700">${e.tanggal}</span></div><h3 class="text-xl font-black text-white mb-2">${e.judul}</h3><p class="text-sm text-gray-300 mb-4 whitespace-pre-line">${e.deskripsi}</p><a href="${e.linkDaftar}" target="_blank" class="block w-full text-center bg-white/5 text-white py-2 rounded-xl border border-gray-700 text-xs font-bold uppercase hover:bg-white/10">Detail</a></div></div>`;
+                });
+            } catch (e) {}
+        }
+        
+        function exportToExcel() {
+            if (currentSortedData.length === 0) return;
+            let csv = "Pos,Nama,Total Lari,Jarak(KM)\n";
+            currentSortedData.forEach((r, i) => csv += `${i+1},"${r.name}",${r.runs},${r.distance.toFixed(2)}\n`);
+            const link = document.createElement("a"); link.href = encodeURI("data:text/csv;charset=utf-8," + csv);
+            link.download = `Rekap_SR_${new Date().getTime()}.csv`; link.click();
+        }
+
+        loadLeaderboardData();
+    </script>
+</body>
+</html>
