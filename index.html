@@ -392,13 +392,48 @@
 
         async function loadEventData() {
             try {
-                const res = await fetch(API_URL + "?page=event"); const data = (await res.json()).data || [];
-                const c = document.getElementById('event-container'); c.innerHTML = '';
+                const res = await fetch(API_URL + "?page=event"); 
+                const data = (await res.json()).data || [];
+                const c = document.getElementById('event-container'); 
+                c.innerHTML = '';
+                
+                let hasActiveEvent = false;
+
                 data.forEach(e => {
+                    // 1. Filter Manual: Jika Bapak mengetik "SELESAI" di Spreadsheet, sembunyikan!
+                    if (e.status.toUpperCase() === "SELESAI") return;
+
+                    // 2. Filter Otomatis: Cerdaskan robot untuk baca bulan bahasa Indonesia
+                    let dateStr = e.tanggal.toString().toLowerCase();
+                    const bulanIndo = {
+                        'januari':'jan', 'februari':'feb', 'maret':'mar', 'april':'apr', 
+                        'mei':'may', 'juni':'jun', 'juli':'jul', 'agustus':'aug', 
+                        'september':'sep', 'oktober':'oct', 'november':'nov', 'desember':'dec'
+                    };
+                    for (let b in bulanIndo) { dateStr = dateStr.replace(b, bulanIndo[b]); }
+                    
+                    // 3. Bandingkan tanggal event dengan hari ini (jam dinetralkan ke 00:00)
+                    let eventDate = new Date(dateStr);
+                    let today = new Date();
+                    today.setHours(0,0,0,0); 
+
+                    // Jika tanggal event LEBIH KECIL dari hari ini (sudah lewat), LEWATI!
+                    if (eventDate < today) return;
+
+                    hasActiveEvent = true;
+
                     let img = e.linkFoto ? `<div class="w-full h-64 md:h-72 bg-black p-4 flex justify-center border-b border-gray-700/50"><img src="${e.linkFoto}" class="w-full h-full object-contain"></div>` : '';
                     c.innerHTML += `<div class="glass-panel rounded-2xl border-t-4 border-red-500 overflow-hidden shadow-2xl">${img}<div class="p-6"><div class="flex justify-between items-center mb-4"><span class="text-[10px] font-black px-2 py-1 rounded bg-red-600 text-white uppercase">${e.status}</span><span class="text-xs text-yellow-400 font-bold bg-gray-900 px-2 py-1 rounded border border-gray-700">${e.tanggal}</span></div><h3 class="text-xl font-black text-white mb-2">${e.judul}</h3><p class="text-sm text-gray-300 mb-4 whitespace-pre-line">${e.deskripsi}</p><a href="${e.linkDaftar}" target="_blank" class="block w-full text-center bg-white/5 text-white py-2 rounded-xl border border-gray-700 text-xs font-bold uppercase hover:bg-white/10">Detail</a></div></div>`;
                 });
-            } catch (e) {}
+
+                // Jika semua event sudah expired / kosong, tampilkan pesan ini:
+                if (!hasActiveEvent) {
+                    c.innerHTML = `<div class="glass-panel p-6 rounded-2xl text-center text-gray-400 col-span-full border border-gray-700/50"><h3 class="text-xl font-bold text-white mb-2">Belum Ada Event Mendatang</h3><p class="text-sm">Saat ini belum ada jadwal race terbaru. Yuk, terus latihan dan persiapkan dirimu!</p></div>`;
+                }
+
+            } catch (e) {
+                console.error("Gagal memuat kalender event:", e);
+            }
         }
         
         function exportToExcel() {
