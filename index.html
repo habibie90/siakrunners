@@ -334,9 +334,20 @@
             else if (f === 'bulan_lalu') { s = new Date(now.getFullYear(), now.getMonth()-1, 1); e = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59); }
             
             let filtered = all ? activeRunnerAllRuns : activeRunnerAllRuns.filter(r => { let rd = new Date(r.date); return rd >= s && rd <= e; });
+            
+            // Sorting berdasarkan waktu ter-update
             filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+            
             let total = 0; const list = document.getElementById('modal-history-list'); list.innerHTML = '';
-            filtered.forEach((r, i) => { total += r.distance; list.innerHTML += `<div class="flex justify-between bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 hover:border-red-500 transition-colors"><span class="text-sm font-bold text-gray-400">#${filtered.length-i} - ${new Date(r.date).toLocaleDateString('id-ID')}</span><span class="text-sm font-black text-white">${r.distance.toFixed(2)} KM</span></div>`; });
+            filtered.forEach((r, i) => { 
+                total += r.distance; 
+                
+                // Format Tanggal dan Jam
+                let tgl = new Date(r.date).toLocaleDateString('id-ID');
+                let jam = new Date(r.date).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+                
+                list.innerHTML += `<div class="flex justify-between bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 hover:border-red-500 transition-colors"><span class="text-sm font-bold text-gray-400">#${filtered.length-i} - ${tgl} ${jam} WIB</span><span class="text-sm font-black text-white">${r.distance.toFixed(2)} KM</span></div>`; 
+            });
             document.getElementById('modal-runner-stats').innerText = `${filtered.length} KALI | ${total.toFixed(2)} KM`;
         }
 
