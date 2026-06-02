@@ -487,7 +487,7 @@
        async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Meracik Top 10...";
+            tombol.innerHTML = "⏳ Menyiapkan Data...";
             tombol.disabled = true;
 
             try {
@@ -523,26 +523,44 @@
                 // --- 2. MENYUSUN DAFTAR TOP 10 ---
                 const daftarJuara = document.getElementById('poster-daftar-juara-story');
                 daftarJuara.innerHTML = ''; 
-                
                 let top10Data = currentSortedData.slice(0, 10); 
 
-                top10Data.forEach((pelari, index) => {
+                // FUNGSI JURUS PAMUNGKAS: Ubah foto jadi teks (Base64) agar kebal blokir
+                async function getSafeImage(url) {
+                    if (!url || url.startsWith('data:')) return url; // Kalau sudah Base64 (upload manual), langsung pakai
+                    try {
+                        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                        const response = await fetch(proxyUrl);
+                        const blob = await response.blob();
+                        return await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.readAsDataURL(blob);
+                        });
+                    } catch(e) {
+                        console.error("Gagal mendownload foto:", e);
+                        return 'https://via.placeholder.com/100'; // Foto cadangan jika error
+                    }
+                }
+
+                let htmlDaftarJuara = '';
+
+                // Loop dengan 'await' agar foto didownload satu per satu sebelum digambar
+                for (let index = 0; index < top10Data.length; index++) {
+                    let pelari = top10Data[index];
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                     
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
-                    let finalPicSrc = picUrl;
+                    
+                    // Update tulisan tombol biar Bapak tahu progress download fotonya
+                    tombol.innerHTML = `⏳ Ekstrak Foto ${index + 1}/10...`;
+                    let safePic = await getSafeImage(picUrl);
 
-                    // INI DIA KUNCI RAHASIANYA (ROBOT PINTAR MEMILIH)
-                    // Jika fotonya berawalan "http" (bukan base64), pakaikan jaket Proxy!
-                    if (picUrl.startsWith('http')) {
-                        finalPicSrc = `https://wsrv.xyz/?url=${encodeURIComponent(picUrl)}&w=150&h=150&fit=cover`;
-                    }
-
-                    daftarJuara.innerHTML += `
+                    htmlDaftarJuara += `
                         <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
-                                <img src="${finalPicSrc}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
+                                <img src="${safePic}" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
                                 <div style="display: flex; flex-direction: column;">
                                     <span style="font-size: 28px; font-weight: bold; color: white;">${pelari.name}</span>
                                     <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
@@ -553,26 +571,19 @@
                             </div>
                         </div>
                     `;
-                });
+                }
+
+                daftarJuara.innerHTML = htmlDaftarJuara;
 
                 // --- 3. MERENDER POSTER MENJADI GAMBAR ---
+                tombol.innerHTML = "📸 Menggambar Poster...";
                 const posterElemen = document.getElementById('poster-weekly-story');
                 document.getElementById('poster-container-story').classList.remove('hidden'); 
 
-                // Tahan robotnya sampai SEMUA foto ter-download sempurna
-                const daftarGambar = posterElemen.getElementsByTagName('img');
-                await Promise.all(Array.from(daftarGambar).map(img => {
-                    if (img.complete) return Promise.resolve();
-                    return new Promise(resolve => {
-                        img.onload = resolve;
-                        img.onerror = resolve; 
-                    });
-                }));
+                // Beri waktu 0.5 detik untuk memastikan browser memunculkan semua kerangka sebelum difoto
+                await new Promise(r => setTimeout(r, 500));
 
-                // Beri napas ekstra setengah detik buat jaga-jaga
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container-story').classList.add('hidden');
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
