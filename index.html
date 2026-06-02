@@ -443,7 +443,6 @@
 
                 let top5Data = currentSortedData.slice(0, 5); 
 
-                // FUNGSI UBAH FOTO JADI BASE64
                 async function getSafeImage(url) {
                     if (!url || url.startsWith('data:')) return url; 
                     try {
@@ -460,14 +459,20 @@
                     }
                 }
 
-                let htmlDaftar = '';
-                for (let index = 0; index < top5Data.length; index++) {
-                    let pelari = top5Data[index];
-                    let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                tombol.innerHTML = "⏳ Ekstrak Foto (Kecepatan Turbo)...";
+                
+                // PROSES DOWNLOAD SERENTAK (PARALEL)
+                const janjiFoto = top5Data.map(pelari => {
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/80';
-                    
-                    tombol.innerHTML = `⏳ Ekstrak Foto ${index + 1}/5...`;
-                    let safePic = await getSafeImage(picUrl);
+                    return getSafeImage(picUrl).then(safePic => ({ pelari, safePic }));
+                });
+                const hasilFoto = await Promise.all(janjiFoto);
+
+                let htmlDaftar = '';
+                hasilFoto.forEach((item, index) => {
+                    let pelari = item.pelari;
+                    let safePic = item.safePic;
+                    let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
 
                     htmlDaftar += `
                         <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
@@ -481,24 +486,14 @@
                             </div>
                         </div>
                     `;
-                }
+                });
                 daftarJuara.innerHTML = htmlDaftar;
 
                 tombol.innerHTML = "📸 Menggambar Poster...";
                 const posterElemen = document.getElementById('poster-weekly');
                 document.getElementById('poster-container').classList.remove('hidden'); 
 
-                // Tahan robot agar foto selesai dimuat
-                const daftarGambar = posterElemen.getElementsByTagName('img');
-                await Promise.all(Array.from(daftarGambar).map(img => {
-                    if (img.complete) return Promise.resolve();
-                    return new Promise(resolve => {
-                        img.onload = resolve;
-                        img.onerror = resolve; 
-                    });
-                }));
-
-                await new Promise(r => setTimeout(r, 500)); // Jeda ekstra untuk kestabilan
+                await new Promise(r => setTimeout(r, 300)); 
 
                 const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container').classList.add('hidden');
@@ -528,7 +523,6 @@
             tombol.disabled = true;
 
             try {
-                // --- 1. MENENTUKAN PERIODE DAN TANGGAL ---
                 const filterVal = document.getElementById('time-filter').value;
                 const now = new Date(); let s, e, jenisPeriode = "KUSTOM";
                 
@@ -557,14 +551,12 @@
                 const formatTgl = (tgl) => tgl.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
                 document.getElementById('poster-tanggal-story').innerText = `${jenisPeriode}: ${formatTgl(s)} - ${formatTgl(e)}`;
 
-                // --- 2. MENYUSUN DAFTAR TOP 10 ---
                 const daftarJuara = document.getElementById('poster-daftar-juara-story');
                 daftarJuara.innerHTML = ''; 
                 let top10Data = currentSortedData.slice(0, 10); 
 
-                // FUNGSI JURUS PAMUNGKAS: Ubah foto jadi teks (Base64) agar kebal blokir
                 async function getSafeImage(url) {
-                    if (!url || url.startsWith('data:')) return url; // Kalau sudah Base64 (upload manual), langsung pakai
+                    if (!url || url.startsWith('data:')) return url; 
                     try {
                         const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
                         const response = await fetch(proxyUrl);
@@ -575,24 +567,25 @@
                             reader.readAsDataURL(blob);
                         });
                     } catch(e) {
-                        console.error("Gagal mendownload foto:", e);
-                        return 'https://via.placeholder.com/100'; // Foto cadangan jika error
+                        return 'https://via.placeholder.com/100'; 
                     }
                 }
 
-                let htmlDaftarJuara = '';
+                tombol.innerHTML = `⏳ Ekstrak 10 Foto Sekaligus...`;
+                
+                // PROSES DOWNLOAD SERENTAK (PARALEL)
+                const janjiFoto = top10Data.map(pelari => {
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
+                    return getSafeImage(picUrl).then(safePic => ({ pelari, safePic }));
+                });
+                const hasilFoto = await Promise.all(janjiFoto);
 
-                // Loop dengan 'await' agar foto didownload satu per satu sebelum digambar
-                for (let index = 0; index < top10Data.length; index++) {
-                    let pelari = top10Data[index];
+                let htmlDaftarJuara = '';
+                hasilFoto.forEach((item, index) => {
+                    let pelari = item.pelari;
+                    let safePic = item.safePic;
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                     
-                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
-                    
-                    // Update tulisan tombol biar Bapak tahu progress download fotonya
-                    tombol.innerHTML = `⏳ Ekstrak Foto ${index + 1}/10...`;
-                    let safePic = await getSafeImage(picUrl);
-
                     htmlDaftarJuara += `
                         <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
                             <div style="display: flex; align-items: center; gap: 20px;">
@@ -608,17 +601,15 @@
                             </div>
                         </div>
                     `;
-                }
+                });
 
                 daftarJuara.innerHTML = htmlDaftarJuara;
 
-                // --- 3. MERENDER POSTER MENJADI GAMBAR ---
                 tombol.innerHTML = "📸 Menggambar Poster...";
                 const posterElemen = document.getElementById('poster-weekly-story');
                 document.getElementById('poster-container-story').classList.remove('hidden'); 
 
-                // Beri waktu 0.5 detik untuk memastikan browser memunculkan semua kerangka sebelum difoto
-                await new Promise(r => setTimeout(r, 500));
+                await new Promise(r => setTimeout(r, 300));
 
                 const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container-story').classList.add('hidden');
