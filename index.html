@@ -443,7 +443,7 @@
 
                 let top5Data = currentSortedData.slice(0, 5); 
 
-                // FUNGSI UBAH FOTO JADI BASE64 (Diterapkan juga di Feed)
+                // FUNGSI UBAH FOTO JADI BASE64
                 async function getSafeImage(url) {
                     if (!url || url.startsWith('data:')) return url; 
                     try {
@@ -488,7 +488,17 @@
                 const posterElemen = document.getElementById('poster-weekly');
                 document.getElementById('poster-container').classList.remove('hidden'); 
 
-                await new Promise(r => setTimeout(r, 500)); // Jeda agar foto muncul
+                // Tahan robot agar foto selesai dimuat
+                const daftarGambar = posterElemen.getElementsByTagName('img');
+                await Promise.all(Array.from(daftarGambar).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve; 
+                    });
+                }));
+
+                await new Promise(r => setTimeout(r, 500)); // Jeda ekstra untuk kestabilan
 
                 const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container').classList.add('hidden');
