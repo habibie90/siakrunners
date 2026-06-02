@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siak Runners - Sehat Bersama Sejak 2023</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -445,6 +446,102 @@
         }
 
         loadLeaderboardData();
+
+        async function generatePosterIG() {
+    alert("Sedang meracik poster... Mohon tunggu sebentar!");
+
+    // 1. Ambil data tanggal dari filter yang sedang aktif
+    const tglMulai = document.getElementById('startDate').value || 'Awal';
+    const tglAkhir = document.getElementById('endDate').value || 'Akhir';
+    document.getElementById('poster-tanggal').innerText = `PERIODE: ${tglMulai} s/d ${tglAkhir}`;
+
+    // 2. Ambil data pelari yang sedang tampil di layar (kita ambil Top 5 saja)
+    // Asumsi: data pelari Bapak tersimpan di variabel global 'filteredData' atau array dari tabel
+    // Ini contoh sederhana mengambil elemen dari tabel Bapak
+    const daftarJuara = document.getElementById('poster-daftar-juara');
+    daftarJuara.innerHTML = ''; // Bersihkan data lama
+
+    // Looping 5 pelari teratas dari data yang sudah difilter
+    // (Bapak harus menyesuaikan variabel 'dataKlasemen' dengan variabel asli Bapak)
+    let top5Data = dataKlasemen.slice(0, 5); 
+
+    top5Data.forEach((pelari, index) => {
+        let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+        
+        daftarJuara.innerHTML += `
+            <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 25px;">
+                    <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
+                    <img src="${pelari.foto}" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover;">
+                    <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.nama}</span>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 45px; font-weight: 900; color: #38bdf8;">${pelari.jarak} <span style="font-size: 24px; color:#9ca3af;">KM</span></span>
+                </div>
+            </div>
+        `;
+    });
+
+    // 3. Ubah HTML menjadi Gambar dengan html2canvas
+    const posterElemen = document.getElementById('poster-weekly');
+    // Hilangkan class hidden sementara
+    document.getElementById('poster-container').classList.remove('hidden'); 
+
+    try {
+        const canvas = await html2canvas(posterElemen, {
+            scale: 2, // Biar kualitasnya HD
+            useCORS: true, // Wajib agar foto profil Strava bisa dimuat
+            backgroundColor: '#0f172a'
+        });
+
+        // Sembunyikan lagi elemennya
+        document.getElementById('poster-container').classList.add('hidden');
+
+        // 4. Unduh Gambarnya atau Share
+        const imageURI = canvas.toDataURL("image/jpeg", 0.9);
+        
+        // Cek apakah di HP (Bisa pakai tombol Share bawaan HP)
+        if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+            const blob = await (await fetch(imageURI)).blob();
+            const file = new File([blob], 'Weekly-Leaderboard.jpg', { type: 'image/jpeg' });
+            await navigator.share({
+                title: 'Siak Runners Weekly Leaderboard',
+                files: [file]
+            });
+        } else {
+            // Kalau di Laptop, otomatis download gambarnya
+            const link = document.createElement('a');
+            link.download = 'SiakRunners-Leaderboard.jpg';
+            link.href = imageURI;
+            link.click();
+        }
+    } catch (err) {
+        console.error("Gagal membuat poster:", err);
+        alert("Waduh, gagal membuat poster. Coba lagi ya, Pak.");
+        document.getElementById('poster-container').classList.add('hidden');
+    }
+}
     </script>
+
+    <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
+    <div id="poster-weekly" style="width: 1080px; height: 1080px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 60px; font-family: sans-serif; position: relative;">
+        <div style="text-align: center; border-bottom: 4px solid #ea580c; padding-bottom: 20px; margin-bottom: 40px;">
+            <h1 style="color: #ea580c; font-size: 50px; font-weight: 900; margin: 0; text-transform: uppercase;">SIAK RUNNERS</h1>
+            <h2 style="font-size: 35px; color: #cbd5e1; margin: 10px 0 0 0; letter-spacing: 2px;">WEEKLY LEADERBOARD</h2>
+            <p id="poster-tanggal" style="color: #9ca3af; font-size: 24px; margin-top: 15px; font-weight: bold;"></p>
+        </div>
+
+        <div id="poster-daftar-juara" style="display: flex; flex-direction: column; gap: 20px;">
+            </div>
+
+        <div style="position: absolute; bottom: 40px; width: calc(100% - 120px); text-align: center; color: #64748b; font-size: 22px;">
+            Generated from siakrunners.vercel.app
+        </div>
+    </div>
+</div>
+    <button onclick="generatePosterIG()" class="bg-gradient-to-r from-orange-500 to-pink-600 text-white px-4 py-2 rounded-lg font-bold hover:opacity-80 transition flex items-center gap-2">
+    📸 Buat Poster IG
+</button>
+    
 </body>
 </html>
