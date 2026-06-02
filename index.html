@@ -430,7 +430,7 @@
         async function generatePosterIG(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Menyiapkan Data...";
+            tombol.innerHTML = "⏳ Meracik...";
             tombol.disabled = true;
 
             try {
@@ -440,45 +440,21 @@
 
                 const daftarJuara = document.getElementById('poster-daftar-juara');
                 daftarJuara.innerHTML = ''; 
-
                 let top5Data = currentSortedData.slice(0, 5); 
 
-                async function getSafeImage(url) {
-                    if (!url || url.startsWith('data:')) return url; 
-                    try {
-                        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-                        const response = await fetch(proxyUrl);
-                        const blob = await response.blob();
-                        return await new Promise((resolve) => {
-                            const reader = new FileReader();
-                            reader.onloadend = () => resolve(reader.result);
-                            reader.readAsDataURL(blob);
-                        });
-                    } catch(e) {
-                        return 'https://via.placeholder.com/80'; 
-                    }
-                }
-
-                tombol.innerHTML = "⏳ Ekstrak Foto (Kecepatan Turbo)...";
-                
-                // PROSES DOWNLOAD SERENTAK (PARALEL)
-                const janjiFoto = top5Data.map(pelari => {
-                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/80';
-                    return getSafeImage(picUrl).then(safePic => ({ pelari, safePic }));
-                });
-                const hasilFoto = await Promise.all(janjiFoto);
-
                 let htmlDaftar = '';
-                hasilFoto.forEach((item, index) => {
-                    let pelari = item.pelari;
-                    let safePic = item.safePic;
+                top5Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/80';
+                    
+                    // JALAN TOL: Langsung bungkus URL dengan proxy WSRV, tidak perlu ekstrak base64!
+                    let proxyUrl = picUrl.startsWith('data:') ? picUrl : `https://wsrv.xyz/?url=${encodeURIComponent(picUrl)}&w=150&h=150&fit=cover`;
 
                     htmlDaftar += `
                         <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
                                 <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
-                                <img src="${safePic}" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
+                                <img src="${proxyUrl}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
                                 <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.name}</span>
                             </div>
                             <div style="text-align: right;">
@@ -489,13 +465,17 @@
                 });
                 daftarJuara.innerHTML = htmlDaftar;
 
-                tombol.innerHTML = "📸 Menggambar Poster...";
                 const posterElemen = document.getElementById('poster-weekly');
                 document.getElementById('poster-container').classList.remove('hidden'); 
 
-                await new Promise(r => setTimeout(r, 300)); 
+                // Tahan hitungan detik sampai gambar HTML bawaan selesai ter-load
+                const daftarGambar = posterElemen.getElementsByTagName('img');
+                await Promise.all(Array.from(daftarGambar).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+                }));
 
-                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container').classList.add('hidden');
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
@@ -519,34 +499,17 @@
         async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Menyiapkan Data...";
+            tombol.innerHTML = "⏳ Meracik Top 10...";
             tombol.disabled = true;
 
             try {
                 const filterVal = document.getElementById('time-filter').value;
                 const now = new Date(); let s, e, jenisPeriode = "KUSTOM";
-                
-                if (filterVal === 'minggu_ini') {
-                    let d = now.getDay() || 7;
-                    s = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d + 1);
-                    e = new Date(s); e.setDate(s.getDate() + 6);
-                    jenisPeriode = "MINGGUAN";
-                } else if (filterVal === 'bulan_ini') {
-                    s = new Date(now.getFullYear(), now.getMonth(), 1);
-                    e = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-                    jenisPeriode = "BULANAN";
-                } else if (filterVal === 'bulan_lalu') {
-                    s = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-                    e = new Date(now.getFullYear(), now.getMonth(), 0);
-                    jenisPeriode = "BULANAN";
-                } else if (filterVal === 'kustom') {
-                    s = new Date(document.getElementById('start-date').value);
-                    e = new Date(document.getElementById('end-date').value);
-                } else {
-                    let [y, m] = filterVal.split('-');
-                    s = new Date(y, m-1, 1); e = new Date(y, m, 0);
-                    jenisPeriode = "BULANAN";
-                }
+                if (filterVal === 'minggu_ini') { let d = now.getDay() || 7; s = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d + 1); e = new Date(s); e.setDate(s.getDate() + 6); jenisPeriode = "MINGGUAN"; } 
+                else if (filterVal === 'bulan_ini') { s = new Date(now.getFullYear(), now.getMonth(), 1); e = new Date(now.getFullYear(), now.getMonth() + 1, 0); jenisPeriode = "BULANAN"; } 
+                else if (filterVal === 'bulan_lalu') { s = new Date(now.getFullYear(), now.getMonth() - 1, 1); e = new Date(now.getFullYear(), now.getMonth(), 0); jenisPeriode = "BULANAN"; } 
+                else if (filterVal === 'kustom') { s = new Date(document.getElementById('start-date').value); e = new Date(document.getElementById('end-date').value); } 
+                else { let [y, m] = filterVal.split('-'); s = new Date(y, m-1, 1); e = new Date(y, m, 0); jenisPeriode = "BULANAN"; }
 
                 const formatTgl = (tgl) => tgl.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
                 document.getElementById('poster-tanggal-story').innerText = `${jenisPeriode}: ${formatTgl(s)} - ${formatTgl(e)}`;
@@ -555,42 +518,19 @@
                 daftarJuara.innerHTML = ''; 
                 let top10Data = currentSortedData.slice(0, 10); 
 
-                async function getSafeImage(url) {
-                    if (!url || url.startsWith('data:')) return url; 
-                    try {
-                        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-                        const response = await fetch(proxyUrl);
-                        const blob = await response.blob();
-                        return await new Promise((resolve) => {
-                            const reader = new FileReader();
-                            reader.onloadend = () => resolve(reader.result);
-                            reader.readAsDataURL(blob);
-                        });
-                    } catch(e) {
-                        return 'https://via.placeholder.com/100'; 
-                    }
-                }
-
-                tombol.innerHTML = `⏳ Ekstrak 10 Foto Sekaligus...`;
-                
-                // PROSES DOWNLOAD SERENTAK (PARALEL)
-                const janjiFoto = top10Data.map(pelari => {
-                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
-                    return getSafeImage(picUrl).then(safePic => ({ pelari, safePic }));
-                });
-                const hasilFoto = await Promise.all(janjiFoto);
-
                 let htmlDaftarJuara = '';
-                hasilFoto.forEach((item, index) => {
-                    let pelari = item.pelari;
-                    let safePic = item.safePic;
+                top10Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
                     
+                    // JALAN TOL
+                    let proxyUrl = picUrl.startsWith('data:') ? picUrl : `https://wsrv.xyz/?url=${encodeURIComponent(picUrl)}&w=150&h=150&fit=cover`;
+
                     htmlDaftarJuara += `
                         <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
-                                <img src="${safePic}" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
+                                <img src="${proxyUrl}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
                                 <div style="display: flex; flex-direction: column;">
                                     <span style="font-size: 28px; font-weight: bold; color: white;">${pelari.name}</span>
                                     <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
@@ -602,16 +542,18 @@
                         </div>
                     `;
                 });
-
                 daftarJuara.innerHTML = htmlDaftarJuara;
 
-                tombol.innerHTML = "📸 Menggambar Poster...";
                 const posterElemen = document.getElementById('poster-weekly-story');
                 document.getElementById('poster-container-story').classList.remove('hidden'); 
 
-                await new Promise(r => setTimeout(r, 300));
+                const daftarGambar = posterElemen.getElementsByTagName('img');
+                await Promise.all(Array.from(daftarGambar).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+                }));
 
-                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container-story').classList.add('hidden');
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
