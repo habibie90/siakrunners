@@ -569,10 +569,6 @@
                 const posterElemen = document.getElementById('poster-weekly-story');
                 document.getElementById('poster-container-story').classList.remove('hidden'); 
 
-                // --- EKSEKUSI RENDER GAMBAR ---
-                const posterElemen = document.getElementById('poster-weekly-story');
-                document.getElementById('poster-container-story').classList.remove('hidden'); 
-
                 // 👇👇👇 TAMBAHKAN KODE INI (Agar robot menunggu foto muncul) 👇👇👇
                 const daftarGambar = posterElemen.getElementsByTagName('img');
                 await Promise.all(Array.from(daftarGambar).map(img => {
