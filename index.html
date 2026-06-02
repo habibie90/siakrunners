@@ -484,7 +484,7 @@
             }
         }
 
-        async function generatePosterStory(event) {
+       async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
             tombol.innerHTML = "⏳ Meracik Top 10...";
@@ -529,14 +529,20 @@
                 top10Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                     
-                    // Mengambil gambar langsung (Tanpa atribut crossorigin)
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
+                    let finalPicSrc = picUrl;
+
+                    // INI DIA KUNCI RAHASIANYA (ROBOT PINTAR MEMILIH)
+                    // Jika fotonya berawalan "http" (bukan base64), pakaikan jaket Proxy!
+                    if (picUrl.startsWith('http')) {
+                        finalPicSrc = `https://wsrv.xyz/?url=${encodeURIComponent(picUrl)}&w=150&h=150&fit=cover`;
+                    }
 
                     daftarJuara.innerHTML += `
                         <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
-                                <img src="${picUrl}" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
+                                <img src="${finalPicSrc}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
                                 <div style="display: flex; flex-direction: column;">
                                     <span style="font-size: 28px; font-weight: bold; color: white;">${pelari.name}</span>
                                     <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
@@ -553,7 +559,7 @@
                 const posterElemen = document.getElementById('poster-weekly-story');
                 document.getElementById('poster-container-story').classList.remove('hidden'); 
 
-                // Menunggu gambar dimuat[cite: 2]
+                // Tahan robotnya sampai SEMUA foto ter-download sempurna
                 const daftarGambar = posterElemen.getElementsByTagName('img');
                 await Promise.all(Array.from(daftarGambar).map(img => {
                     if (img.complete) return Promise.resolve();
@@ -562,6 +568,9 @@
                         img.onerror = resolve; 
                     });
                 }));
+
+                // Beri napas ekstra setengah detik buat jaga-jaga
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container-story').classList.add('hidden');
