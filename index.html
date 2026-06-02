@@ -120,7 +120,7 @@
                     <div class="flex items-center gap-4">
                         <div class="relative group cursor-pointer" onclick="document.getElementById('upload-profile-pic').click()">
                             <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-gray-700 overflow-hidden bg-gray-800 flex items-center justify-center shadow-lg">
-                                <img id="modal-runner-img" src="" alt="Profile" class="w-full h-full object-cover hidden" crossorigin="anonymous"/>
+                                <img id="modal-runner-img" src="" alt="Profile" class="w-full h-full object-cover hidden" />
                                 <span id="modal-runner-initial" class="text-3xl md:text-4xl font-black text-gray-500 uppercase"></span>
                             </div>
                             <div class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -342,7 +342,7 @@
             currentSortedData.forEach((runner, i) => {
                 let rank = i + 1, icon = rank === 1 ? '🥇' : (rank === 2 ? '🥈' : (rank === 3 ? '🥉' : rank));
                 let pic = profilesData[runner.name]?.foto;
-                let avatar = pic ? `<img src="${pic}" crossorigin="anonymous" class="w-8 h-8 rounded-full object-cover">` : `<div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-gray-600 text-xs font-bold text-gray-400">${runner.name[0]}</div>`;
+                let avatar = pic ? `<img src="${pic}" class="w-8 h-8 rounded-full object-cover">` : `<div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-gray-600 text-xs font-bold text-gray-400">${runner.name[0]}</div>`;
                 tbody.innerHTML += `<tr onclick="showRunnerDetail(${i})" class="hover:bg-gray-800/80 cursor-pointer border-b border-gray-800/40"><td class="px-4 py-4 text-center font-bold text-gray-500">${icon}</td><td class="px-4 py-4"><div class="flex items-center gap-3">${avatar}<div><span class="font-bold text-gray-100">${runner.name}</span><br><span class="text-[10px] text-gray-400 bg-gray-900 border border-gray-700 px-2 py-0.5 rounded-full">${runner.runs}x Lari</span></div></div></td><td class="px-4 py-4 text-right text-blue-400 font-black text-base">${runner.distance.toFixed(2)}</td></tr>`;
             });
         }
