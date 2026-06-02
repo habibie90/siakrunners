@@ -430,7 +430,7 @@
         async function generatePosterIG(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Meracik...";
+            tombol.innerHTML = "⏳ Menyiapkan Data...";
             tombol.disabled = true;
 
             try {
@@ -443,15 +443,37 @@
 
                 let top5Data = currentSortedData.slice(0, 5); 
 
-                top5Data.forEach((pelari, index) => {
+                // FUNGSI UBAH FOTO JADI BASE64 (Diterapkan juga di Feed)
+                async function getSafeImage(url) {
+                    if (!url || url.startsWith('data:')) return url; 
+                    try {
+                        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                        const response = await fetch(proxyUrl);
+                        const blob = await response.blob();
+                        return await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.readAsDataURL(blob);
+                        });
+                    } catch(e) {
+                        return 'https://via.placeholder.com/80'; 
+                    }
+                }
+
+                let htmlDaftar = '';
+                for (let index = 0; index < top5Data.length; index++) {
+                    let pelari = top5Data[index];
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-                    let pic = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/80';
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/80';
                     
-                    daftarJuara.innerHTML += `
+                    tombol.innerHTML = `⏳ Ekstrak Foto ${index + 1}/5...`;
+                    let safePic = await getSafeImage(picUrl);
+
+                    htmlDaftar += `
                         <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
                                 <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
-                                <img src="${pic}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover;">
+                                <img src="${safePic}" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
                                 <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.name}</span>
                             </div>
                             <div style="text-align: right;">
@@ -459,22 +481,26 @@
                             </div>
                         </div>
                     `;
-                });
+                }
+                daftarJuara.innerHTML = htmlDaftar;
 
+                tombol.innerHTML = "📸 Menggambar Poster...";
                 const posterElemen = document.getElementById('poster-weekly');
                 document.getElementById('poster-container').classList.remove('hidden'); 
 
-                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                await new Promise(r => setTimeout(r, 500)); // Jeda agar foto muncul
+
+                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container').classList.add('hidden');
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
                 
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
                     const blob = await (await fetch(imageURI)).blob();
-                    const file = new File([blob], 'Weekly-Leaderboard.jpg', { type: 'image/jpeg' });
-                    await navigator.share({ title: 'Siak Runners Weekly Leaderboard', files: [file] });
+                    const file = new File([blob], 'Feed-Leaderboard.jpg', { type: 'image/jpeg' });
+                    await navigator.share({ title: 'Siak Runners Leaderboard Feed', files: [file] });
                 } else {
-                    const link = document.createElement('a'); link.download = 'SiakRunners-Leaderboard.jpg';
+                    const link = document.createElement('a'); link.download = 'SiakRunners-Feed.jpg';
                     link.href = imageURI; link.click();
                 }
             } catch (err) {
@@ -484,7 +510,6 @@
                 tombol.innerHTML = teksAsli; tombol.disabled = false;
             }
         }
-
        async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
