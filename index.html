@@ -55,7 +55,6 @@
                             TOP 50 LEADERBOARD<br />
                             <span class="text-shine-white">SIAK</span> <span class="text-pulse-red">RUNNERS</span>
                         </h1>
-                        <!-- TOMBOL LOGIN STRAVA -->
                         <a id="btn-connect-strava" href="#" class="mt-3 inline-flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-all shadow-lg border border-orange-500 w-fit mx-auto md:mx-0">
                             <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
                             Hubungkan Strava Saya
@@ -87,9 +86,18 @@
                             <span class="text-gray-400 text-xs font-bold">s/d</span>
                             <input type="date" id="end-date" onchange="renderLeaderboardTable()" class="bg-gray-900 text-gray-300 text-xs p-1.5 rounded outline-none border border-gray-700 w-full md:w-auto">
                         </div>
-                        <button onclick="exportToExcel()" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white text-xs md:text-sm font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Export
-                        </button>
+                        
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <button onclick="generatePosterIG(event)" class="w-full md:w-auto bg-gradient-to-r from-orange-500 to-pink-600 hover:opacity-80 text-white text-xs md:text-sm font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
+                                📸 Feed
+                            </button>
+                            <button onclick="generatePosterStory(event)" class="w-full md:w-auto bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-80 text-white text-xs md:text-sm font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
+                                📱 Story
+                            </button>
+                            <button onclick="exportToExcel()" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white text-xs md:text-sm font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Export
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
@@ -105,7 +113,6 @@
             </div>
         </section>
 
-        <!-- Modal Detail Profil -->
         <div id="detail-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md justify-center items-center p-4">
             <div class="glass-panel w-full max-w-md rounded-2xl overflow-hidden border border-gray-700 flex flex-col max-h-[90vh] shadow-2xl">
                 <div class="bg-gradient-to-b from-gray-800 to-gray-900 px-6 py-6 border-b border-gray-700 relative">
@@ -113,7 +120,7 @@
                     <div class="flex items-center gap-4">
                         <div class="relative group cursor-pointer" onclick="document.getElementById('upload-profile-pic').click()">
                             <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-gray-700 overflow-hidden bg-gray-800 flex items-center justify-center shadow-lg">
-                                <img id="modal-runner-img" src="" alt="Profile" class="w-full h-full object-cover hidden" />
+                                <img id="modal-runner-img" src="" alt="Profile" class="w-full h-full object-cover hidden" crossorigin="anonymous"/>
                                 <span id="modal-runner-initial" class="text-3xl md:text-4xl font-black text-gray-500 uppercase"></span>
                             </div>
                             <div class="absolute inset-0 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -150,7 +157,6 @@
             </div>
         </div>
 
-        <!-- Section Event -->
         <section id="page-event" class="page-section">
             <div class="mb-8 text-center">
                 <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Kalender <span class="text-red-500">Event</span></h2>
@@ -161,7 +167,6 @@
             </div>
         </section>
 
-        <!-- Section Upload -->
         <section id="page-upload" class="page-section">
             <div class="mb-8 text-center">
                 <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Upload <span class="text-red-500">Foto Event</span></h2>
@@ -210,7 +215,6 @@
             </div>
         </section>
 
-        <!-- Section Tentang -->
         <section id="page-tentang" class="page-section">
             <div class="glass-panel p-8 md:p-12 rounded-2xl text-center shadow-2xl border-t-4 border-red-500">
                 <img src="Logo SR.jpeg" alt="Logo" class="h-24 mx-auto rounded-xl mb-6 bg-white p-2 object-contain shadow-lg" onerror="this.src='https://via.placeholder.com/150'"/>
@@ -236,13 +240,40 @@
         </section>
     </div>
 
+    <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
+        <div id="poster-weekly" style="width: 1080px; height: 1080px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 60px; font-family: sans-serif; position: relative;">
+            <div style="text-align: center; border-bottom: 4px solid #ea580c; padding-bottom: 20px; margin-bottom: 40px;">
+                <h1 style="color: #ea580c; font-size: 50px; font-weight: 900; margin: 0; text-transform: uppercase;">SIAK RUNNERS</h1>
+                <h2 style="font-size: 35px; color: #cbd5e1; margin: 10px 0 0 0; letter-spacing: 2px;">WEEKLY LEADERBOARD</h2>
+                <p id="poster-tanggal" style="color: #9ca3af; font-size: 24px; margin-top: 15px; font-weight: bold;"></p>
+            </div>
+            <div id="poster-daftar-juara" style="display: flex; flex-direction: column; gap: 20px;"></div>
+            <div style="position: absolute; bottom: 40px; width: calc(100% - 120px); text-align: center; color: #64748b; font-size: 22px;">
+                Generated from siakrunners.vercel.app
+            </div>
+        </div>
+    </div>
+
+    <div id="poster-container-story" class="hidden fixed top-0 left-0 -z-50">
+        <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #ea580c 100%); color: white; padding: 120px 80px; font-family: sans-serif; position: relative; box-sizing: border-box;">
+            <div style="text-align: center; margin-top: 100px; margin-bottom: 80px;">
+                <h2 style="color: #cbd5e1; font-size: 35px; margin: 0; letter-spacing: 5px; text-transform: uppercase;">Leaderboard Mingguan</h2>
+                <h1 style="color: white; font-size: 80px; font-weight: 900; margin: 15px 0; text-transform: uppercase; text-shadow: 3px 5px 15px rgba(0,0,0,0.4);">SIAK RUNNERS</h1>
+                <div style="background: rgba(255,255,255,0.15); display: inline-block; padding: 15px 50px; border-radius: 50px; margin-top: 25px; backdrop-filter: blur(5px);">
+                    <p id="poster-tanggal-story" style="color: #f1f5f9; font-size: 28px; margin: 0; font-weight: bold;"></p>
+                </div>
+            </div>
+            <div id="poster-daftar-juara-story" style="display: flex; flex-direction: column; gap: 40px; margin-top: 60px;"></div>
+            <div style="position: absolute; bottom: 180px; left: 0; width: 100%; text-align: center;">
+                <p style="color: white; font-size: 35px; font-weight: bold; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Terus Bergerak, Terus Berlari!</p>
+                <p style="color: rgba(255,255,255,0.7); font-size: 24px;">Generate otomatis via siakrunners.vercel.app</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // =========================================================================
-        // PENTING: GANTI TEKS DI BAWAH INI DENGAN URL APPS SCRIPT BAPAK YANG BARU!
-        // =========================================================================
         const API_URL = 'https://script.google.com/macros/s/AKfycby0v-8vDpnEYlw0uOe7yYg5rv30zWH6h8gNFlzePvcrSqz47Me_AzxnEHqaHuCZwvYBFw/exec';
         
-        // Kodingan untuk menyuntikkan URL otomatis ke tombol Login Strava
         document.getElementById('btn-connect-strava').href = `https://www.strava.com/oauth/authorize?client_id=221203&response_type=code&redirect_uri=${API_URL}&approval_prompt=force&scope=activity:read_all`;
 
         let rawRunData = []; let profilesData = {}; let currentSortedData = []; let activeRunnerName = ""; let activeRunnerAllRuns = [];
@@ -300,7 +331,6 @@
             document.getElementById('stat-distance').innerHTML = `${totalKolektif.toFixed(1)} <span class="text-xl text-yellow-500 font-bold">km</span>`;
             const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = '';
             
-            // JIKA BELUM ADA DATA
             if (currentSortedData.length === 0) { 
                 tbody.innerHTML = `<tr><td colspan="3" class="text-center py-12">
                     <p class="text-gray-400 font-bold mb-2">Belum ada data terekam.</p>
@@ -312,7 +342,7 @@
             currentSortedData.forEach((runner, i) => {
                 let rank = i + 1, icon = rank === 1 ? '🥇' : (rank === 2 ? '🥈' : (rank === 3 ? '🥉' : rank));
                 let pic = profilesData[runner.name]?.foto;
-                let avatar = pic ? `<img src="${pic}" class="w-8 h-8 rounded-full object-cover">` : `<div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-gray-600 text-xs font-bold text-gray-400">${runner.name[0]}</div>`;
+                let avatar = pic ? `<img src="${pic}" crossorigin="anonymous" class="w-8 h-8 rounded-full object-cover">` : `<div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center border border-gray-600 text-xs font-bold text-gray-400">${runner.name[0]}</div>`;
                 tbody.innerHTML += `<tr onclick="showRunnerDetail(${i})" class="hover:bg-gray-800/80 cursor-pointer border-b border-gray-800/40"><td class="px-4 py-4 text-center font-bold text-gray-500">${icon}</td><td class="px-4 py-4"><div class="flex items-center gap-3">${avatar}<div><span class="font-bold text-gray-100">${runner.name}</span><br><span class="text-[10px] text-gray-400 bg-gray-900 border border-gray-700 px-2 py-0.5 rounded-full">${runner.runs}x Lari</span></div></div></td><td class="px-4 py-4 text-right text-blue-400 font-black text-base">${runner.distance.toFixed(2)}</td></tr>`;
             });
         }
@@ -335,18 +365,13 @@
             else if (f === 'bulan_lalu') { s = new Date(now.getFullYear(), now.getMonth()-1, 1); e = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59); }
             
             let filtered = all ? activeRunnerAllRuns : activeRunnerAllRuns.filter(r => { let rd = new Date(r.date); return rd >= s && rd <= e; });
-            
-            // Sorting berdasarkan waktu ter-update
             filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
             
             let total = 0; const list = document.getElementById('modal-history-list'); list.innerHTML = '';
             filtered.forEach((r, i) => { 
                 total += r.distance; 
-                
-                // Format Tanggal dan Jam
                 let tgl = new Date(r.date).toLocaleDateString('id-ID');
                 let jam = new Date(r.date).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-                
                 list.innerHTML += `<div class="flex justify-between bg-gray-800/50 p-3 rounded-xl border border-gray-700/50 hover:border-red-500 transition-colors"><span class="text-sm font-bold text-gray-400">#${filtered.length-i} - ${tgl} ${jam} WIB</span><span class="text-sm font-black text-white">${r.distance.toFixed(2)} KM</span></div>`; 
             });
             document.getElementById('modal-runner-stats').innerText = `${filtered.length} KALI | ${total.toFixed(2)} KM`;
@@ -399,42 +424,23 @@
                 c.innerHTML = '';
                 
                 let hasActiveEvent = false;
-
                 data.forEach(e => {
-                    // 1. Filter Manual: Jika Bapak mengetik "SELESAI" di Spreadsheet, sembunyikan!
                     if (e.status.toUpperCase() === "SELESAI") return;
-
-                    // 2. Filter Otomatis: Cerdaskan robot untuk baca bulan bahasa Indonesia
                     let dateStr = e.tanggal.toString().toLowerCase();
-                    const bulanIndo = {
-                        'januari':'jan', 'februari':'feb', 'maret':'mar', 'april':'apr', 
-                        'mei':'may', 'juni':'jun', 'juli':'jul', 'agustus':'aug', 
-                        'september':'sep', 'oktober':'oct', 'november':'nov', 'desember':'dec'
-                    };
+                    const bulanIndo = { 'januari':'jan', 'februari':'feb', 'maret':'mar', 'april':'apr', 'mei':'may', 'juni':'jun', 'juli':'jul', 'agustus':'aug', 'september':'sep', 'oktober':'oct', 'november':'nov', 'desember':'dec' };
                     for (let b in bulanIndo) { dateStr = dateStr.replace(b, bulanIndo[b]); }
                     
-                    // 3. Bandingkan tanggal event dengan hari ini (jam dinetralkan ke 00:00)
-                    let eventDate = new Date(dateStr);
-                    let today = new Date();
-                    today.setHours(0,0,0,0); 
-
-                    // Jika tanggal event LEBIH KECIL dari hari ini (sudah lewat), LEWATI!
+                    let eventDate = new Date(dateStr); let today = new Date(); today.setHours(0,0,0,0); 
                     if (eventDate < today) return;
-
                     hasActiveEvent = true;
 
                     let img = e.linkFoto ? `<div class="w-full h-64 md:h-72 bg-black p-4 flex justify-center border-b border-gray-700/50"><img src="${e.linkFoto}" class="w-full h-full object-contain"></div>` : '';
                     c.innerHTML += `<div class="glass-panel rounded-2xl border-t-4 border-red-500 overflow-hidden shadow-2xl">${img}<div class="p-6"><div class="flex justify-between items-center mb-4"><span class="text-[10px] font-black px-2 py-1 rounded bg-red-600 text-white uppercase">${e.status}</span><span class="text-xs text-yellow-400 font-bold bg-gray-900 px-2 py-1 rounded border border-gray-700">${e.tanggal}</span></div><h3 class="text-xl font-black text-white mb-2">${e.judul}</h3><p class="text-sm text-gray-300 mb-4 whitespace-pre-line">${e.deskripsi}</p><a href="${e.linkDaftar}" target="_blank" class="block w-full text-center bg-white/5 text-white py-2 rounded-xl border border-gray-700 text-xs font-bold uppercase hover:bg-white/10">Detail</a></div></div>`;
                 });
-
-                // Jika semua event sudah expired / kosong, tampilkan pesan ini:
                 if (!hasActiveEvent) {
                     c.innerHTML = `<div class="glass-panel p-6 rounded-2xl text-center text-gray-400 col-span-full border border-gray-700/50"><h3 class="text-xl font-bold text-white mb-2">Belum Ada Event Mendatang</h3><p class="text-sm">Saat ini belum ada jadwal race terbaru. Yuk, terus latihan dan persiapkan dirimu!</p></div>`;
                 }
-
-            } catch (e) {
-                console.error("Gagal memuat kalender event:", e);
-            }
+            } catch (e) { console.error("Gagal memuat kalender event:", e); }
         }
         
         function exportToExcel() {
@@ -447,101 +453,127 @@
 
         loadLeaderboardData();
 
-        async function generatePosterIG() {
-    alert("Sedang meracik poster... Mohon tunggu sebentar!");
+        // 🟢 REVISI 2: FUNGSI POSTER FEED (1:1) TANPA ALERT
+        async function generatePosterIG(event) {
+            const tombol = event.currentTarget;
+            const teksAsli = tombol.innerHTML;
+            tombol.innerHTML = "⏳ Meracik...";
+            tombol.disabled = true;
 
-    // 1. Ambil data tanggal dari filter yang sedang aktif
-    const tglMulai = document.getElementById('startDate').value || 'Awal';
-    const tglAkhir = document.getElementById('endDate').value || 'Akhir';
-    document.getElementById('poster-tanggal').innerText = `PERIODE: ${tglMulai} s/d ${tglAkhir}`;
+            try {
+                const sel = document.getElementById('time-filter');
+                const tglTeks = sel.options[sel.selectedIndex].text;
+                document.getElementById('poster-tanggal').innerText = `PERIODE: ${tglTeks}`;
 
-    // 2. Ambil data pelari yang sedang tampil di layar (kita ambil Top 5 saja)
-    // Asumsi: data pelari Bapak tersimpan di variabel global 'filteredData' atau array dari tabel
-    // Ini contoh sederhana mengambil elemen dari tabel Bapak
-    const daftarJuara = document.getElementById('poster-daftar-juara');
-    daftarJuara.innerHTML = ''; // Bersihkan data lama
+                const daftarJuara = document.getElementById('poster-daftar-juara');
+                daftarJuara.innerHTML = ''; 
 
-    // Looping 5 pelari teratas dari data yang sudah difilter
-    // (Bapak harus menyesuaikan variabel 'dataKlasemen' dengan variabel asli Bapak)
-    let top5Data = dataKlasemen.slice(0, 5); 
+                // Pakai variabel asli Bapak: currentSortedData
+                let top5Data = currentSortedData.slice(0, 5); 
 
-    top5Data.forEach((pelari, index) => {
-        let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-        
-        daftarJuara.innerHTML += `
-            <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 25px;">
-                    <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
-                    <img src="${pelari.foto}" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover;">
-                    <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.nama}</span>
-                </div>
-                <div style="text-align: right;">
-                    <span style="font-size: 45px; font-weight: 900; color: #38bdf8;">${pelari.jarak} <span style="font-size: 24px; color:#9ca3af;">KM</span></span>
-                </div>
-            </div>
-        `;
-    });
+                top5Data.forEach((pelari, index) => {
+                    let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    let pic = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/80';
+                    
+                    daftarJuara.innerHTML += `
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 25px;">
+                                <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
+                                <img src="${pic}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover;">
+                                <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.name}</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 45px; font-weight: 900; color: #38bdf8;">${pelari.distance.toFixed(2)} <span style="font-size: 24px; color:#9ca3af;">KM</span></span>
+                            </div>
+                        </div>
+                    `;
+                });
 
-    // 3. Ubah HTML menjadi Gambar dengan html2canvas
-    const posterElemen = document.getElementById('poster-weekly');
-    // Hilangkan class hidden sementara
-    document.getElementById('poster-container').classList.remove('hidden'); 
+                const posterElemen = document.getElementById('poster-weekly');
+                document.getElementById('poster-container').classList.remove('hidden'); 
 
-    try {
-        const canvas = await html2canvas(posterElemen, {
-            scale: 2, // Biar kualitasnya HD
-            useCORS: true, // Wajib agar foto profil Strava bisa dimuat
-            backgroundColor: '#0f172a'
-        });
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                document.getElementById('poster-container').classList.add('hidden');
 
-        // Sembunyikan lagi elemennya
-        document.getElementById('poster-container').classList.add('hidden');
-
-        // 4. Unduh Gambarnya atau Share
-        const imageURI = canvas.toDataURL("image/jpeg", 0.9);
-        
-        // Cek apakah di HP (Bisa pakai tombol Share bawaan HP)
-        if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
-            const blob = await (await fetch(imageURI)).blob();
-            const file = new File([blob], 'Weekly-Leaderboard.jpg', { type: 'image/jpeg' });
-            await navigator.share({
-                title: 'Siak Runners Weekly Leaderboard',
-                files: [file]
-            });
-        } else {
-            // Kalau di Laptop, otomatis download gambarnya
-            const link = document.createElement('a');
-            link.download = 'SiakRunners-Leaderboard.jpg';
-            link.href = imageURI;
-            link.click();
+                const imageURI = canvas.toDataURL("image/jpeg", 0.9);
+                
+                if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+                    const blob = await (await fetch(imageURI)).blob();
+                    const file = new File([blob], 'Weekly-Leaderboard.jpg', { type: 'image/jpeg' });
+                    await navigator.share({ title: 'Siak Runners Weekly Leaderboard', files: [file] });
+                } else {
+                    const link = document.createElement('a'); link.download = 'SiakRunners-Leaderboard.jpg';
+                    link.href = imageURI; link.click();
+                }
+            } catch (err) {
+                console.error(err); alert("Gagal meracik poster.");
+                document.getElementById('poster-container').classList.add('hidden');
+            } finally {
+                tombol.innerHTML = teksAsli; tombol.disabled = false;
+            }
         }
-    } catch (err) {
-        console.error("Gagal membuat poster:", err);
-        alert("Waduh, gagal membuat poster. Coba lagi ya, Pak.");
-        document.getElementById('poster-container').classList.add('hidden');
-    }
-}
+
+        // 🟢 REVISI 3: FUNGSI POSTER STORY (9:16)
+        async function generatePosterStory(event) {
+            const tombol = event.currentTarget;
+            const teksAsli = tombol.innerHTML;
+            tombol.innerHTML = "⏳ Meracik...";
+            tombol.disabled = true;
+
+            try {
+                const sel = document.getElementById('time-filter');
+                const tglTeks = sel.options[sel.selectedIndex].text;
+                document.getElementById('poster-tanggal-story').innerText = `PERIODE: ${tglTeks}`;
+
+                const daftarJuara = document.getElementById('poster-daftar-juara-story');
+                daftarJuara.innerHTML = ''; 
+
+                let top5Data = currentSortedData.slice(0, 5); 
+
+                top5Data.forEach((pelari, index) => {
+                    let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    let pic = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
+                    
+                    daftarJuara.innerHTML += `
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 25px; padding: 35px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
+                            <div style="display: flex; align-items: center; gap: 30px;">
+                                <span style="font-size: 50px; font-weight: bold; width: 60px; text-align: center;">${medali}</span>
+                                <img src="${pic}" crossorigin="anonymous" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; object-fit: cover;">
+                                <div style="display: flex; flex-direction: column;">
+                                    <span style="font-size: 40px; font-weight: bold; color: white;">${pelari.name}</span>
+                                    <span style="font-size: 22px; color: #cbd5e1; margin-top: 5px;">${pelari.runs}x Aktivitas Lari</span>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 55px; font-weight: 900; color: #38bdf8;">${pelari.distance.toFixed(2)} <span style="font-size: 28px; color:#9ca3af;">KM</span></span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const posterElemen = document.getElementById('poster-weekly-story');
+                document.getElementById('poster-container-story').classList.remove('hidden'); 
+
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                document.getElementById('poster-container-story').classList.add('hidden');
+
+                const imageURI = canvas.toDataURL("image/jpeg", 0.9);
+                
+                if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+                    const blob = await (await fetch(imageURI)).blob();
+                    const file = new File([blob], 'Story-Leaderboard.jpg', { type: 'image/jpeg' });
+                    await navigator.share({ title: 'Story Siak Runners Leaderboard', files: [file] });
+                } else {
+                    const link = document.createElement('a'); link.download = 'SiakRunners-Story.jpg';
+                    link.href = imageURI; link.click();
+                }
+            } catch (err) {
+                console.error(err); alert("Gagal meracik poster story.");
+                document.getElementById('poster-container-story').classList.add('hidden');
+            } finally {
+                tombol.innerHTML = teksAsli; tombol.disabled = false;
+            }
+        }
     </script>
-
-    <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
-    <div id="poster-weekly" style="width: 1080px; height: 1080px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 60px; font-family: sans-serif; position: relative;">
-        <div style="text-align: center; border-bottom: 4px solid #ea580c; padding-bottom: 20px; margin-bottom: 40px;">
-            <h1 style="color: #ea580c; font-size: 50px; font-weight: 900; margin: 0; text-transform: uppercase;">SIAK RUNNERS</h1>
-            <h2 style="font-size: 35px; color: #cbd5e1; margin: 10px 0 0 0; letter-spacing: 2px;">WEEKLY LEADERBOARD</h2>
-            <p id="poster-tanggal" style="color: #9ca3af; font-size: 24px; margin-top: 15px; font-weight: bold;"></p>
-        </div>
-
-        <div id="poster-daftar-juara" style="display: flex; flex-direction: column; gap: 20px;">
-            </div>
-
-        <div style="position: absolute; bottom: 40px; width: calc(100% - 120px); text-align: center; color: #64748b; font-size: 22px;">
-            Generated from siakrunners.vercel.app
-        </div>
-    </div>
-</div>
-    <button onclick="generatePosterIG()" class="bg-gradient-to-r from-orange-500 to-pink-600 text-white px-4 py-2 rounded-lg font-bold hover:opacity-80 transition flex items-center gap-2">
-    📸 Buat Poster IG
-</button>
-    
 </body>
 </html>
