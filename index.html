@@ -556,6 +556,20 @@
                 const posterElemen = document.getElementById('poster-weekly-story');
                 document.getElementById('poster-container-story').classList.remove('hidden'); 
 
+                // --- EKSEKUSI RENDER GAMBAR ---
+                const posterElemen = document.getElementById('poster-weekly-story');
+                document.getElementById('poster-container-story').classList.remove('hidden'); 
+
+                // 👇👇👇 TAMBAHKAN KODE INI (Agar robot menunggu foto muncul) 👇👇👇
+                const daftarGambar = posterElemen.getElementsByTagName('img');
+                await Promise.all(Array.from(daftarGambar).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => {
+                        img.onload = resolve;
+                        img.onerror = resolve; // Lanjut terus walaupun ada 1 foto yang error
+                    });
+                }));
+
                 const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container-story').classList.add('hidden');
 
