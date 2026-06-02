@@ -487,40 +487,72 @@
         async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Meracik...";
+            tombol.innerHTML = "⏳ Meracik Top 10...";
             tombol.disabled = true;
 
             try {
-                const sel = document.getElementById('time-filter');
-                const tglTeks = sel.options[sel.selectedIndex].text;
-                document.getElementById('poster-tanggal-story').innerText = `PERIODE: ${tglTeks}`;
+                // --- LOGIKA MENGHITUNG TANGGAL & PERIODE ---
+                const filterVal = document.getElementById('time-filter').value;
+                const now = new Date(); let s, e, jenisPeriode = "KUSTOM";
+                
+                if (filterVal === 'minggu_ini') {
+                    let d = now.getDay() || 7;
+                    s = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d + 1);
+                    e = new Date(s); e.setDate(s.getDate() + 6);
+                    jenisPeriode = "MINGGUAN";
+                } else if (filterVal === 'bulan_ini') {
+                    s = new Date(now.getFullYear(), now.getMonth(), 1);
+                    e = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                    jenisPeriode = "BULANAN";
+                } else if (filterVal === 'bulan_lalu') {
+                    s = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                    e = new Date(now.getFullYear(), now.getMonth(), 0);
+                    jenisPeriode = "BULANAN";
+                } else if (filterVal === 'kustom') {
+                    s = new Date(document.getElementById('start-date').value);
+                    e = new Date(document.getElementById('end-date').value);
+                } else {
+                    let [y, m] = filterVal.split('-');
+                    s = new Date(y, m-1, 1); e = new Date(y, m, 0);
+                    jenisPeriode = "BULANAN";
+                }
 
+                // Format jadi teks cantik (Contoh: "1 Jun 2026 - 30 Jun 2026")
+                const formatTgl = (tgl) => tgl.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
+                document.getElementById('poster-tanggal-story').innerText = `${jenisPeriode}: ${formatTgl(s)} - ${formatTgl(e)}`;
+
+                // --- LOGIKA MENYUSUN TOP 10 ---
                 const daftarJuara = document.getElementById('poster-daftar-juara-story');
                 daftarJuara.innerHTML = ''; 
+                
+                // Ambil 10 teratas (Bukan lagi 5)
+                let top10Data = currentSortedData.slice(0, 10); 
 
-                let top5Data = currentSortedData.slice(0, 5); 
-
-                top5Data.forEach((pelari, index) => {
+                top10Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-                    let pic = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/100';
                     
+                    // Trik Jitu: Gunakan Proxy WSRV agar foto tidak diblokir (Error CORS) oleh Canvas
+                    let proxyPic = `https://wsrv.xyz/?url=${encodeURIComponent(picUrl)}&w=150&h=150&fit=cover`;
+
                     daftarJuara.innerHTML += `
-                        <div style="background: rgba(255,255,255,0.08); border-radius: 25px; padding: 35px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
-                            <div style="display: flex; align-items: center; gap: 30px;">
-                                <span style="font-size: 50px; font-weight: bold; width: 60px; text-align: center;">${medali}</span>
-                                <img src="${pic}" crossorigin="anonymous" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid white; object-fit: cover;">
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
+                            <div style="display: flex; align-items: center; gap: 20px;">
+                                <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
+                                <img src="${proxyPic}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
                                 <div style="display: flex; flex-direction: column;">
-                                    <span style="font-size: 40px; font-weight: bold; color: white;">${pelari.name}</span>
-                                    <span style="font-size: 22px; color: #cbd5e1; margin-top: 5px;">${pelari.runs}x Aktivitas Lari</span>
+                                    <span style="font-size: 28px; font-weight: bold; color: white;">${pelari.name}</span>
+                                    <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
                                 </div>
                             </div>
                             <div style="text-align: right;">
-                                <span style="font-size: 55px; font-weight: 900; color: #38bdf8;">${pelari.distance.toFixed(2)} <span style="font-size: 28px; color:#9ca3af;">KM</span></span>
+                                <span style="font-size: 42px; font-weight: 900; color: #38bdf8;">${pelari.distance.toFixed(2)} <span style="font-size: 20px; color:#9ca3af;">KM</span></span>
                             </div>
                         </div>
                     `;
                 });
 
+                // --- EKSEKUSI RENDER GAMBAR ---
                 const posterElemen = document.getElementById('poster-weekly-story');
                 document.getElementById('poster-container-story').classList.remove('hidden'); 
 
@@ -531,10 +563,10 @@
                 
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
                     const blob = await (await fetch(imageURI)).blob();
-                    const file = new File([blob], 'Story-Leaderboard.jpg', { type: 'image/jpeg' });
-                    await navigator.share({ title: 'Story Siak Runners Leaderboard', files: [file] });
+                    const file = new File([blob], 'Top10-Leaderboard.jpg', { type: 'image/jpeg' });
+                    await navigator.share({ title: 'Top 10 Siak Runners', files: [file] });
                 } else {
-                    const link = document.createElement('a'); link.download = 'SiakRunners-Story.jpg';
+                    const link = document.createElement('a'); link.download = 'SiakRunners-Top10.jpg';
                     link.href = imageURI; link.click();
                 }
             } catch (err) {
@@ -561,21 +593,20 @@
     </div>
 
     <div id="poster-container-story" class="hidden fixed top-0 left-0 -z-50">
-        <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #ea580c 100%); color: white; padding: 120px 80px; font-family: sans-serif; position: relative; box-sizing: border-box;">
-            <div style="text-align: center; margin-top: 100px; margin-bottom: 80px;">
-                <h2 style="color: #cbd5e1; font-size: 35px; margin: 0; letter-spacing: 5px; text-transform: uppercase;">Leaderboard Mingguan</h2>
-                <h1 style="color: white; font-size: 80px; font-weight: 900; margin: 15px 0; text-transform: uppercase; text-shadow: 3px 5px 15px rgba(0,0,0,0.4);">SIAK RUNNERS</h1>
-                <div style="background: rgba(255,255,255,0.15); display: inline-block; padding: 15px 50px; border-radius: 50px; margin-top: 25px; backdrop-filter: blur(5px);">
-                    <p id="poster-tanggal-story" style="color: #f1f5f9; font-size: 28px; margin: 0; font-weight: bold;"></p>
+        <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #ea580c 100%); color: white; padding: 100px 60px 80px 60px; font-family: sans-serif; position: relative; box-sizing: border-box;">
+            <div style="text-align: center; margin-top: 40px; margin-bottom: 40px;">
+                <h2 style="color: #cbd5e1; font-size: 30px; margin: 0; letter-spacing: 5px; text-transform: uppercase;">Leaderboard Klasemen</h2>
+                <h1 style="color: white; font-size: 70px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 3px 5px 15px rgba(0,0,0,0.4);">SIAK RUNNERS</h1>
+                <div style="background: rgba(255,255,255,0.15); display: inline-block; padding: 12px 40px; border-radius: 50px; margin-top: 15px; backdrop-filter: blur(5px);">
+                    <p id="poster-tanggal-story" style="color: #f1f5f9; font-size: 24px; margin: 0; font-weight: bold;"></p>
                 </div>
             </div>
-            <div id="poster-daftar-juara-story" style="display: flex; flex-direction: column; gap: 40px; margin-top: 60px;"></div>
-            <div style="position: absolute; bottom: 180px; left: 0; width: 100%; text-align: center;">
-                <p style="color: white; font-size: 35px; font-weight: bold; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Terus Bergerak, Terus Berlari!</p>
-                <p style="color: rgba(255,255,255,0.7); font-size: 24px;">Generate otomatis via siakrunners.vercel.app</p>
+            <div id="poster-daftar-juara-story" style="display: flex; flex-direction: column; gap: 18px; margin-top: 20px;"></div>
+            <div style="position: absolute; bottom: 120px; left: 0; width: 100%; text-align: center;">
+                <p style="color: white; font-size: 30px; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Terus Bergerak, Terus Berlari!</p>
+                <p style="color: rgba(255,255,255,0.7); font-size: 20px;">Generate otomatis via siakrunners.vercel.app</p>
             </div>
         </div>
     </div>
-
 </body>
 </html>
