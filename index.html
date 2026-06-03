@@ -431,11 +431,12 @@
         // FUNGSI UBAH FOTO JADI TEKS (SUPER KILAT)
         // ==========================================
         // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR)
+        // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR & ANTI MOGOK)
         async function fetchImageAsBase64Fast(url) {
             if (!url || url.startsWith('data:')) return url;
             try {
-                // Menggunakan allorigins karena paling stabil menangani CORS di jaringan Indonesia
-                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+                // Kita ganti kurirnya menggunakan WSRV.XYZ yang kuat ditarik 10 foto serentak
+                const proxyUrl = `https://wsrv.xyz/?url=${encodeURIComponent(url)}&w=150&h=150&fit=cover&t=${new Date().getTime()}`;
                 const response = await fetch(proxyUrl);
                 const blob = await response.blob();
                 return await new Promise((resolve) => {
@@ -444,7 +445,8 @@
                     reader.readAsDataURL(blob);
                 });
             } catch(e) {
-                return 'https://via.placeholder.com/120';
+                // Jika masih ada yang gagal, beri foto inisial SR agar tidak sekadar lingkaran kosong
+                return 'https://via.placeholder.com/150/1e293b/ffffff?text=SR';
             }
         }
         // ==========================================
