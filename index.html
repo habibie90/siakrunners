@@ -432,22 +432,57 @@
         // ==========================================
         // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR)
         // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR & ANTI MOGOK)
+        // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR & KURIR BERLAPIS)
         async function fetchImageAsBase64Fast(url) {
+            // Kalau foto hasil upload manual (sudah base64), langsung loloskan
             if (!url || url.startsWith('data:')) return url;
-            try {
-                // Kita ganti kurirnya menggunakan WSRV.XYZ yang kuat ditarik 10 foto serentak
-                const proxyUrl = `https://wsrv.xyz/?url=${encodeURIComponent(url)}&w=150&h=150&fit=cover&t=${new Date().getTime()}`;
-                const response = await fetch(proxyUrl);
-                const blob = await response.blob();
-                return await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(blob);
-                });
-            } catch(e) {
-                // Jika masih ada yang gagal, beri foto inisial SR agar tidak sekadar lingkaran kosong
+            
+            // CEK INGATAN: Kalau sebelumnya sudah pernah di-download, pakai yang ada di memori (0 Detik)
+            if (window.imageCache && window.imageCache[url]) return window.imageCache[url];
+
+            // SIAPKAN 3 KURIR PROXY BERBEDA
+            const proxies = [
+                `https://corsproxy.io/?${encodeURIComponent(url)}`, // Kurir Utama (Paling Stabil)
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, // Kurir Cadangan 1
+                `https://wsrv.xyz/?url=${encodeURIComponent(url)}&w=150&h=150&fit=cover` // Kurir Cadangan 2
+            ];
+
+            let validBlob = null;
+
+            // Suruh kurir berangkat satu per satu secara bergantian
+            for (let proxy of proxies) {
+                try {
+                    const response = await fetch(proxy);
+                    if (response.ok) {
+                        const tempBlob = await response.blob();
+                        // VERIFIKASI KETAT: Pastikan yang dibawa benar-benar gambar, bukan error transparan!
+                        if (tempBlob.type.startsWith('image/')) {
+                            validBlob = tempBlob;
+                            break; // Kurir berhasil, hentikan pencarian
+                        }
+                    }
+                } catch (e) {
+                    console.log("Satu proxy diblokir Strava, mengalihkan ke proxy berikutnya...");
+                }
+            }
+
+            // Jika KETIGA kurir gagal semua, pasang logo SR agar tidak bolong
+            if (!validBlob) {
                 return 'https://via.placeholder.com/150/1e293b/ffffff?text=SR';
             }
+
+            // Ubah gambar asli menjadi teks (Base64)
+            return await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    // Simpan ke ingatan agar klik berikutnya super cepat
+                    if (!window.imageCache) window.imageCache = {};
+                    window.imageCache[url] = reader.result;
+                    
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(validBlob);
+            });
         }
         // ==========================================
         // POSTER 1: FEED (TOP 5)
