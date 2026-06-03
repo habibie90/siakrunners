@@ -430,39 +430,22 @@
         // ==========================================
         // FUNGSI UBAH FOTO JADI TEKS (SUPER KILAT)
         // ==========================================
-        let rawRunData = [];
-        let profilesData = {};
-        let currentSortedData = [];
-
-        function getRunnerPhoto(runnerName) {
-
-    const foto = profilesData?.[runnerName]?.foto;
-
-    if (foto && foto.length > 50) {
-        return foto;
-    }
-
-    const initial = runnerName.charAt(0).toUpperCase();
-
-    return `data:image/svg+xml;base64,${btoa(`
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="120"
-             height="120">
-            <rect width="120"
-                  height="120"
-                  fill="#1e293b"/>
-            <text x="50%"
-                  y="55%"
-                  font-size="60"
-                  text-anchor="middle"
-                  fill="white"
-                  font-family="Arial"
-                  dominant-baseline="middle">
-                ${initial}
-            </text>
-        </svg>
-    `)}`;
-}
+        async function fetchImageAsBase64Fast(url) {
+            if (!url || url.startsWith('data:')) return url;
+            try {
+                // Rahasianya di sini: w=120&h=120 bikin ukuran foto jadi cuma 3KB! (Download sekilas mata)
+                const proxyUrl = `https://wsrv.xyz/?url=${encodeURIComponent(url)}&w=120&h=120&fit=cover`;
+                const response = await fetch(proxyUrl);
+                const blob = await response.blob();
+                return await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
+            } catch(e) {
+                return 'https://via.placeholder.com/120';
+            }
+        }
 
         // ==========================================
         // POSTER 1: FEED (TOP 5)
@@ -482,10 +465,11 @@
                 let top5Data = currentSortedData.slice(0, 5); 
 
                 // Proses Sedot & Ubah 5 Foto Serentak (Sangat Cepat)
-                const hasilFoto = top5Data.map(pelari => ({
-                    pelari,
-                    base64: getRunnerPhoto(pelari.name)
-                }));
+                const janjiFoto = top5Data.map(pelari => {
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/120';
+                    return fetchImageAsBase64Fast(picUrl).then(base64 => ({ pelari, base64 }));
+                });
+                const hasilFoto = await Promise.all(janjiFoto);
 
                 let htmlDaftar = '';
                 hasilFoto.forEach((item, index) => {
@@ -496,7 +480,7 @@
                         <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
                                 <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
-                                <img src="${item.base64}" crossorigin="anonymous" loading="eager" decoding="sync" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
+                                <img src="${item.base64}" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
                                 <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.name}</span>
                             </div>
                             <div style="text-align: right;">
@@ -513,32 +497,7 @@
 
                 await new Promise(r => setTimeout(r, 200)); // Jeda super tipis biar HTML napas
 
-                const images =
-    posterElemen.querySelectorAll("img");
-
-await Promise.all(
-    [...images].map(img => {
-
-        if (img.complete)
-            return Promise.resolve();
-
-        return new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve;
-        });
-
-    })
-);
-
-const canvas = await html2canvas(
-    posterElemen,
-    {
-        scale: 3,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#0f172a"
-    }
-);
+                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container').classList.add('hidden');
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
@@ -584,11 +543,12 @@ const canvas = await html2canvas(
                 let top10Data = currentSortedData.slice(0, 10); 
 
                 // Proses Sedot & Ubah 10 Foto Serentak (Sangat Cepat)
-                const hasilFoto = top10Data.map(pelari => ({
-                    pelari,
-                    base64: getRunnerPhoto(pelari.name)
-                }));
-                
+                const janjiFoto = top10Data.map(pelari => {
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/120';
+                    return fetchImageAsBase64Fast(picUrl).then(base64 => ({ pelari, base64 }));
+                });
+                const hasilFoto = await Promise.all(janjiFoto);
+
                 let htmlDaftarJuara = '';
                 hasilFoto.forEach((item, index) => {
                     let pelari = item.pelari;
@@ -618,32 +578,7 @@ const canvas = await html2canvas(
 
                 await new Promise(r => setTimeout(r, 200)); // Jeda super tipis
 
-                const images =
-    posterElemen.querySelectorAll("img");
-
-await Promise.all(
-    [...images].map(img => {
-
-        if (img.complete)
-            return Promise.resolve();
-
-        return new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve;
-        });
-
-    })
-);
-
-const canvas = await html2canvas(
-    posterElemen,
-    {
-        scale: 3,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#0f172a"
-    }
-);
+                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
                 document.getElementById('poster-container-story').classList.add('hidden');
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
