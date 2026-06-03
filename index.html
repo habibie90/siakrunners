@@ -430,11 +430,12 @@
         // ==========================================
         // FUNGSI UBAH FOTO JADI TEKS (SUPER KILAT)
         // ==========================================
+        // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR)
         async function fetchImageAsBase64Fast(url) {
             if (!url || url.startsWith('data:')) return url;
             try {
-                // Rahasianya di sini: w=120&h=120 bikin ukuran foto jadi cuma 3KB! (Download sekilas mata)
-                const proxyUrl = `https://wsrv.xyz/?url=${encodeURIComponent(url)}&w=120&h=120&fit=cover`;
+                // Menggunakan allorigins karena paling stabil menangani CORS di jaringan Indonesia
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
                 const response = await fetch(proxyUrl);
                 const blob = await response.blob();
                 return await new Promise((resolve) => {
@@ -446,10 +447,10 @@
                 return 'https://via.placeholder.com/120';
             }
         }
-
         // ==========================================
         // POSTER 1: FEED (TOP 5)
         // ==========================================
+        // FUNGSI 2: POSTER FEED (TOP 5)
         async function generatePosterIG(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
@@ -464,7 +465,6 @@
                 daftarJuara.innerHTML = ''; 
                 let top5Data = currentSortedData.slice(0, 5); 
 
-                // Proses Sedot & Ubah 5 Foto Serentak (Sangat Cepat)
                 const janjiFoto = top5Data.map(pelari => {
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/120';
                     return fetchImageAsBase64Fast(picUrl).then(base64 => ({ pelari, base64 }));
@@ -475,12 +475,11 @@
                 hasilFoto.forEach((item, index) => {
                     let pelari = item.pelari;
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-                    
                     htmlDaftar += `
                         <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
                                 <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
-                                <img src="${item.base64}" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
+                                <img src="${item.base64}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
                                 <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.name}</span>
                             </div>
                             <div style="text-align: right;">
@@ -491,14 +490,26 @@
                 });
                 daftarJuara.innerHTML = htmlDaftar;
 
-                tombol.innerHTML = "📸 Memotret...";
+                const posterContainer = document.getElementById('poster-container');
                 const posterElemen = document.getElementById('poster-weekly');
-                document.getElementById('poster-container').classList.remove('hidden'); 
+                
+                // KUNCI RAHASIA: Munculkan dulu kanvasnya agar browser me-render (mewarnai) gambar
+                posterContainer.classList.remove('hidden'); 
 
-                await new Promise(r => setTimeout(r, 200)); // Jeda super tipis biar HTML napas
+                tombol.innerHTML = "📸 Menggambar Poster...";
+                
+                // Tahan robotnya sampai SEMUA foto ter-load sempurna di layar (bukan sekadar di belakang layar)
+                const daftarGambar = Array.from(posterElemen.getElementsByTagName('img'));
+                await Promise.all(daftarGambar.map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+                }));
 
-                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
-                document.getElementById('poster-container').classList.add('hidden');
+                // Beri waktu napas tambahan 0.5 detik untuk kepastian
+                await new Promise(r => setTimeout(r, 500)); 
+
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#0f172a' });
+                posterContainer.classList.add('hidden'); // Sembunyikan lagi
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
@@ -520,6 +531,7 @@
         // ==========================================
         // POSTER 2: STORY (TOP 10)
         // ==========================================
+        // FUNGSI 3: POSTER STORY (TOP 10)
         async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
@@ -542,7 +554,6 @@
                 daftarJuara.innerHTML = ''; 
                 let top10Data = currentSortedData.slice(0, 10); 
 
-                // Proses Sedot & Ubah 10 Foto Serentak (Sangat Cepat)
                 const janjiFoto = top10Data.map(pelari => {
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/120';
                     return fetchImageAsBase64Fast(picUrl).then(base64 => ({ pelari, base64 }));
@@ -553,12 +564,11 @@
                 hasilFoto.forEach((item, index) => {
                     let pelari = item.pelari;
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-                    
                     htmlDaftarJuara += `
                         <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
-                                <img src="${item.base64}" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
+                                <img src="${item.base64}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
                                 <div style="display: flex; flex-direction: column;">
                                     <span style="font-size: 28px; font-weight: bold; color: white;">${pelari.name}</span>
                                     <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
@@ -572,17 +582,26 @@
                 });
                 daftarJuara.innerHTML = htmlDaftarJuara;
 
-                tombol.innerHTML = "📸 Memotret...";
+                const posterContainer = document.getElementById('poster-container-story');
                 const posterElemen = document.getElementById('poster-weekly-story');
-                document.getElementById('poster-container-story').classList.remove('hidden'); 
+                
+                // KUNCI RAHASIA
+                posterContainer.classList.remove('hidden'); 
 
-                await new Promise(r => setTimeout(r, 200)); // Jeda super tipis
+                tombol.innerHTML = "📸 Menggambar Poster...";
 
-                const canvas = await html2canvas(posterElemen, { scale: 2, backgroundColor: '#0f172a' });
-                document.getElementById('poster-container-story').classList.add('hidden');
+                const daftarGambar = Array.from(posterElemen.getElementsByTagName('img'));
+                await Promise.all(daftarGambar.map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+                }));
+
+                await new Promise(r => setTimeout(r, 500)); // Tambahan napas 0.5 detik
+
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#0f172a' });
+                posterContainer.classList.add('hidden');
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
-                
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
                     const blob = await (await fetch(imageURI)).blob();
                     const file = new File([blob], 'Top10-Leaderboard.jpg', { type: 'image/jpeg' });
