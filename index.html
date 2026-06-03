@@ -604,63 +604,56 @@
     </script>
 
     <!-- ======================================================= -->
-    <!-- KANVAS POSTER FEED (SEMBUNYIKAN SECARA DEFAULT) -->
+    <!-- KANVAS POSTER FEED (REVISI DESAIN) -->
     <!-- ======================================================= -->
     <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
-        <div id="poster-weekly" style="width: 1080px; height: 1350px; background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); padding: 60px; font-family: sans-serif; position: relative; overflow: hidden;">
+        <div id="poster-weekly" style="width: 1080px; height: 1350px; background: linear-gradient(180deg, #0d1117 0%, #161b22 100%); padding: 60px; font-family: 'Arial', sans-serif; position: relative; overflow: hidden;">
             
-            <!-- Foto Personal Latar Belakang (Transparan) -->
-            <img id="gambar-personal-overlay" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: 0; width: 65%; max-height: 85%; object-fit: contain; z-index: 0; opacity: 0.9;">
+            <img id="gambar-personal-overlay" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: 0; width: 60%; z-index: 0; opacity: 0.85;">
 
             <div style="position: relative; z-index: 10;">
-                <div style="text-align: center; margin-bottom: 50px;">
-                    <h2 style="font-size: 40px; color: #9ca3af; letter-spacing: 5px; margin: 0 0 15px 0; text-transform: uppercase;">LEADERBOARD KLASEMEN</h2>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 25px; margin-bottom: 20px;">
-                        <!-- Logo SR tanpa crossorigin dan menggunakan %20 untuk spasi -->
-                        <img src="Logo%20SR.jpeg" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #ea580c; background: white;">
-                        <h1 style="font-size: 90px; color: #ea580c; font-weight: 900; margin: 0; text-transform: uppercase;">SIAK RUNNERS</h1>
+                <div style="text-align: center; margin-bottom: 50px; display: flex; flex-direction: column; align-items: center;">
+                    <h2 style="font-size: 35px; color: #8b949e; letter-spacing: 6px; margin-bottom: 20px; text-transform: uppercase;">TOP 10 LEADERBOARD</h2>
+                    <div style="display: flex; align-items: center; gap: 25px;">
+                        <img src="Logo%20SR.jpeg" style="width: 120px; height: 120px; object-fit: contain;">
+                        <h1 style="font-size: 95px; color: #f97316; font-weight: 800; margin: 0; text-transform: uppercase; text-shadow: 2px 4px 6px rgba(0,0,0,0.5);">SIAK RUNNERS</h1>
                     </div>
-                    <div style="background: rgba(255,255,255,0.1); display: inline-block; padding: 15px 40px; border-radius: 50px;">
-                        <p id="poster-tanggal" style="font-size: 30px; color: #cbd5e1; font-weight: bold; margin: 0;"></p>
+                    <div style="background: rgba(255,255,255,0.08); padding: 15px 40px; border-radius: 50px; margin-top: 25px; border: 1px solid #30363d;">
+                        <p id="poster-tanggal" style="font-size: 32px; color: #e6edf3; font-weight: 600; margin: 0;"></p>
                     </div>
                 </div>
                 <div id="poster-daftar-juara" style="display: flex; flex-direction: column; gap: 20px;"></div>
             </div>
             
-            <div style="position: absolute; bottom: 50px; left: 0; width: 100%; text-align: center; z-index: 10;">
-                <h3 style="color: white; font-size: 35px; margin: 0;">Terus Bergerak, Terus Berlari!</h3>
-                <p style="color: #9ca3af; font-size: 25px; margin-top: 10px;">Generate otomatis via siakrunners.vercel.app</p>
+            <div style="position: absolute; bottom: 50px; width: 100%; text-align: center; z-index: 10;">
+                <h3 style="color: #c9d1d9; font-size: 35px; font-weight: 700; margin: 0;">Terus Bergerak, Terus Berlari!</h3>
             </div>
         </div>
     </div>
 
     <!-- ======================================================= -->
-    <!-- KANVAS POSTER STORY (SEMBUNYIKAN SECARA DEFAULT) -->
+    <!-- KANVAS POSTER STORY (REVISI DESAIN) -->
     <!-- ======================================================= -->
     <div id="poster-container-story" class="hidden fixed top-0 left-0 -z-50">
-        <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: linear-gradient(180deg, #0f172a 0%, #000000 100%); padding: 80px 60px; font-family: sans-serif; position: relative; box-sizing: border-box; overflow: hidden;">
+        <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: linear-gradient(160deg, #0d1117 0%, #161b22 100%); padding: 100px 60px; font-family: 'Arial', sans-serif; position: relative; overflow: hidden; box-sizing: border-box;">
             
-            <!-- Foto Personal Latar Belakang (Transparan) -->
-            <img id="gambar-personal-overlay-story" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: -50px; width: 75%; max-height: 80%; object-fit: contain; z-index: 0; opacity: 0.9;">
+            <img id="gambar-personal-overlay-story" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: -50px; width: 75%; z-index: 0; opacity: 0.85;">
 
             <div style="position: relative; z-index: 10;">
-                <div style="text-align: center; margin-top: 20px; margin-bottom: 50px;">
-                    <h2 style="font-size: 35px; color: #9ca3af; letter-spacing: 4px; margin: 0 0 15px 0; text-transform: uppercase;">TOP 10 LEADERBOARD</h2>
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
-                        <!-- Logo SR tanpa crossorigin dan menggunakan %20 untuk spasi -->
-                        <img src="Logo%20SR.jpeg" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #ea580c; background: white;">
-                        <h1 style="font-size: 85px; color: #ea580c; font-weight: 900; margin: 0; text-transform: uppercase;">SIAK RUNNERS</h1>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.15); display: inline-block; padding: 15px 40px; border-radius: 50px; backdrop-filter: blur(5px);">
-                        <p id="poster-tanggal-story" style="color: #f1f5f9; font-size: 30px; font-weight: bold; margin: 0;"></p>
+                <div style="text-align: center; margin-bottom: 60px; display: flex; flex-direction: column; align-items: center;">
+                    <h2 style="font-size: 40px; color: #8b949e; letter-spacing: 6px; margin-bottom: 25px; text-transform: uppercase;">LEADERBOARD</h2>
+                    <img src="Logo%20SR.jpeg" style="width: 200px; height: 200px; object-fit: contain; margin-bottom: 20px;">
+                    <h1 style="font-size: 110px; color: #f97316; font-weight: 800; margin: 0; text-transform: uppercase; text-shadow: 3px 6px 8px rgba(0,0,0,0.5);">SIAK RUNNERS</h1>
+                    <div style="background: rgba(255,255,255,0.08); padding: 20px 50px; border-radius: 50px; margin-top: 30px; border: 1px solid #30363d;">
+                        <p id="poster-tanggal-story" style="font-size: 35px; color: #e6edf3; font-weight: 600; margin: 0;"></p>
                     </div>
                 </div>
-                <div id="poster-daftar-juara-story" style="display: flex; flex-direction: column; gap: 20px;"></div>
+                <div id="poster-daftar-juara-story" style="display: flex; flex-direction: column; gap: 25px;"></div>
             </div>
             
-            <div style="position: absolute; bottom: 80px; left: 0; width: 100%; text-align: center; z-index: 10;">
-                <p style="color: white; font-size: 35px; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Terus Bergerak, Terus Berlari!</p>
-                <p style="color: rgba(255,255,255,0.7); font-size: 25px; margin:0;">siakrunners.vercel.app</p>
+            <div style="position: absolute; bottom: 100px; width: 100%; text-align: center; z-index: 10;">
+                <p style="color: #c9d1d9; font-size: 35px; font-weight: 700; margin-bottom: 15px;">Terus Bergerak, Terus Berlari!</p>
+                <p style="color: #8b949e; font-size: 25px; margin: 0;">siakrunners.vercel.app</p>
             </div>
         </div>
     </div>
