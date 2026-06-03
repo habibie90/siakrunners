@@ -427,71 +427,14 @@
         // KODINGAN TAMBAHAN UNTUK GENERATE POSTER (FEED & STORY) TANPA ALERT
         // ---------------------------------------------------------------------
         
+        
         // ==========================================
-        // FUNGSI UBAH FOTO JADI TEKS (SUPER KILAT)
+        // FUNGSI 1: POSTER FEED (TOP 5)
         // ==========================================
-        // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR)
-        // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR & ANTI MOGOK)
-        // FUNGSI 1: UBAH FOTO JADI TEKS KILAT (ANTI BLOKIR & KURIR BERLAPIS)
-        async function fetchImageAsBase64Fast(url) {
-            // Kalau foto hasil upload manual (sudah base64), langsung loloskan
-            if (!url || url.startsWith('data:')) return url;
-            
-            // CEK INGATAN: Kalau sebelumnya sudah pernah di-download, pakai yang ada di memori (0 Detik)
-            if (window.imageCache && window.imageCache[url]) return window.imageCache[url];
-
-            // SIAPKAN 3 KURIR PROXY BERBEDA
-            const proxies = [
-                `https://corsproxy.io/?${encodeURIComponent(url)}`, // Kurir Utama (Paling Stabil)
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, // Kurir Cadangan 1
-                `https://wsrv.xyz/?url=${encodeURIComponent(url)}&w=150&h=150&fit=cover` // Kurir Cadangan 2
-            ];
-
-            let validBlob = null;
-
-            // Suruh kurir berangkat satu per satu secara bergantian
-            for (let proxy of proxies) {
-                try {
-                    const response = await fetch(proxy);
-                    if (response.ok) {
-                        const tempBlob = await response.blob();
-                        // VERIFIKASI KETAT: Pastikan yang dibawa benar-benar gambar, bukan error transparan!
-                        if (tempBlob.type.startsWith('image/')) {
-                            validBlob = tempBlob;
-                            break; // Kurir berhasil, hentikan pencarian
-                        }
-                    }
-                } catch (e) {
-                    console.log("Satu proxy diblokir Strava, mengalihkan ke proxy berikutnya...");
-                }
-            }
-
-            // Jika KETIGA kurir gagal semua, pasang logo SR agar tidak bolong
-            if (!validBlob) {
-                return 'https://via.placeholder.com/150/1e293b/ffffff?text=SR';
-            }
-
-            // Ubah gambar asli menjadi teks (Base64)
-            return await new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    // Simpan ke ingatan agar klik berikutnya super cepat
-                    if (!window.imageCache) window.imageCache = {};
-                    window.imageCache[url] = reader.result;
-                    
-                    resolve(reader.result);
-                };
-                reader.readAsDataURL(validBlob);
-            });
-        }
-        // ==========================================
-        // POSTER 1: FEED (TOP 5)
-        // ==========================================
-        // FUNGSI 2: POSTER FEED (TOP 5)
         async function generatePosterIG(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Ekstrak Foto...";
+            tombol.innerHTML = "⏳ Melukis Poster...";
             tombol.disabled = true;
 
             try {
@@ -502,21 +445,19 @@
                 daftarJuara.innerHTML = ''; 
                 let top5Data = currentSortedData.slice(0, 5); 
 
-                const janjiFoto = top5Data.map(pelari => {
-                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/120';
-                    return fetchImageAsBase64Fast(picUrl).then(base64 => ({ pelari, base64 }));
-                });
-                const hasilFoto = await Promise.all(janjiFoto);
-
                 let htmlDaftar = '';
-                hasilFoto.forEach((item, index) => {
-                    let pelari = item.pelari;
+                top5Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    
+                    // LANGSUNG TEMPEL: Foto otomatis memakai Cloudinary dari database Bapak
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
+                    
                     htmlDaftar += `
                         <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
                                 <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
-                                <img src="${item.base64}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
+                                <!-- WAJIB tambahkan crossorigin="anonymous" agar diizinkan html2canvas -->
+                                <img src="${picUrl}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
                                 <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.name}</span>
                             </div>
                             <div style="text-align: right;">
@@ -530,23 +471,30 @@
                 const posterContainer = document.getElementById('poster-container');
                 const posterElemen = document.getElementById('poster-weekly');
                 
-                // KUNCI RAHASIA: Munculkan dulu kanvasnya agar browser me-render (mewarnai) gambar
+                // Lempar keluar layar sebentar agar HP bisa fokus melukis
                 posterContainer.classList.remove('hidden'); 
+                posterContainer.style.position = 'absolute';
+                posterContainer.style.left = '-9999px';
+                posterContainer.style.top = '0';
 
-                tombol.innerHTML = "📸 Menggambar Poster...";
-                
-                // Tahan robotnya sampai SEMUA foto ter-load sempurna di layar (bukan sekadar di belakang layar)
+                tombol.innerHTML = "📸 Memotret...";
+
+                // Tahan hitungan detik sampai gambar Cloudinary ter-download utuh di HP
                 const daftarGambar = Array.from(posterElemen.getElementsByTagName('img'));
                 await Promise.all(daftarGambar.map(img => {
                     if (img.complete) return Promise.resolve();
                     return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
                 }));
-
-                // Beri waktu napas tambahan 0.5 detik untuk kepastian
+                
+                // Jeda ekstra 0.5 detik agar HTML bernapas santai
                 await new Promise(r => setTimeout(r, 500)); 
 
-                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#0f172a' });
-                posterContainer.classList.add('hidden'); // Sembunyikan lagi
+                // CETAK (Pastikan useCORS aktif)
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                
+                posterContainer.classList.add('hidden');
+                posterContainer.style.position = 'fixed';
+                posterContainer.style.left = '0';
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
@@ -566,13 +514,12 @@
         }
 
         // ==========================================
-        // POSTER 2: STORY (TOP 10)
+        // FUNGSI 2: POSTER STORY (TOP 10)
         // ==========================================
-        // FUNGSI 3: POSTER STORY (TOP 10)
         async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Ekstrak 10 Foto...";
+            tombol.innerHTML = "⏳ Melukis Poster...";
             tombol.disabled = true;
 
             try {
@@ -591,21 +538,17 @@
                 daftarJuara.innerHTML = ''; 
                 let top10Data = currentSortedData.slice(0, 10); 
 
-                const janjiFoto = top10Data.map(pelari => {
-                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/120';
-                    return fetchImageAsBase64Fast(picUrl).then(base64 => ({ pelari, base64 }));
-                });
-                const hasilFoto = await Promise.all(janjiFoto);
-
                 let htmlDaftarJuara = '';
-                hasilFoto.forEach((item, index) => {
-                    let pelari = item.pelari;
+                top10Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                    
+                    let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
+                    
                     htmlDaftarJuara += `
                         <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
-                                <img src="${item.base64}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
+                                <img src="${picUrl}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
                                 <div style="display: flex; flex-direction: column;">
                                     <span style="font-size: 28px; font-weight: bold; color: white;">${pelari.name}</span>
                                     <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
@@ -622,21 +565,25 @@
                 const posterContainer = document.getElementById('poster-container-story');
                 const posterElemen = document.getElementById('poster-weekly-story');
                 
-                // KUNCI RAHASIA
                 posterContainer.classList.remove('hidden'); 
+                posterContainer.style.position = 'absolute';
+                posterContainer.style.left = '-9999px';
+                posterContainer.style.top = '0';
 
-                tombol.innerHTML = "📸 Menggambar Poster...";
+                tombol.innerHTML = "📸 Memotret...";
 
                 const daftarGambar = Array.from(posterElemen.getElementsByTagName('img'));
                 await Promise.all(daftarGambar.map(img => {
                     if (img.complete) return Promise.resolve();
                     return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
                 }));
+                await new Promise(r => setTimeout(r, 500)); 
 
-                await new Promise(r => setTimeout(r, 500)); // Tambahan napas 0.5 detik
-
-                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, allowTaint: true, backgroundColor: '#0f172a' });
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                
                 posterContainer.classList.add('hidden');
+                posterContainer.style.position = 'fixed';
+                posterContainer.style.left = '0';
 
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
