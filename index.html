@@ -95,6 +95,11 @@
                             <button onclick="generatePosterStory(event)" class="w-full md:w-auto bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-80 text-white text-xs md:text-sm font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
                                 📱 Story
                             </button>
+                            <!-- TOMBOL BARU: Upload Foto Personal (AI Pixelz) -->
+                            <input type="file" id="input-foto-personal" accept="image/*" style="display: none;">
+                            <button onclick="document.getElementById('input-foto-personal').click()" style="background-color: #3b82f6; color: white; padding: 10px 15px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;">
+                                👤 Tambah Foto Pamer (Otomatis Hapus Latar)
+                            </button>
                             <button onclick="exportToExcel()" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white text-xs md:text-sm font-bold py-2 px-3 rounded-lg transition flex items-center justify-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg> Export
                             </button>
@@ -601,10 +606,57 @@
                 tombol.innerHTML = teksAsli; tombol.disabled = false;
             }
         }
+
+        // ==========================================
+        // FUNGSI UPLOAD FOTO PERSONAL KE POSTER (VIA PIXELZ)
+        // ==========================================
+        document.getElementById('input-foto-personal').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Beri tahu user prosesnya sedang berjalan
+            alert("Sedang mengupload dan menghapus latar belakang oleh AI... Mohon tunggu sekitar 5-10 detik.");
+
+            // Siapkan paket ke Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'fhi6tgyi'); // Memakai preset Unsigned Bapak
+
+            try {
+                // Tembakkan ke Cloudinary Bapak
+                const res = await fetch(`https://api.cloudinary.com/v1_1/dsai9btzj/image/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (data.secure_url) {
+                    // TRIK SULAP: Tambahkan "e_pixelz" untuk memanggil AI penghapus latar
+                    let urlTransparan = data.secure_url.replace('/upload/', '/upload/e_pixelz/').replace(/\.jpg|\.jpeg/i, '.png');
+
+                    // Tempelkan ke dalam poster
+                    const imgOverlay = document.getElementById('gambar-personal-overlay');
+                    imgOverlay.src = urlTransparan;
+                    imgOverlay.style.display = 'block';
+                    
+                    // Pastikan tombol cetak menunggu gambar ini termuat
+                    imgOverlay.onload = () => {
+                        alert("✅ Foto pamer berhasil ditempel! Silakan klik tombol 'Story' atau 'Feed' untuk mencetak poster.");
+                    };
+                } else {
+                    alert("Terjadi kesalahan saat mengupload foto.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Gagal menghubungi server penyedot latar.");
+            }
+        });
+        
     </script>
 
     <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
         <div id="poster-weekly" style="width: 1080px; height: 1080px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 60px; font-family: sans-serif; position: relative;">
+            <img id="gambar-personal-overlay" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: 0; width: 65%; max-height: 85%; object-fit: contain; z-index: 0; opacity: 0.9;">
             <div style="text-align: center; border-bottom: 4px solid #ea580c; padding-bottom: 20px; margin-bottom: 40px;">
                 <h1 style="color: #ea580c; font-size: 50px; font-weight: 900; margin: 0; text-transform: uppercase;">SIAK RUNNERS</h1>
                 <h2 style="font-size: 35px; color: #cbd5e1; margin: 10px 0 0 0; letter-spacing: 2px;">WEEKLY LEADERBOARD</h2>
@@ -619,6 +671,7 @@
 
     <div id="poster-container-story" class="hidden fixed top-0 left-0 -z-50">
         <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #ea580c 100%); color: white; padding: 100px 60px 80px 60px; font-family: sans-serif; position: relative; box-sizing: border-box;">
+            <img id="gambar-personal-overlay-story" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: -50px; width: 75%; max-height: 80%; object-fit: contain; z-index: 0; opacity: 0.9;">
             <div style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
                 <h2 style="color: #cbd5e1; font-size: 30px; margin: 0; letter-spacing: 5px; text-transform: uppercase;">Leaderboard Klasemen</h2>
                 <h1 style="color: white; font-size: 75px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 3px 5px 15px rgba(0,0,0,0.4);">SIAK RUNNERS</h1>
