@@ -184,10 +184,14 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-b border-gray-700 pb-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap Pemesan</label>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap</label>
                             <input type="text" id="j-nama" required placeholder="Sesuai KTP/Panggilan" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500" />
                         </div>
                         <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">No. Whatsapp</label>
+                            <input type="tel" id="j-nohp" required placeholder="Contoh: 081234567890" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500" />
+                        </div>
+                        <div class="md:col-span-2">
                             <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Jumlah Jersey</label>
                             <input type="number" id="j-qty" min="1" max="50" value="1" required onchange="updateJerseyRows()" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500" />
                         </div>
@@ -199,29 +203,53 @@
                         <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Metode Pengiriman</label>
                         <div class="flex flex-col gap-3">
                             <label class="flex items-center gap-3 bg-gray-900 border border-gray-700 p-3 rounded-xl cursor-pointer hover:border-orange-500">
-                                <input type="radio" name="j-metode" value="Ambil di Siak" checked class="w-4 h-4 text-orange-500 focus:ring-orange-500">
-                                <span class="text-sm font-semibold text-gray-300">Ambil Sendiri di Siak (Sekretariat)</span>
+                                <input type="radio" name="j-metode" value="Ambil di Siak" checked onchange="toggleAlamat()" class="w-4 h-4 text-orange-500 focus:ring-orange-500">
+                                <span class="text-sm font-semibold text-gray-300">Ambil Sendiri di Siak <br><span class="text-xs font-normal text-gray-400 italic">(Jl. Raja Kecik No. 52 Kampung Rempak, Bengkel Lubis Ban)</span></span>
                             </label>
                             <label class="flex items-center gap-3 bg-gray-900 border border-gray-700 p-3 rounded-xl cursor-pointer hover:border-orange-500">
-                                <input type="radio" name="j-metode" value="Dikirim ke Rumah" class="w-4 h-4 text-orange-500 focus:ring-orange-500">
+                                <input type="radio" name="j-metode" value="Dikirim ke Tujuan" onchange="toggleAlamat()" class="w-4 h-4 text-orange-500 focus:ring-orange-500">
                                 <span class="text-sm font-semibold text-gray-300">Dikirim ke Tujuan <span class="text-red-400 text-xs italic">(Ada biaya tambahan ongkir bayar COD)</span></span>
                             </label>
                         </div>
                     </div>
 
-                    <div>
+                    <div id="container-alamat" style="display: none;">
                         <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Alamat Lengkap Tujuan</label>
-                        <textarea id="j-alamat" rows="3" required placeholder="Tuliskan alamat lengkap beserta kecamatan dan kode pos" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500"></textarea>
+                        <textarea id="j-alamat" rows="3" placeholder="Tuliskan alamat lengkap beserta kecamatan dan kode pos" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500"></textarea>
+                    </div>
+
+                    <div class="border-t border-gray-700 pt-5">
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Metode Pembayaran</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="j-bayar" value="Transfer BRI" checked onchange="togglePembayaran()" class="text-orange-500 focus:ring-orange-500">
+                                <span class="text-sm text-gray-300 font-bold">Transfer BRI</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="j-bayar" value="QRIS" onchange="togglePembayaran()" class="text-orange-500 focus:ring-orange-500">
+                                <span class="text-sm text-gray-300 font-bold">QRIS</span>
+                            </label>
+                        </div>
+
+                        <div id="info-bri" class="mt-4 p-4 bg-blue-900/20 border border-blue-500/30 rounded-xl">
+                            <p class="text-xs text-gray-400 mb-1 uppercase tracking-widest">Transfer ke Rekening:</p>
+                            <p class="text-lg font-black text-white">BRI 33860104590052</p>
+                            <p class="text-sm text-blue-300 font-bold">a/n MUHAMAD HABIBI LUBIS</p>
+                        </div>
+                        
+                        <div id="info-qris" class="mt-4 p-4 bg-gray-800 border border-gray-600 rounded-xl text-center" style="display: none;">
+                            <p class="text-xs text-gray-400 mb-2 uppercase tracking-widest">Scan Barcode QRIS</p>
+                            <img src="qris.jpg" alt="QRIS Siak Runners" class="mx-auto rounded-lg w-48 h-auto border-2 border-orange-500" onerror="this.src='https://via.placeholder.com/200?text=Gambar+QRIS'">
+                        </div>
                     </div>
 
                     <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex justify-between items-center">
                         <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Total Pembayaran:</span>
-                        <span id="j-total-harga" class="text-2xl font-black text-orange-400">Rp 150.000</span>
+                        <span id="j-total-harga" class="text-2xl font-black text-orange-400">Rp 135.000</span>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Upload Bukti Transfer</label>
-                        <p class="text-xs text-gray-500 mb-2 italic">Silakan transfer sesuai nominal ke Rekening: <b>BSI 1234567890 a/n Siak Runners</b></p>
                         <input type="file" id="j-bukti" accept="image/*" required class="w-full text-xs text-gray-400 cursor-pointer border border-gray-700 p-2 rounded-xl bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-gray-700 file:text-white hover:file:bg-gray-600 transition-all" />
                     </div>
 
@@ -288,18 +316,6 @@
                     <p>Dimulai dari sekumpulan penghobi lari, kini kami tumbuh menjadi wadah bagi ratusan pelari dari berbagai kalangan. Bukan sekadar lari, kami berkomitmen membangun komunitas yang inklusif, rutin menyelenggarakan lari bersama (Sunday Morning Run), hingga berpartisipasi dalam berbagai event race nasional.</p>
                     <p class="text-gray-400 italic text-sm">"Bersama kami, setiap langkah adalah progres menuju diri yang lebih baik."</p>
                 </div>
-                <div class="flex justify-center space-x-8 mt-10 border-t border-gray-800 pt-8">
-                    <a href="https://www.instagram.com/siak_runners/" target="_blank" class="group flex flex-col items-center gap-2">
-                        <div class="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center border border-gray-700 group-hover:border-pink-500 group-hover:bg-pink-500/10 transition-all shadow-lg">
-                            <svg class="w-7 h-7 text-gray-400 group-hover:text-pink-500 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div>
-                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest group-hover:text-pink-500">Instagram</span>
-                    </a>
-                    <a href="https://www.facebook.com/share/1CjMCoGjYV/" target="_blank" class="group flex flex-col items-center gap-2">
-                        <div class="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center border border-gray-700 group-hover:border-blue-500 group-hover:bg-blue-500/10 transition-all shadow-lg">
-                            <svg class="w-7 h-7 text-gray-400 group-hover:text-blue-500 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
-                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest group-hover:text-blue-500">Facebook</span>
-                    </a>
-                </div>
             </div>
         </section>
     </div>
@@ -312,9 +328,49 @@
         let rawRunData = []; let profilesData = {}; let currentSortedData = []; let activeRunnerName = ""; let activeRunnerAllRuns = [];
 
         // ----------------------------------------------------
-        // FITUR BARU: LOGIKA PEMESANAN JERSEY
+        // LOGIKA PEMESANAN JERSEY (UPDATE HARGA & ALAMAT)
         // ----------------------------------------------------
-        const HARGA_JERSEY = 150000; // <- BAPAK BISA GANTI HARGA PER JERSEY DI SINI
+        const HARGA_BASE = 135000;
+
+        function toggleAlamat() {
+            const metode = document.querySelector('input[name="j-metode"]:checked').value;
+            const containerAlamat = document.getElementById('container-alamat');
+            const inputAlamat = document.getElementById('j-alamat');
+            if(metode === 'Dikirim ke Tujuan') {
+                containerAlamat.style.display = 'block';
+                inputAlamat.required = true;
+            } else {
+                containerAlamat.style.display = 'none';
+                inputAlamat.required = false;
+                inputAlamat.value = "";
+            }
+        }
+
+        function togglePembayaran() {
+            const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
+            if(bayar === 'QRIS') {
+                document.getElementById('info-bri').style.display = 'none';
+                document.getElementById('info-qris').style.display = 'block';
+            } else {
+                document.getElementById('info-bri').style.display = 'block';
+                document.getElementById('info-qris').style.display = 'none';
+            }
+        }
+
+        function hitungTotal() {
+            let total = 0;
+            let selects = document.querySelectorAll('.j-ukuran');
+            selects.forEach(sel => {
+                let val = sel.value;
+                let hargaSatuan = HARGA_BASE;
+                if(val === '2XL') hargaSatuan += 10000;
+                if(val === '3XL') hargaSatuan += 20000;
+                if(val === '4XL') hargaSatuan += 30000;
+                total += hargaSatuan;
+            });
+            document.getElementById('j-total-harga').innerText = 'Rp ' + total.toLocaleString('id-ID');
+            return total;
+        }
 
         function updateJerseyRows() {
             const qty = parseInt(document.getElementById('j-qty').value) || 1;
@@ -328,12 +384,14 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Ukuran</label>
-                                <select class="j-ukuran w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500 cursor-pointer">
+                                <select class="j-ukuran w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500 cursor-pointer" onchange="hitungTotal()">
                                     <option value="S">S</option>
                                     <option value="M">M</option>
                                     <option value="L">L</option>
                                     <option value="XL">XL</option>
-                                    <option value="XXL">XXL (+ Tambahan)</option>
+                                    <option value="2XL">2XL (+ Rp 10.000)</option>
+                                    <option value="3XL">3XL (+ Rp 20.000)</option>
+                                    <option value="4XL">4XL (+ Rp 30.000)</option>
                                 </select>
                             </div>
                             <div>
@@ -344,13 +402,10 @@
                     </div>
                 `;
             }
-            // Update Total Pembayaran
-            const total = qty * HARGA_JERSEY;
-            document.getElementById('j-total-harga').innerText = 'Rp ' + total.toLocaleString('id-ID');
+            hitungTotal();
         }
 
-        // Panggil fungsi sekali saat halaman dimuat agar baris pertama muncul
-        window.onload = () => { updateJerseyRows(); };
+        window.onload = () => { updateJerseyRows(); toggleAlamat(); togglePembayaran(); };
 
         async function submitJersey() {
             const btn = document.getElementById('btn-submit-jersey');
@@ -365,36 +420,35 @@
             btn.disabled = true; status.classList.add('hidden');
 
             try {
-                // 1. Kumpulkan data spesifikasi jersey dalam bentuk Array (Bukan teks gabungan)
                 let detailJersey = [];
                 document.querySelectorAll('#j-details-container > div').forEach((div) => {
                     let uk = div.querySelector('.j-ukuran').value;
                     let nd = div.querySelector('.j-namadada').value || '-';
-                    // Simpan sebagai objek terpisah
                     detailJersey.push({ ukuran: uk, namaDada: nd });
                 });
 
-                // 2. Upload Gambar Bukti Transfer ke Cloudinary
                 const CN = "dsai9btzj", UP = "ml_default"; 
                 const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", UP);
                 const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${CN}/image/upload`, { method: "POST", body: fd });
                 const fotoUrl = (await uploadRes.json()).secure_url;
 
-                // 3. Ambil sisa data form
                 const nama = document.getElementById('j-nama').value;
+                const noHp = document.getElementById('j-nohp').value;
                 const qty = document.getElementById('j-qty').value;
-                const alamat = document.getElementById('j-alamat').value;
+                const alamat = document.getElementById('j-alamat').value || "Ambil Sendiri";
                 const metode = document.querySelector('input[name="j-metode"]:checked').value;
-                const total = qty * HARGA_JERSEY;
+                const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
+                const total = hitungTotal();
 
-                // 4. Kirim ke Google Apps Script
                 const payload = {
                     action: "pesan_jersey",
                     namaPemesan: nama,
+                    noHp: noHp,
                     jumlahTotal: qty,
-                    details: detailJersey, // Data array langsung dikirim
+                    details: detailJersey,
                     metodeKirim: metode,
                     alamatLengkap: alamat,
+                    metodeBayar: bayar,
                     totalHarga: total,
                     buktiTransfer: fotoUrl
                 };
@@ -406,7 +460,7 @@
                     status.innerText = "✅ Pesanan Berhasil Dikirim! Admin akan segera memproses."; 
                     status.className = "text-center text-green-400 font-bold mt-3 block"; 
                     document.getElementById('jersey-form').reset();
-                    updateJerseyRows(); // Reset jumlah baris
+                    updateJerseyRows(); toggleAlamat(); togglePembayaran();
                 } else {
                     throw new Error("Gagal dari server");
                 }
@@ -423,13 +477,11 @@
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
             document.getElementById('page-' + pageId).classList.add('page-active');
             
-            // Reset semua warna tombol menu ke abu-abu
             document.querySelectorAll('nav button').forEach(btn => { 
                 btn.classList.remove('text-white', 'bg-white/10', 'text-orange-400', 'hover:bg-orange-500/10', 'border', 'border-orange-500/30'); 
                 btn.classList.add('text-gray-400'); 
             });
 
-            // Warnai khusus tombol yang aktif
             const activeBtn = document.getElementById('nav-' + pageId);
             if(pageId === 'jersey') {
                 activeBtn.classList.add('text-orange-400', 'bg-orange-500/10', 'border', 'border-orange-500/30');
@@ -490,7 +542,6 @@
             if (currentSortedData.length === 0) { 
                 tbody.innerHTML = `<tr><td colspan="3" class="text-center py-12">
                     <p class="text-gray-400 font-bold mb-2">Belum ada data terekam.</p>
-                    <p class="text-xs text-gray-500">Ayo klik tombol 'Hubungkan Strava' di atas untuk mulai bersaing!</p>
                 </td></tr>`; 
                 return; 
             }
