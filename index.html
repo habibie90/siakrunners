@@ -365,14 +365,14 @@
             btn.disabled = true; status.classList.add('hidden');
 
             try {
-                // 1. Kumpulkan data spesifikasi jersey
+                // 1. Kumpulkan data spesifikasi jersey dalam bentuk Array (Bukan teks gabungan)
                 let detailJersey = [];
-                document.querySelectorAll('#j-details-container > div').forEach((div, index) => {
+                document.querySelectorAll('#j-details-container > div').forEach((div) => {
                     let uk = div.querySelector('.j-ukuran').value;
                     let nd = div.querySelector('.j-namadada').value || '-';
-                    detailJersey.push(`[Jrsy ${index+1}: Ukuran ${uk}, Nama: ${nd}]`);
+                    // Simpan sebagai objek terpisah
+                    detailJersey.push({ ukuran: uk, namaDada: nd });
                 });
-                let spesifikasiLengkap = detailJersey.join(" | ");
 
                 // 2. Upload Gambar Bukti Transfer ke Cloudinary
                 const CN = "dsai9btzj", UP = "ml_default"; 
@@ -391,8 +391,8 @@
                 const payload = {
                     action: "pesan_jersey",
                     namaPemesan: nama,
-                    jumlah: qty,
-                    spesifikasi: spesifikasiLengkap,
+                    jumlahTotal: qty,
+                    details: detailJersey, // Data array langsung dikirim
                     metodeKirim: metode,
                     alamatLengkap: alamat,
                     totalHarga: total,
