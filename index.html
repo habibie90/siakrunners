@@ -25,24 +25,24 @@
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
         @font-face {
-                        font-family: 'Helofone';
-                        src: url('https://siakrunners.vercel.app/fonts/helofone.ttf') format('truetype'); /* Pastikan path URL ini benar sesuai lokasi file di server Bapak */
-                        font-display: swap;
-}
-        
+            font-family: 'Helofone';
+            src: url('https://siakrunners.vercel.app/fonts/helofone.ttf') format('truetype'); 
+            font-display: swap;
+        }
     </style>
 </head>
 <body class="animated-bg text-gray-200 font-sans antialiased selection:bg-red-500 selection:text-white">
 
     <nav class="glass-panel sticky top-0 z-50 border-b border-gray-700/50">
-        <div class="max-w-5xl mx-auto px-2 md:px-4 py-2.5 md:py-3 flex justify-between items-center">
+        <div class="max-w-6xl mx-auto px-2 md:px-4 py-2.5 md:py-3 flex justify-between items-center">
             <div class="flex items-center gap-2 md:gap-3 cursor-pointer shrink-0" onclick="switchPage('klasemen')">
-                <img src="Logo SR.jpeg" alt="Logo" class="h-7 md:h-8 rounded object-contain bg-white/95 p-1" onerror="this.src='https://via.placeholder.com/150'"/>
+                <img src="logo-siak-runners.png" alt="Logo" class="h-7 md:h-8 rounded object-contain p-1" onerror="this.src='https://via.placeholder.com/150'"/>
                 <span class="font-bold text-white tracking-widest text-sm md:text-base hidden sm:block">SIAK <span class="text-red-500">RUNNERS</span></span>
             </div>
-            <div class="flex gap-1 md:gap-4 text-[10px] md:text-sm font-semibold tracking-wider overflow-x-auto">
+            <div class="flex gap-1 md:gap-4 text-[10px] md:text-xs font-semibold tracking-wider overflow-x-auto">
                 <button onclick="switchPage('klasemen')" id="nav-klasemen" class="text-white bg-white/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">KLASEMEN</button>
                 <button onclick="switchPage('event')" id="nav-event" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">EVENT</button>
+                <button onclick="switchPage('jersey')" id="nav-jersey" class="text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap border border-orange-500/30">👕 JERSEY</button>
                 <button onclick="switchPage('upload')" id="nav-upload" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">UPLOAD FOTO</button>
                 <button onclick="switchPage('tentang')" id="nav-tentang" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">TENTANG</button>
             </div>
@@ -54,8 +54,8 @@
         <section id="page-klasemen" class="page-section page-active">
             <div class="glass-panel rounded-2xl mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-center p-5 md:p-6 gap-5 relative overflow-hidden">
                 <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto text-center md:text-left z-10">
-                    <div class="p-2 bg-white/95 backdrop-blur-md rounded-xl shadow-lg shrink-0 transform transition hover:scale-105">
-                        <img src="Logo SR.jpeg" alt="Logo" class="h-14 md:h-20 rounded object-contain" onerror="this.src='https://via.placeholder.com/150'"/>
+                    <div class="p-2 bg-gray-900 backdrop-blur-md rounded-xl shadow-lg shrink-0 transform transition hover:scale-105 border border-gray-700">
+                        <img src="logo-siak-runners.png" alt="Logo" class="h-14 md:h-20 rounded object-contain" onerror="this.src='https://via.placeholder.com/150'"/>
                     </div>
                     <div class="flex flex-col justify-center">
                         <h1 class="text-xl md:text-4xl font-extrabold tracking-wider uppercase leading-tight drop-shadow-md text-gray-300 mt-2 md:mt-0">
@@ -174,6 +174,63 @@
             </div>
         </section>
 
+        <section id="page-jersey" class="page-section">
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Pemesanan <span class="text-orange-500">Jersey</span></h2>
+                <p class="text-sm md:text-base text-gray-400 mt-2 max-w-2xl mx-auto tracking-wide">Miliki jersey resmi kebanggaan Siak Runners. Isi formulir di bawah ini untuk melakukan pemesanan.</p>
+            </div>
+            <div class="glass-panel p-6 md:p-8 rounded-2xl max-w-2xl mx-auto border-t-4 border-orange-500 shadow-2xl">
+                <form id="jersey-form" class="flex flex-col gap-5" onsubmit="event.preventDefault(); submitJersey();">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-b border-gray-700 pb-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap Pemesan</label>
+                            <input type="text" id="j-nama" required placeholder="Sesuai KTP/Panggilan" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Jumlah Jersey</label>
+                            <input type="number" id="j-qty" min="1" max="50" value="1" required onchange="updateJerseyRows()" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500" />
+                        </div>
+                    </div>
+
+                    <div id="j-details-container" class="flex flex-col gap-3"></div>
+
+                    <div class="border-t border-gray-700 pt-5">
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Metode Pengiriman</label>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-center gap-3 bg-gray-900 border border-gray-700 p-3 rounded-xl cursor-pointer hover:border-orange-500">
+                                <input type="radio" name="j-metode" value="Ambil di Siak" checked class="w-4 h-4 text-orange-500 focus:ring-orange-500">
+                                <span class="text-sm font-semibold text-gray-300">Ambil Sendiri di Siak (Sekretariat)</span>
+                            </label>
+                            <label class="flex items-center gap-3 bg-gray-900 border border-gray-700 p-3 rounded-xl cursor-pointer hover:border-orange-500">
+                                <input type="radio" name="j-metode" value="Dikirim ke Rumah" class="w-4 h-4 text-orange-500 focus:ring-orange-500">
+                                <span class="text-sm font-semibold text-gray-300">Dikirim ke Tujuan <span class="text-red-400 text-xs italic">(Ada biaya tambahan ongkir bayar COD)</span></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Alamat Lengkap Tujuan</label>
+                        <textarea id="j-alamat" rows="3" required placeholder="Tuliskan alamat lengkap beserta kecamatan dan kode pos" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500"></textarea>
+                    </div>
+
+                    <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex justify-between items-center">
+                        <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Total Pembayaran:</span>
+                        <span id="j-total-harga" class="text-2xl font-black text-orange-400">Rp 150.000</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Upload Bukti Transfer</label>
+                        <p class="text-xs text-gray-500 mb-2 italic">Silakan transfer sesuai nominal ke Rekening: <b>BSI 1234567890 a/n Siak Runners</b></p>
+                        <input type="file" id="j-bukti" accept="image/*" required class="w-full text-xs text-gray-400 cursor-pointer border border-gray-700 p-2 rounded-xl bg-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-gray-700 file:text-white hover:file:bg-gray-600 transition-all" />
+                    </div>
+
+                    <button id="btn-submit-jersey" type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-700 hover:from-orange-400 hover:to-orange-600 text-white font-black py-4 rounded-xl uppercase tracking-widest transition-all transform hover:scale-[1.02] shadow-lg mt-2">Pesan Jersey Sekarang</button>
+                    <p id="submit-status-jersey" class="text-center text-sm font-bold mt-2 hidden"></p>
+                </form>
+            </div>
+        </section>
+
         <section id="page-upload" class="page-section">
             <div class="mb-8 text-center">
                 <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Upload <span class="text-red-500">Foto Event</span></h2>
@@ -224,7 +281,7 @@
 
         <section id="page-tentang" class="page-section">
             <div class="glass-panel p-8 md:p-12 rounded-2xl text-center shadow-2xl border-t-4 border-red-500">
-                <img src="Logo SR.jpeg" alt="Logo" class="h-24 mx-auto rounded-xl mb-6 bg-white p-2 object-contain shadow-lg" onerror="this.src='https://via.placeholder.com/150'"/>
+                <img src="logo-siak-runners.png" alt="Logo" class="h-24 mx-auto mb-6 object-contain shadow-lg" onerror="this.src='https://via.placeholder.com/150'"/>
                 <h2 class="text-3xl font-black text-white uppercase tracking-widest mb-6">Siak <span class="text-pulse-red">Runners</span></h2>
                 <div class="mt-8 text-gray-300 leading-relaxed text-center max-w-2xl mx-auto space-y-4">
                     <p><span class="text-red-500 font-bold italic tracking-wider">SIAK RUNNERS</span> telah aktif menggerakkan semangat pola hidup sehat di Kabupaten Siak sejak tahun <span class="text-white font-bold">2023</span>.</p>
@@ -254,11 +311,134 @@
 
         let rawRunData = []; let profilesData = {}; let currentSortedData = []; let activeRunnerName = ""; let activeRunnerAllRuns = [];
 
+        // ----------------------------------------------------
+        // FITUR BARU: LOGIKA PEMESANAN JERSEY
+        // ----------------------------------------------------
+        const HARGA_JERSEY = 150000; // <- BAPAK BISA GANTI HARGA PER JERSEY DI SINI
+
+        function updateJerseyRows() {
+            const qty = parseInt(document.getElementById('j-qty').value) || 1;
+            const container = document.getElementById('j-details-container');
+            container.innerHTML = '';
+            
+            for(let i=1; i<=qty; i++) {
+                container.innerHTML += `
+                    <div class="p-4 bg-gray-800/50 rounded-xl border border-gray-700 mt-2">
+                        <p class="text-xs font-bold text-orange-400 mb-3 border-b border-gray-700 pb-2">Detail Jersey Ke-${i}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Ukuran</label>
+                                <select class="j-ukuran w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500 cursor-pointer">
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL (+ Tambahan)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Nama Dada (Opsional)</label>
+                                <input type="text" class="j-namadada w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500" placeholder="Kosongkan jika polos">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            // Update Total Pembayaran
+            const total = qty * HARGA_JERSEY;
+            document.getElementById('j-total-harga').innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        // Panggil fungsi sekali saat halaman dimuat agar baris pertama muncul
+        window.onload = () => { updateJerseyRows(); };
+
+        async function submitJersey() {
+            const btn = document.getElementById('btn-submit-jersey');
+            const status = document.getElementById('submit-status-jersey');
+            const file = document.getElementById('j-bukti').files[0];
+            
+            if(!file) {
+                alert("Mohon upload bukti transfer terlebih dahulu."); return;
+            }
+
+            btn.innerHTML = `<span>⏳ Mengirim Data...</span>`; 
+            btn.disabled = true; status.classList.add('hidden');
+
+            try {
+                // 1. Kumpulkan data spesifikasi jersey
+                let detailJersey = [];
+                document.querySelectorAll('#j-details-container > div').forEach((div, index) => {
+                    let uk = div.querySelector('.j-ukuran').value;
+                    let nd = div.querySelector('.j-namadada').value || '-';
+                    detailJersey.push(`[Jrsy ${index+1}: Ukuran ${uk}, Nama: ${nd}]`);
+                });
+                let spesifikasiLengkap = detailJersey.join(" | ");
+
+                // 2. Upload Gambar Bukti Transfer ke Cloudinary
+                const CN = "dsai9btzj", UP = "ml_default"; 
+                const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", UP);
+                const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${CN}/image/upload`, { method: "POST", body: fd });
+                const fotoUrl = (await uploadRes.json()).secure_url;
+
+                // 3. Ambil sisa data form
+                const nama = document.getElementById('j-nama').value;
+                const qty = document.getElementById('j-qty').value;
+                const alamat = document.getElementById('j-alamat').value;
+                const metode = document.querySelector('input[name="j-metode"]:checked').value;
+                const total = qty * HARGA_JERSEY;
+
+                // 4. Kirim ke Google Apps Script
+                const payload = {
+                    action: "pesan_jersey",
+                    namaPemesan: nama,
+                    jumlah: qty,
+                    spesifikasi: spesifikasiLengkap,
+                    metodeKirim: metode,
+                    alamatLengkap: alamat,
+                    totalHarga: total,
+                    buktiTransfer: fotoUrl
+                };
+
+                const sr = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+                const responServer = await sr.json();
+
+                if (responServer.status === "success") { 
+                    status.innerText = "✅ Pesanan Berhasil Dikirim! Admin akan segera memproses."; 
+                    status.className = "text-center text-green-400 font-bold mt-3 block"; 
+                    document.getElementById('jersey-form').reset();
+                    updateJerseyRows(); // Reset jumlah baris
+                } else {
+                    throw new Error("Gagal dari server");
+                }
+            } catch (e) { 
+                status.innerText = "❌ Gagal mengirim: Cek koneksi / hubungi admin."; 
+                status.className = "text-center text-red-400 font-bold mt-3 block"; 
+            } finally { 
+                btn.innerHTML = `Pesan Jersey Sekarang`; btn.disabled = false; 
+            }
+        }
+        // ----------------------------------------------------
+
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
             document.getElementById('page-' + pageId).classList.add('page-active');
-            document.querySelectorAll('nav button').forEach(btn => { btn.classList.remove('text-white', 'bg-white/10'); btn.classList.add('text-gray-400'); });
-            document.getElementById('nav-' + pageId).classList.add('text-white', 'bg-white/10');
+            
+            // Reset semua warna tombol menu ke abu-abu
+            document.querySelectorAll('nav button').forEach(btn => { 
+                btn.classList.remove('text-white', 'bg-white/10', 'text-orange-400', 'hover:bg-orange-500/10', 'border', 'border-orange-500/30'); 
+                btn.classList.add('text-gray-400'); 
+            });
+
+            // Warnai khusus tombol yang aktif
+            const activeBtn = document.getElementById('nav-' + pageId);
+            if(pageId === 'jersey') {
+                activeBtn.classList.add('text-orange-400', 'bg-orange-500/10', 'border', 'border-orange-500/30');
+                activeBtn.classList.remove('text-gray-400');
+            } else {
+                activeBtn.classList.add('text-white', 'bg-white/10');
+                activeBtn.classList.remove('text-gray-400');
+            }
+
             if (pageId === 'event') loadEventData();
         }
 
@@ -430,13 +610,8 @@
         loadLeaderboardData();
 
         // ---------------------------------------------------------------------
-        // KODINGAN TAMBAHAN UNTUK GENERATE POSTER (FEED & STORY) TANPA ALERT
+        // KODINGAN POSTER FEED & STORY
         // ---------------------------------------------------------------------
-        
-        
-        // ==========================================
-        // FUNGSI 1: POSTER FEED (TOP 5)
-        // ==========================================
         async function generatePosterIG(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
@@ -454,20 +629,17 @@
                 let htmlDaftar = '';
                 top5Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-                    
-                    // LANGSUNG TEMPEL: Foto otomatis memakai Cloudinary dari database Bapak
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
                     
                     htmlDaftar += `
-                        <div style="background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); border-left: 6px solid #f97316; border-radius: 16px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
                                 <span style="font-size: 40px; font-weight: bold; width: 50px; text-align: center;">${medali}</span>
-                                <!-- WAJIB tambahkan crossorigin="anonymous" agar diizinkan html2canvas -->
                                 <img src="${picUrl}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
-                                <span style="font-size: 35px; font-weight: bold; color: white;">${pelari.name}</span>
+                                <span style="font-size: 35px; font-weight: bold; color: #e6edf3;">${pelari.name}</span>
                             </div>
                             <div style="text-align: right;">
-                                <span style="font-size: 45px; font-weight: 900; color: #38bdf8;">${pelari.distance.toFixed(2)} <span style="font-size: 24px; color:#9ca3af;">KM</span></span>
+                                <span style="font-size: 45px; font-weight: 900; color: #58a6ff;">${pelari.distance.toFixed(2)} <span style="font-size: 24px; color:#9ca3af;">KM</span></span>
                             </div>
                         </div>
                     `;
@@ -477,7 +649,6 @@
                 const posterContainer = document.getElementById('poster-container');
                 const posterElemen = document.getElementById('poster-weekly');
                 
-                // Lempar keluar layar sebentar agar HP bisa fokus melukis
                 posterContainer.classList.remove('hidden'); 
                 posterContainer.style.position = 'absolute';
                 posterContainer.style.left = '-9999px';
@@ -485,18 +656,14 @@
 
                 tombol.innerHTML = "📸 Memotret...";
 
-                // Tahan hitungan detik sampai gambar Cloudinary ter-download utuh di HP
                 const daftarGambar = Array.from(posterElemen.getElementsByTagName('img'));
                 await Promise.all(daftarGambar.map(img => {
                     if (img.complete) return Promise.resolve();
                     return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
                 }));
-                
-                // Jeda ekstra 0.5 detik agar HTML bernapas santai
                 await new Promise(r => setTimeout(r, 500)); 
 
-                // CETAK (Pastikan useCORS aktif)
-                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0b0e14' });
                 
                 posterContainer.classList.add('hidden');
                 posterContainer.style.position = 'fixed';
@@ -519,9 +686,6 @@
             }
         }
 
-        // ==========================================
-        // FUNGSI 2: POSTER STORY (TOP 10)
-        // ==========================================
         async function generatePosterStory(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
@@ -547,21 +711,20 @@
                 let htmlDaftarJuara = '';
                 top10Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-                    
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
                     
                     htmlDaftarJuara += `
-                        <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between; border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : 'transparent'};">
+                        <div style="background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : '#f97316'}; border-radius: 16px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
                                 <img src="${picUrl}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
                                 <div style="display: flex; flex-direction: column;">
-                                    <span style="font-size: 28px; font-weight: bold; color: white;">${pelari.name}</span>
+                                    <span style="font-size: 28px; font-weight: bold; color: #e6edf3;">${pelari.name}</span>
                                     <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
                                 </div>
                             </div>
                             <div style="text-align: right;">
-                                <span style="font-size: 42px; font-weight: 900; color: #38bdf8;">${pelari.distance.toFixed(2)} <span style="font-size: 20px; color:#9ca3af;">KM</span></span>
+                                <span style="font-size: 42px; font-weight: 900; color: #58a6ff;">${pelari.distance.toFixed(2)} <span style="font-size: 20px; color:#9ca3af;">KM</span></span>
                             </div>
                         </div>
                     `;
@@ -585,7 +748,7 @@
                 }));
                 await new Promise(r => setTimeout(r, 500)); 
 
-                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0f172a' });
+                const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0b0e14' });
                 
                 posterContainer.classList.add('hidden');
                 posterContainer.style.position = 'fixed';
@@ -610,34 +773,49 @@
     </script>
 
     <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
-        <div id="poster-weekly" style="width: 1080px; height: 1080px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; padding: 60px; font-family: sans-serif; position: relative;">
-            <div style="text-align: center; border-bottom: 4px solid #ea580c; padding-bottom: 20px; margin-bottom: 40px;">
-                <h1 style="color: #ea580c; font-size: 50px; font-weight: 900; margin: 0; text-transform: uppercase;">SIAK RUNNERS</h1>
-                <h2 style="font-size: 35px; color: #cbd5e1; margin: 10px 0 0 0; letter-spacing: 2px;">WEEKLY LEADERBOARD</h2>
-                <p id="poster-tanggal" style="color: #9ca3af; font-size: 24px; margin-top: 15px; font-weight: bold;"></p>
+        <div id="poster-weekly" style="width: 1080px; height: 1350px; background: #0b0e14; padding: 60px; font-family: 'Helvetica', sans-serif; position: relative; overflow: hidden;">
+            
+            <img id="gambar-personal-overlay" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: 0; width: 60%; z-index: 0; opacity: 0.7;">
+
+            <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center;">
+                <img src="logo-siak-runners.png" style="width: 250px; height: auto; object-fit: contain; margin-bottom: 20px;">
+                <h1 style="font-family: 'Helofone', sans-serif; font-size: 75px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 3px 5px 15px rgba(0,0,0,0.4);">
+                    <span style="color: white;">SIAK</span> <span style="color: #dc2626;">RUNNERS</span>
+                </h1>
+                <div style="background: #1e293b; color: #f1f5f9; padding: 12px 30px; border-radius: 40px; font-size: 24px; font-weight: bold; border: 1px solid #334155;">
+                    <span id="poster-tanggal"></span>
+                </div>
             </div>
-            <div id="poster-daftar-juara" style="display: flex; flex-direction: column; gap: 20px;"></div>
-            <div style="position: absolute; bottom: 40px; width: calc(100% - 120px); text-align: center; color: #64748b; font-size: 22px;">
-                Generated from siakrunners.vercel.app
+
+            <div id="poster-daftar-juara" style="position: relative; z-index: 10; margin-top: 50px; display: flex; flex-direction: column; gap: 20px;"></div>
+            
+            <div style="position: absolute; bottom: 50px; left:0; width: 100%; text-align: center; z-index: 10;">
+                <p style="color: #64748b; font-size: 22px; font-weight: 600;">Terus Bergerak, Terus Berlari! | siakrunners.vercel.app</p>
             </div>
         </div>
     </div>
 
     <div id="poster-container-story" class="hidden fixed top-0 left-0 -z-50">
-        <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #ea580c 100%); color: white; padding: 100px 60px 80px 60px; font-family: sans-serif; position: relative; box-sizing: border-box;">
-            <div style="text-align: center; margin-top: 20px; margin-bottom: 30px;">
-                <h2 style="color: #cbd5e1; font-size: 30px; margin: 0; letter-spacing: 5px; text-transform: uppercase;">Top 10 Leaderboard</h2>
-                <h1 style="font-family: 'Helofone', sans-serif; font-size: 75px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 3px 5px 15px rgba(0,0,0,0.4);">
+        <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: #0b0e14; padding: 100px 60px; font-family: 'Helvetica', sans-serif; position: relative; box-sizing: border-box; overflow: hidden;">
+            
+            <img id="gambar-personal-overlay-story" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: -50px; width: 75%; z-index: 0; opacity: 0.85;">
+
+            <div style="position: relative; z-index: 10; text-align: center; margin-bottom: 80px; display: flex; flex-direction: column; align-items: center;">
+                <h2 style="font-size: 40px; color: #8b949e; letter-spacing: 8px; margin-bottom: 30px; text-transform: uppercase;">LEADERBOARD</h2>
+                <img src="logo-siak-runners.png" style="width: 400px; height: auto; object-fit: contain; margin-bottom: 40px;">
+                <h1 style="font-family: 'Helofone', sans-serif; font-size: 110px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 4px 8px 12px rgba(0,0,0,0.5);">
                     <span style="color: white;">SIAK</span> <span style="color: #dc2626;">RUNNERS</span>
                 </h1>
-                <div style="background: rgba(255,255,255,0.15); display: inline-block; padding: 12px 40px; border-radius: 50px; margin-top: 15px; backdrop-filter: blur(5px);">
-                    <p id="poster-tanggal-story" style="color: #f1f5f9; font-size: 24px; margin: 0; font-weight: bold;"></p>
+                <div style="background: rgba(255,255,255,0.08); padding: 20px 60px; border-radius: 50px; margin-top: 40px; border: 1px solid #30363d;">
+                    <p id="poster-tanggal-story" style="font-size: 35px; color: #e6edf3; font-weight: 600; margin: 0;"></p>
                 </div>
             </div>
-            <div id="poster-daftar-juara-story" style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;"></div>
-            <div style="position: absolute; bottom: 100px; left: 0; width: 100%; text-align: center;">
-                <p style="color: white; font-size: 30px; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Terus Bergerak, Terus Berlari!</p>
-                <p style="color: rgba(255,255,255,0.7); font-size: 20px;">Generate otomatis via siakrunners.vercel.app</p>
+
+            <div id="poster-daftar-juara-story" style="position: relative; z-index: 10; display: flex; flex-direction: column; gap: 25px;"></div>
+            
+            <div style="position: absolute; bottom: 100px; left:0; width: 100%; text-align: center; z-index: 10;">
+                <p style="color: #c9d1d9; font-size: 35px; font-weight: 700; margin-bottom: 15px;">Terus Bergerak, Terus Berlari!</p>
+                <p style="color: #8b949e; font-size: 25px; margin: 0;">siakrunners.vercel.app</p>
             </div>
         </div>
     </div>
