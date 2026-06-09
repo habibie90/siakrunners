@@ -244,8 +244,20 @@
                     </div>
 
                     <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex justify-between items-center">
-                        <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Total Pembayaran:</span>
-                        <span id="j-total-harga" class="text-2xl font-black text-orange-400">Rp 135.000</span>
+                        <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex flex-col gap-2">
+                        <div class="flex justify-between items-center text-sm font-bold text-gray-300">
+                            <span>Subtotal:</span>
+                            <span id="j-subtotal-harga">Rp 135.000</span>
+                        </div>
+                        <div id="j-fee-qris-container" class="hidden justify-between items-center text-sm font-bold text-red-400">
+                            <span>Biaya QRIS (0.3%):</span>
+                            <span id="j-fee-qris">Rp 0</span>
+                        </div>
+                        <div class="border-t border-orange-500/30 pt-2 mt-1 flex justify-between items-center">
+                            <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Total Bayar:</span>
+                            <span id="j-total-harga" class="text-2xl font-black text-orange-400">Rp 135.000</span>
+                        </div>
+                    </div>
                     </div>
 
                     <div>
@@ -346,7 +358,7 @@
             }
         }
 
-        function togglePembayaran() {
+       function togglePembayaran() {
             const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
             if(bayar === 'QRIS') {
                 document.getElementById('info-bri').style.display = 'none';
@@ -355,21 +367,51 @@
                 document.getElementById('info-bri').style.display = 'block';
                 document.getElementById('info-qris').style.display = 'none';
             }
+            // Jalankan perhitungan ulang setiap kali metode bayar diganti
+            hitungTotal();
         }
 
         function hitungTotal() {
-            let total = 0;
+            let subtotal = 0;
             let selects = document.querySelectorAll('.j-ukuran');
+            
+            // 1. Hitung harga jersey dan tambahan ukuran
             selects.forEach(sel => {
                 let val = sel.value;
                 let hargaSatuan = HARGA_BASE;
                 if(val === '2XL') hargaSatuan += 10000;
                 if(val === '3XL') hargaSatuan += 20000;
                 if(val === '4XL') hargaSatuan += 30000;
-                total += hargaSatuan;
+                subtotal += hargaSatuan;
             });
-            document.getElementById('j-total-harga').innerText = 'Rp ' + total.toLocaleString('id-ID');
-            return total;
+
+            // Tampilkan subtotal
+            document.getElementById('j-subtotal-harga').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
+
+            // 2. Cek metode pembayaran & logika fee QRIS
+            let feeQris = 0;
+            const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
+            const feeContainer = document.getElementById('j-fee-qris-container');
+
+            if (bayar === 'QRIS' && subtotal > 500000) {
+                feeQris = subtotal * 0.003; // Biaya 0.3%
+                document.getElementById('j-fee-qris').innerText = 'Rp ' + Math.round(feeQris).toLocaleString('id-ID');
+                
+                // Tampilkan baris info biaya QRIS
+                feeContainer.classList.remove('hidden');
+                feeContainer.classList.add('flex');
+            } else {
+                // Sembunyikan baris info biaya QRIS
+                feeContainer.classList.add('hidden');
+                feeContainer.classList.remove('flex');
+            }
+
+            // 3. Total Akhir
+            let totalAkhir = subtotal + Math.round(feeQris);
+            document.getElementById('j-total-harga').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
+            
+            // Kembalikan nilai total akhir untuk dimasukkan ke database saat submit
+            return totalAkhir;
         }
 
         function updateJerseyRows() {
