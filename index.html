@@ -559,8 +559,7 @@
                     // Nama dada tetap opsional, kalau dikosongkan akan jadi '-'
                     let nd = div.querySelector('.j-namadada').value.trim() || '-';
                     
-                    let ukuranKombinasi = `${mdl} - ${uk}`;
-                    detailJersey.push({ ukuran: ukuranKombinasi, namaDada: nd });
+                    detailJersey.push({ model: mdl, ukuran: uk, namaDada: nd });
                 });
 
                 // Upload gambar ke Cloudinary
