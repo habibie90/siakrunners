@@ -532,8 +532,7 @@
                     let uk = div.querySelector('.j-ukuran').value;
                     let nd = div.querySelector('.j-namadada').value || '-';
                     
-                    let ukuranKombinasi = `${mdl} - ${uk}`;
-                    detailJersey.push({ ukuran: ukuranKombinasi, namaDada: nd });
+                   detailJersey.push({ model: mdl, ukuran: uk, namaDada: nd });
                 });
 
                 const CN = "dsai9btzj", UP = "ml_default"; 
