@@ -516,35 +516,60 @@
         async function submitJersey() {
             const btn = document.getElementById('btn-submit-jersey');
             const status = document.getElementById('submit-status-jersey');
-            const file = document.getElementById('j-bukti').files[0];
             
-            if(!file) {
-                alert("Mohon upload bukti transfer terlebih dahulu."); return;
+            // 1. AMBIL NILAI & HILANGKAN SPASI KOSONG (SPASI SAJA DIANGGAP KOSONG)
+            const nama = document.getElementById('j-nama').value.trim();
+            const noHp = document.getElementById('j-nohp').value.trim();
+            const qty = document.getElementById('j-qty').value;
+            const metode = document.querySelector('input[name="j-metode"]:checked').value;
+            const alamatInput = document.getElementById('j-alamat').value.trim();
+            const file = document.getElementById('j-bukti').files[0];
+
+            // 2. VALIDASI KETAT (TIDAK BOLEH KOSONG)
+            if (nama === "") { 
+                alert("❌ Nama Lengkap wajib diisi!"); 
+                document.getElementById('j-nama').focus(); 
+                return; 
+            }
+            if (noHp === "") { 
+                alert("❌ Nomor WhatsApp wajib diisi!"); 
+                document.getElementById('j-nohp').focus(); 
+                return; 
+            }
+            if (metode === 'Dikirim ke Tujuan' && alamatInput === "") { 
+                alert("❌ Alamat lengkap wajib diisi karena Anda memilih dikirim ke tujuan!"); 
+                document.getElementById('j-alamat').focus(); 
+                return; 
+            }
+            if (!file) { 
+                alert("❌ Wajib mengunggah foto Bukti Transfer sebelum memesan!"); 
+                return; 
             }
 
+            // Jika semua lolos validasi, ubah tombol jadi loading
             btn.innerHTML = `<span>⏳ Mengirim Data...</span>`; 
-            btn.disabled = true; status.classList.add('hidden');
+            btn.disabled = true; 
+            status.classList.add('hidden');
 
             try {
                 let detailJersey = [];
                 document.querySelectorAll('#j-details-container > div').forEach((div) => {
                     let mdl = div.querySelector('.j-model').value;
                     let uk = div.querySelector('.j-ukuran').value;
-                    let nd = div.querySelector('.j-namadada').value || '-';
+                    // Nama dada tetap opsional, kalau dikosongkan akan jadi '-'
+                    let nd = div.querySelector('.j-namadada').value.trim() || '-';
                     
-                   detailJersey.push({ model: mdl, ukuran: uk, namaDada: nd });
+                    let ukuranKombinasi = `${mdl} - ${uk}`;
+                    detailJersey.push({ ukuran: ukuranKombinasi, namaDada: nd });
                 });
 
+                // Upload gambar ke Cloudinary
                 const CN = "dsai9btzj", UP = "ml_default"; 
                 const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", UP);
                 const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${CN}/image/upload`, { method: "POST", body: fd });
                 const fotoUrl = (await uploadRes.json()).secure_url;
 
-                const nama = document.getElementById('j-nama').value;
-                const noHp = document.getElementById('j-nohp').value;
-                const qty = document.getElementById('j-qty').value;
-                const alamat = document.getElementById('j-alamat').value || "Ambil Sendiri";
-                const metode = document.querySelector('input[name="j-metode"]:checked').value;
+                const alamatAkhir = (metode === 'Ambil di Siak') ? "Ambil Sendiri" : alamatInput;
                 const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
                 const total = hitungTotal();
 
@@ -555,7 +580,7 @@
                     jumlahTotal: qty,
                     details: detailJersey,
                     metodeKirim: metode,
-                    alamatLengkap: alamat,
+                    alamatLengkap: alamatAkhir,
                     metodeBayar: bayar,
                     totalHarga: total,
                     buktiTransfer: fotoUrl
@@ -576,7 +601,9 @@
                 status.innerText = "❌ Gagal mengirim: Cek koneksi / hubungi admin."; 
                 status.className = "text-center text-red-400 font-bold mt-3 block"; 
             } finally { 
-                btn.innerHTML = `Pesan Jersey Sekarang`; btn.disabled = false; 
+                // Kembalikan tombol seperti semula setelah selesai (sukses/gagal)
+                btn.innerHTML = `Pesan Jersey Sekarang`; 
+                btn.disabled = false; 
             }
         }
         // ----------------------------------------------------
