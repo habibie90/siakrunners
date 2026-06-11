@@ -180,6 +180,25 @@
                 <p class="text-sm md:text-base text-gray-400 mt-2 max-w-2xl mx-auto tracking-wide">Miliki jersey resmi kebanggaan Siak Runners. Isi formulir di bawah ini untuk melakukan pemesanan.</p>
             </div>
             <div class="glass-panel p-6 md:p-8 rounded-2xl max-w-2xl mx-auto border-t-4 border-orange-500 shadow-2xl">
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
+                    <div class="bg-gray-800/50 p-2 rounded-xl border border-gray-700 text-center hover:border-orange-500 transition-colors cursor-pointer" onclick="window.open('Jersey-Nol.jpg')">
+                        <img src="Jersey-Nol.jpeg" alt="Singlet" class="w-full h-auto rounded-lg mb-2 object-cover aspect-square" onerror="this.src='https://via.placeholder.com/150'">
+                        <p class="text-[10px] md:text-xs font-bold text-gray-300 uppercase tracking-wider">Tanpa Lengan</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-2 rounded-xl border border-gray-700 text-center hover:border-orange-500 transition-colors cursor-pointer" onclick="window.open('Jersey-Lpk.jpeg')">
+                        <img src="Jersey-Lpk.jpeg" alt="Short Sleeve" class="w-full h-auto rounded-lg mb-2 object-cover aspect-square" onerror="this.src='https://via.placeholder.com/150'">
+                        <p class="text-[10px] md:text-xs font-bold text-gray-300 uppercase tracking-wider">Lengan Pendek</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-2 rounded-xl border border-gray-700 text-center hover:border-orange-500 transition-colors cursor-pointer" onclick="window.open('Jersey-Lpg.jpeg')">
+                        <img src="Jersey-Lpg.jpeg" alt="Long Sleeve" class="w-full h-auto rounded-lg mb-2 object-cover aspect-square" onerror="this.src='https://via.placeholder.com/150'">
+                        <p class="text-[10px] md:text-xs font-bold text-gray-300 uppercase tracking-wider">Lengan Panjang</p>
+                    </div>
+                    <div class="bg-gray-800/50 p-2 rounded-xl border border-gray-700 text-center hover:border-orange-500 transition-colors cursor-pointer" onclick="window.open('size-chart.jpg')">
+                        <img src="size-chart.jpeg" alt="Size Chart" class="w-full h-auto rounded-lg mb-2 object-cover aspect-square" onerror="this.src='https://via.placeholder.com/150'">
+                        <p class="text-[10px] md:text-xs font-bold text-orange-400 uppercase tracking-wider">Size Chart</p>
+                    </div>
+                </div>
                 <form id="jersey-form" class="flex flex-col gap-5" onsubmit="event.preventDefault(); submitJersey();">
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-b border-gray-700 pb-5">
@@ -244,7 +263,7 @@
                     </div>
 
                     <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex justify-between items-center">
-                        <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex flex-col gap-2">
+                        <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex flex-col gap-2 w-full">
                         <div class="flex justify-between items-center text-sm font-bold text-gray-300">
                             <span>Subtotal:</span>
                             <span id="j-subtotal-harga">Rp 135.000</span>
@@ -367,7 +386,6 @@
                 document.getElementById('info-bri').style.display = 'block';
                 document.getElementById('info-qris').style.display = 'none';
             }
-            // Jalankan perhitungan ulang setiap kali metode bayar diganti
             hitungTotal();
         }
 
@@ -423,7 +441,15 @@
                 container.innerHTML += `
                     <div class="p-4 bg-gray-800/50 rounded-xl border border-gray-700 mt-2">
                         <p class="text-xs font-bold text-orange-400 mb-3 border-b border-gray-700 pb-2">Detail Jersey Ke-${i}</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Model Jersey</label>
+                                <select class="j-model w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500 cursor-pointer">
+                                    <option value="Lengan Pendek">Lengan Pendek</option>
+                                    <option value="Tanpa Lengan">Tanpa Lengan (Singlet)</option>
+                                    <option value="Lengan Panjang">Lengan Panjang</option>
+                                </select>
+                            </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Ukuran</label>
                                 <select class="j-ukuran w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500 cursor-pointer" onchange="hitungTotal()">
@@ -465,9 +491,14 @@
             try {
                 let detailJersey = [];
                 document.querySelectorAll('#j-details-container > div').forEach((div) => {
+                    let mdl = div.querySelector('.j-model').value;
                     let uk = div.querySelector('.j-ukuran').value;
                     let nd = div.querySelector('.j-namadada').value || '-';
-                    detailJersey.push({ ukuran: uk, namaDada: nd });
+                    
+                    // Gabungkan Model dan Ukuran agar tidak perlu mengubah kode backend .gs
+                    let ukuranKombinasi = `${mdl} - ${uk}`;
+                    
+                    detailJersey.push({ ukuran: ukuranKombinasi, namaDada: nd });
                 });
 
                 const CN = "dsai9btzj", UP = "ml_default"; 
