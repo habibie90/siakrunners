@@ -24,7 +24,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
-        
+
         /* CLASS BARU UNTUK MENYEMBUNYIKAN SCROLLBAR DI SLIDER */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -184,9 +184,9 @@
                 <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Pemesanan <span class="text-orange-500">Jersey</span></h2>
                 <p class="text-sm md:text-base text-gray-400 mt-2 max-w-2xl mx-auto tracking-wide">Miliki jersey resmi kebanggaan Siak Runners. Isi formulir di bawah ini untuk melakukan pemesanan.</p>
             </div>
-            
+
             <div class="glass-panel p-6 md:p-8 rounded-2xl max-w-3xl mx-auto border-t-4 border-orange-500 shadow-2xl">
-                
+
                 <div class="relative w-full mb-8 group border-b border-gray-700/50 pb-6">
                     <button type="button" onclick="scrollCarousel(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-orange-500 text-white w-10 h-10 rounded-full flex items-center justify-center transition backdrop-blur hidden md:flex border border-gray-500 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -196,8 +196,8 @@
                     </button>
 
                     <div id="jersey-slider" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scroll-smooth hide-scrollbar rounded-xl relative">
-                        
-                        <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('Jersey-Nol.jpg')">
+
+                        <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('Jersey-Nol.jpeg')">
                             <img src="Jersey-Nol.jpeg" class="w-full h-64 md:h-[450px] object-contain rounded-lg drop-shadow-xl mb-3" onerror="this.src='https://via.placeholder.com/400?text=Tanpa+Lengan'">
                             <p class="text-sm md:text-lg font-black text-white uppercase tracking-widest bg-gray-900/80 px-4 py-2 rounded-lg border border-gray-600 w-full text-center">1. Tanpa Lengan (Singlet)</p>
                             <div class="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded border border-gray-500 hidden md:block">Klik untuk Perbesar</div>
@@ -215,7 +215,7 @@
                             <div class="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded border border-gray-500 hidden md:block">Klik untuk Perbesar</div>
                         </div>
 
-                        <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('size-chart.jpg')">
+                        <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('size-chart.jpeg')">
                             <img src="size-chart.jpeg" class="w-full h-64 md:h-[450px] object-contain rounded-lg drop-shadow-xl mb-3 bg-white" onerror="this.src='https://via.placeholder.com/400?text=Size+Chart'">
                             <p class="text-sm md:text-lg font-black text-orange-400 uppercase tracking-widest bg-gray-900/80 px-4 py-2 rounded-lg border border-orange-500/50 w-full text-center">📏 Panduan Ukuran (Size Chart)</p>
                             <div class="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded border border-gray-500 hidden md:block">Klik untuk Perbesar</div>
@@ -232,7 +232,7 @@
                     </div>
                 </div>
                 <form id="jersey-form" class="flex flex-col gap-5" onsubmit="event.preventDefault(); submitJersey();">
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-b border-gray-700 pb-5">
                         <div>
                             <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap</label>
@@ -287,7 +287,7 @@
                             <p class="text-lg font-black text-white">BRI 338601045900531</p>
                             <p class="text-sm text-blue-300 font-bold">a/n MUHAMAD HABIBI LUBIS</p>
                         </div>
-                        
+
                         <div id="info-qris" class="mt-4 p-4 bg-gray-800 border border-gray-600 rounded-xl text-center" style="display: none;">
                             <p class="text-xs text-gray-400 mb-2 uppercase tracking-widest">Scan Barcode QRIS</p>
                             <img src="qris.jpeg" alt="QRIS Siak Runners" class="mx-auto rounded-lg w-48 h-auto border-2 border-orange-500" onerror="this.src='https://via.placeholder.com/200?text=Gambar+QRIS'">
@@ -393,7 +393,7 @@
         // ===========================================
 
         const API_URL = 'https://script.google.com/macros/s/AKfycby0v-8vDpnEYlw0uOe7yYg5rv30zWH6h8gNFlzePvcrSqz47Me_AzxnEHqaHuCZwvYBFw/exec';
-        
+
         document.getElementById('btn-connect-strava').href = `https://www.strava.com/oauth/authorize?client_id=221203&response_type=code&redirect_uri=${API_URL}&approval_prompt=force&scope=activity:read_all`;
 
         let rawRunData = []; let profilesData = {}; let currentSortedData = []; let activeRunnerName = ""; let activeRunnerAllRuns = [];
@@ -431,22 +431,36 @@
 
         function hitungTotal() {
             let subtotal = 0;
-            let selects = document.querySelectorAll('.j-ukuran');
-            
-            // 1. Hitung harga jersey dan tambahan ukuran
-            selects.forEach(sel => {
-                let val = sel.value;
-                let hargaSatuan = HARGA_BASE;
-                if(val === '2XL') hargaSatuan += 10000;
-                if(val === '3XL') hargaSatuan += 20000;
-                if(val === '4XL') hargaSatuan += 30000;
-                subtotal += hargaSatuan;
+            // Targetkan pembungkus '.jersey-item' agar bisa membaca model dan ukuran sekaligus
+            let items = document.querySelectorAll('.jersey-item');
+
+            items.forEach(item => {
+                let selModel = item.querySelector('.j-model');
+                let selUkuran = item.querySelector('.j-ukuran');
+                
+                if (selModel && selUkuran) {
+                    let valModel = selModel.value;
+                    let valUkuran = selUkuran.value;
+                    let hargaSatuan = HARGA_BASE;
+
+                    // 1. Tambahan khusus Lengan Panjang
+                    if(valModel.includes('Lengan Panjang')) {
+                        hargaSatuan += 10000;
+                    }
+
+                    // 2. Tambahan ukuran oversize (berlaku untuk semua model)
+                    if(valUkuran === '2XL') hargaSatuan += 10000;
+                    if(valUkuran === '3XL') hargaSatuan += 20000;
+                    if(valUkuran === '4XL') hargaSatuan += 30000;
+
+                    subtotal += hargaSatuan;
+                }
             });
 
             // Tampilkan subtotal
             document.getElementById('j-subtotal-harga').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
 
-            // 2. Cek metode pembayaran & logika fee QRIS
+            // Cek metode pembayaran & logika fee QRIS
             let feeQris = 0;
             const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
             const feeContainer = document.getElementById('j-fee-qris-container');
@@ -454,7 +468,6 @@
             if (bayar === 'QRIS' && subtotal > 500000) {
                 feeQris = subtotal * 0.003; // Biaya 0.3%
                 document.getElementById('j-fee-qris').innerText = 'Rp ' + Math.round(feeQris).toLocaleString('id-ID');
-                
                 feeContainer.classList.remove('hidden');
                 feeContainer.classList.add('flex');
             } else {
@@ -462,10 +475,10 @@
                 feeContainer.classList.remove('flex');
             }
 
-            // 3. Total Akhir
+            // Total Akhir
             let totalAkhir = subtotal + Math.round(feeQris);
             document.getElementById('j-total-harga').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
-            
+
             return totalAkhir;
         }
 
@@ -473,18 +486,18 @@
             const qty = parseInt(document.getElementById('j-qty').value) || 1;
             const container = document.getElementById('j-details-container');
             container.innerHTML = '';
-            
+
             for(let i=1; i<=qty; i++) {
                 container.innerHTML += `
-                    <div class="p-4 bg-gray-800/50 rounded-xl border border-gray-700 mt-2">
+                    <div class="jersey-item p-4 bg-gray-800/50 rounded-xl border border-gray-700 mt-2">
                         <p class="text-xs font-bold text-orange-400 mb-3 border-b border-gray-700 pb-2">Detail Jersey Ke-${i}</p>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Model Jersey</label>
-                                <select class="j-model w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500 cursor-pointer">
+                                <select class="j-model w-full bg-gray-900 border border-gray-600 p-2.5 rounded-lg text-white text-xs outline-none focus:border-orange-500 cursor-pointer" onchange="hitungTotal()">
                                     <option value="Lengan Pendek">Lengan Pendek</option>
                                     <option value="Tanpa Lengan">Tanpa Lengan (Singlet)</option>
-                                    <option value="Lengan Panjang">Lengan Panjang</option>
+                                    <option value="Lengan Panjang">Lengan Panjang (+ Rp 10.000)</option>
                                 </select>
                             </div>
                             <div>
@@ -516,8 +529,8 @@
         async function submitJersey() {
             const btn = document.getElementById('btn-submit-jersey');
             const status = document.getElementById('submit-status-jersey');
-            
-            // 1. AMBIL NILAI & HILANGKAN SPASI KOSONG (SPASI SAJA DIANGGAP KOSONG)
+
+            // 1. AMBIL NILAI & HILANGKAN SPASI KOSONG
             const nama = document.getElementById('j-nama').value.trim();
             const noHp = document.getElementById('j-nohp').value.trim();
             const qty = document.getElementById('j-qty').value;
@@ -525,41 +538,27 @@
             const alamatInput = document.getElementById('j-alamat').value.trim();
             const file = document.getElementById('j-bukti').files[0];
 
-            // 2. VALIDASI KETAT (TIDAK BOLEH KOSONG)
-            if (nama === "") { 
-                alert("❌ Nama Lengkap wajib diisi!"); 
-                document.getElementById('j-nama').focus(); 
-                return; 
-            }
-            if (noHp === "") { 
-                alert("❌ Nomor WhatsApp wajib diisi!"); 
-                document.getElementById('j-nohp').focus(); 
-                return; 
-            }
-            if (metode === 'Dikirim ke Tujuan' && alamatInput === "") { 
-                alert("❌ Alamat lengkap wajib diisi karena Anda memilih dikirim ke tujuan!"); 
-                document.getElementById('j-alamat').focus(); 
-                return; 
-            }
-            if (!file) { 
-                alert("❌ Wajib mengunggah foto Bukti Transfer sebelum memesan!"); 
-                return; 
-            }
+            // 2. VALIDASI KETAT
+            if (nama === "") { alert("❌ Nama Lengkap wajib diisi!"); document.getElementById('j-nama').focus(); return; }
+            if (noHp === "") { alert("❌ Nomor WhatsApp wajib diisi!"); document.getElementById('j-nohp').focus(); return; }
+            if (metode === 'Dikirim ke Tujuan' && alamatInput === "") { alert("❌ Alamat lengkap wajib diisi karena Anda memilih dikirim ke tujuan!"); document.getElementById('j-alamat').focus(); return; }
+            if (!file) { alert("❌ Wajib mengunggah foto Bukti Transfer sebelum memesan!"); return; }
 
-            // Jika semua lolos validasi, ubah tombol jadi loading
             btn.innerHTML = `<span>⏳ Mengirim Data...</span>`; 
             btn.disabled = true; 
             status.classList.add('hidden');
 
             try {
                 let detailJersey = [];
-                document.querySelectorAll('#j-details-container > div').forEach((div) => {
+                document.querySelectorAll('.jersey-item').forEach((div) => {
                     let mdl = div.querySelector('.j-model').value;
                     let uk = div.querySelector('.j-ukuran').value;
-                    // Nama dada tetap opsional, kalau dikosongkan akan jadi '-'
                     let nd = div.querySelector('.j-namadada').value.trim() || '-';
                     
-                    detailJersey.push({ model: mdl, ukuran: uk, namaDada: nd });
+                    // Bersihkan tulisan "+ Rp 10.000" agar rekap di Google Sheet terlihat rapi
+                    let modelClean = mdl.includes("Panjang") ? "Lengan Panjang" : (mdl.includes("Tanpa") ? "Tanpa Lengan" : "Lengan Pendek");
+
+                    detailJersey.push({ model: modelClean, ukuran: uk, namaDada: nd });
                 });
 
                 // Upload gambar ke Cloudinary
@@ -600,7 +599,6 @@
                 status.innerText = "❌ Gagal mengirim: Cek koneksi / hubungi admin."; 
                 status.className = "text-center text-red-400 font-bold mt-3 block"; 
             } finally { 
-                // Kembalikan tombol seperti semula setelah selesai (sukses/gagal)
                 btn.innerHTML = `Pesan Jersey Sekarang`; 
                 btn.disabled = false; 
             }
@@ -610,7 +608,7 @@
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
             document.getElementById('page-' + pageId).classList.add('page-active');
-            
+
             document.querySelectorAll('nav button').forEach(btn => { 
                 btn.classList.remove('text-white', 'bg-white/10', 'text-orange-400', 'hover:bg-orange-500/10', 'border', 'border-orange-500/30'); 
                 btn.classList.add('text-gray-400'); 
@@ -672,7 +670,7 @@
             currentSortedData = Object.values(stats).sort((a,b) => b.distance - a.distance);
             document.getElementById('stat-distance').innerHTML = `${totalKolektif.toFixed(1)} <span class="text-xl text-yellow-500 font-bold">km</span>`;
             const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = '';
-            
+
             if (currentSortedData.length === 0) { 
                 tbody.innerHTML = `<tr><td colspan="3" class="text-center py-12">
                     <p class="text-gray-400 font-bold mb-2">Belum ada data terekam.</p>
@@ -704,10 +702,10 @@
             if (f === 'minggu_ini') { let d = now.getDay() || 7; s = new Date(now.getFullYear(), now.getMonth(), now.getDate()-d+1); e = new Date(s); e.setDate(s.getDate()+6); e.setHours(23,59,59); }
             else if (f === 'bulan_ini') { s = new Date(now.getFullYear(), now.getMonth(), 1); e = new Date(now.getFullYear(), now.getMonth()+1, 0, 23, 59); }
             else if (f === 'bulan_lalu') { s = new Date(now.getFullYear(), now.getMonth()-1, 1); e = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59); }
-            
+
             let filtered = all ? activeRunnerAllRuns : activeRunnerAllRuns.filter(r => { let rd = new Date(r.date); return rd >= s && rd <= e; });
             filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
-            
+
             let total = 0; const list = document.getElementById('modal-history-list'); list.innerHTML = '';
             filtered.forEach((r, i) => { 
                 total += r.distance; 
@@ -763,14 +761,14 @@
                 const data = (await res.json()).data || [];
                 const c = document.getElementById('event-container'); 
                 c.innerHTML = '';
-                
+
                 let hasActiveEvent = false;
                 data.forEach(e => {
                     if (e.status.toUpperCase() === "SELESAI") return;
                     let dateStr = e.tanggal.toString().toLowerCase();
                     const bulanIndo = { 'januari':'jan', 'februari':'feb', 'maret':'mar', 'april':'apr', 'mei':'may', 'juni':'jun', 'juli':'jul', 'agustus':'aug', 'september':'sep', 'oktober':'oct', 'november':'nov', 'desember':'dec' };
                     for (let b in bulanIndo) { dateStr = dateStr.replace(b, bulanIndo[b]); }
-                    
+
                     let eventDate = new Date(dateStr); let today = new Date(); today.setHours(0,0,0,0); 
                     if (eventDate < today) return;
                     hasActiveEvent = true;
@@ -783,20 +781,8 @@
                 }
             } catch (e) { console.error("Gagal memuat kalender event:", e); }
         }
-        
-        function exportToExcel() {
-            if (currentSortedData.length === 0) return;
-            let csv = "Pos,Nama,Total Lari,Jarak(KM)\n";
-            currentSortedData.forEach((r, i) => csv += `${i+1},"${r.name}",${r.runs},${r.distance.toFixed(2)}\n`);
-            const link = document.createElement("a"); link.href = encodeURI("data:text/csv;charset=utf-8," + csv);
-            link.download = `Rekap_SR_${new Date().getTime()}.csv`; link.click();
-        }
 
-        loadLeaderboardData();
-
-        // ---------------------------------------------------------------------
-        // KODINGAN POSTER FEED & STORY
-        // ---------------------------------------------------------------------
+        // FUNGSI LOGIK POTRET POSTER CANVAS
         async function generatePosterIG(event) {
             const tombol = event.currentTarget;
             const teksAsli = tombol.innerHTML;
@@ -815,7 +801,7 @@
                 top5Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
-                    
+
                     htmlDaftar += `
                         <div style="background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); border-left: 6px solid #f97316; border-radius: 16px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
@@ -833,7 +819,7 @@
 
                 const posterContainer = document.getElementById('poster-container');
                 const posterElemen = document.getElementById('poster-weekly');
-                
+
                 posterContainer.classList.remove('hidden'); 
                 posterContainer.style.position = 'absolute';
                 posterContainer.style.left = '-9999px';
@@ -849,7 +835,7 @@
                 await new Promise(r => setTimeout(r, 500)); 
 
                 const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0b0e14' });
-                
+
                 posterContainer.classList.add('hidden');
                 posterContainer.style.position = 'fixed';
                 posterContainer.style.left = '0';
@@ -897,7 +883,7 @@
                 top10Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
-                    
+
                     htmlDaftarJuara += `
                         <div style="background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : '#f97316'}; border-radius: 16px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 20px;">
@@ -918,7 +904,7 @@
 
                 const posterContainer = document.getElementById('poster-container-story');
                 const posterElemen = document.getElementById('poster-weekly-story');
-                
+
                 posterContainer.classList.remove('hidden'); 
                 posterContainer.style.position = 'absolute';
                 posterContainer.style.left = '-9999px';
@@ -934,7 +920,7 @@
                 await new Promise(r => setTimeout(r, 500)); 
 
                 const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0b0e14' });
-                
+
                 posterContainer.classList.add('hidden');
                 posterContainer.style.position = 'fixed';
                 posterContainer.style.left = '0';
@@ -959,7 +945,7 @@
 
     <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
         <div id="poster-weekly" style="width: 1080px; height: 1350px; background: #0b0e14; padding: 60px; font-family: 'Helvetica', sans-serif; position: relative; overflow: hidden;">
-            
+
             <img id="gambar-personal-overlay" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: 0; width: 60%; z-index: 0; opacity: 0.7;">
 
             <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center;">
@@ -973,7 +959,7 @@
             </div>
 
             <div id="poster-daftar-juara" style="position: relative; z-index: 10; margin-top: 50px; display: flex; flex-direction: column; gap: 20px;"></div>
-            
+
             <div style="position: absolute; bottom: 50px; left:0; width: 100%; text-align: center; z-index: 10;">
                 <p style="color: #64748b; font-size: 22px; font-weight: 600;">Terus Bergerak, Terus Berlari! | siakrunners.vercel.app</p>
             </div>
@@ -982,7 +968,7 @@
 
     <div id="poster-container-story" class="hidden fixed top-0 left-0 -z-50">
         <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: #0b0e14; padding: 100px 60px; font-family: 'Helvetica', sans-serif; position: relative; box-sizing: border-box; overflow: hidden;">
-            
+
             <img id="gambar-personal-overlay-story" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: -50px; width: 75%; z-index: 0; opacity: 0.85;">
 
             <div style="position: relative; z-index: 10; text-align: center; margin-bottom: 80px; display: flex; flex-direction: column; align-items: center;">
@@ -997,7 +983,7 @@
             </div>
 
             <div id="poster-daftar-juara-story" style="position: relative; z-index: 10; display: flex; flex-direction: column; gap: 25px;"></div>
-            
+
             <div style="position: absolute; bottom: 100px; left:0; width: 100%; text-align: center; z-index: 10;">
                 <p style="color: #c9d1d9; font-size: 35px; font-weight: 700; margin-bottom: 15px;">Terus Bergerak, Terus Berlari!</p>
                 <p style="color: #8b949e; font-size: 25px; margin: 0;">siakrunners.vercel.app</p>
