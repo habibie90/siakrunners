@@ -24,11 +24,8 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
-
-        /* CLASS BARU UNTUK MENYEMBUNYIKAN SCROLLBAR DI SLIDER */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
         @font-face {
             font-family: 'Helofone';
             src: url('https://siakrunners.vercel.app/fonts/helofone.ttf') format('truetype'); 
@@ -41,13 +38,14 @@
     <nav class="glass-panel sticky top-0 z-50 border-b border-gray-700/50">
         <div class="max-w-6xl mx-auto px-2 md:px-4 py-2.5 md:py-3 flex justify-between items-center">
             <div class="flex items-center gap-2 md:gap-3 cursor-pointer shrink-0" onclick="switchPage('klasemen')">
-                <img src="Logo SR.jpeg" alt="Logo" class="h-7 md:h-8 rounded object-contain p-1" onerror="this.src='https://via.placeholder.com/150'"/>
+                <img src="Logo SR.jpeg" alt="Logo" class="h-7 md:h-8 rounded object-contain bg-white/95 p-1" onerror="this.src='https://via.placeholder.com/150'"/>
                 <span class="font-bold text-white tracking-widest text-sm md:text-base hidden sm:block">SIAK <span class="text-red-500">RUNNERS</span></span>
             </div>
             <div class="flex gap-1 md:gap-4 text-[10px] md:text-xs font-semibold tracking-wider overflow-x-auto">
                 <button onclick="switchPage('klasemen')" id="nav-klasemen" class="text-white bg-white/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">KLASEMEN</button>
                 <button onclick="switchPage('event')" id="nav-event" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">EVENT</button>
-                <button onclick="switchPage('jersey')" id="nav-jersey" class="text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap border border-orange-500/30">👕 JERSEY</button>
+                <button onclick="switchPage('bhayangkara')" id="nav-bhayangkara" class="text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap border border-yellow-500/30">🏃 RBR 2026</button>
+                <button onclick="switchPage('jersey')" id="nav-jersey" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">👕 JERSEY</button>
                 <button onclick="switchPage('upload')" id="nav-upload" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">UPLOAD FOTO</button>
                 <button onclick="switchPage('tentang')" id="nav-tentang" class="text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap">TENTANG</button>
             </div>
@@ -55,6 +53,68 @@
     </nav>
 
     <div class="max-w-5xl mx-auto p-3 md:p-8 mt-2">
+
+        <section id="page-bhayangkara" class="page-section">
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-widest">Road To <span class="text-yellow-500">Riau Bhayangkara Run</span></h2>
+                <p class="text-sm md:text-base text-gray-400 mt-2 max-w-2xl mx-auto tracking-wide">Pendaftaran Peserta Lari Bersama Siak Runners</p>
+                
+                <div class="flex flex-wrap justify-center gap-3 mt-5 text-xs font-bold">
+                    <span class="bg-gray-800 text-yellow-500 px-3 py-2 rounded-lg border border-gray-600 flex items-center gap-2 shadow-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> 21 JUNI 2026</span>
+                    <span class="bg-gray-800 text-yellow-500 px-3 py-2 rounded-lg border border-gray-600 flex items-center gap-2 shadow-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 06:00 WIB Pagi</span>
+                    <span class="bg-gray-800 text-yellow-500 px-3 py-2 rounded-lg border border-gray-600 flex items-center gap-2 shadow-lg"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> Depan Istana Siak</span>
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 md:p-8 rounded-2xl max-w-2xl mx-auto border-t-4 border-yellow-500 shadow-2xl">
+                <div class="bg-red-900/40 border border-red-500/50 rounded-xl p-4 mb-6 text-center">
+                    <p class="text-sm md:text-base font-black text-red-400 uppercase tracking-widest animate-pulse">🔥 Kuota Sangat Terbatas! Pendaftaran Otomatis Ditutup Jika Penuh 🔥</p>
+                </div>
+
+                <form id="bhayangkara-form" class="flex flex-col gap-5" onsubmit="event.preventDefault(); submitBhayangkara();">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap</label>
+                        <input type="text" id="b-nama" required placeholder="Sesuai KTP" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-yellow-500" />
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Tanggal Lahir</label>
+                            <input type="date" id="b-tgllahir" required class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-yellow-500 cursor-pointer" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">No. Whatsapp / HP</label>
+                            <input type="tel" id="b-nohp" required placeholder="Contoh: 08123456789" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-yellow-500" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Alamat Email</label>
+                            <input type="email" id="b-email" required placeholder="email@anda.com" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-yellow-500" />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Ukuran Jersey Gratis</label>
+                            <select id="b-ukuran" required class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-yellow-500 cursor-pointer font-bold">
+                                <option value="">Pilih Ukuran...</option>
+                                <option value="S">Ukuran S</option>
+                                <option value="M">Ukuran M</option>
+                                <option value="L">Ukuran L</option>
+                                <option value="XL">Ukuran XL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-xl">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" id="b-bersedia" required class="mt-1 w-5 h-5 text-yellow-500 bg-gray-900 border-gray-600 rounded focus:ring-yellow-500">
+                            <span class="text-sm font-semibold text-gray-300 leading-relaxed">
+                                Saya bersedia menggunakan jersey yang diberikan oleh panitia dan sanggup hadir di lokasi sebelum acara *race* dimulai pada jam 06:00 WIB.
+                            </span>
+                        </label>
+                    </div>
+                    <button id="btn-submit-bhayangkara" type="submit" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-700 hover:from-yellow-400 hover:to-yellow-600 text-gray-900 font-black py-4 rounded-xl uppercase tracking-widest transition-all transform hover:scale-[1.02] shadow-[0_0_15px_rgba(234,179,8,0.4)] mt-2">Daftar Sekarang</button>
+                    <p id="submit-status-bhayangkara" class="text-center text-sm font-bold mt-2 hidden"></p>
+                </form>
+            </div>
+        </section>
 
         <section id="page-klasemen" class="page-section page-active">
             <div class="glass-panel rounded-2xl mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-center p-5 md:p-6 gap-5 relative overflow-hidden">
@@ -186,7 +246,6 @@
             </div>
 
             <div class="glass-panel p-6 md:p-8 rounded-2xl max-w-3xl mx-auto border-t-4 border-orange-500 shadow-2xl">
-
                 <div class="relative w-full mb-8 group border-b border-gray-700/50 pb-6">
                     <button type="button" onclick="scrollCarousel(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-orange-500 text-white w-10 h-10 rounded-full flex items-center justify-center transition backdrop-blur hidden md:flex border border-gray-500 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -196,46 +255,38 @@
                     </button>
 
                     <div id="jersey-slider" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scroll-smooth hide-scrollbar rounded-xl relative">
-
                         <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('Jersey-Nol.jpeg')">
                             <img src="Jersey-Nol.jpeg" class="w-full h-64 md:h-[450px] object-contain rounded-lg drop-shadow-xl mb-3" onerror="this.src='https://via.placeholder.com/400?text=Tanpa+Lengan'">
                             <p class="text-sm md:text-lg font-black text-white uppercase tracking-widest bg-gray-900/80 px-4 py-2 rounded-lg border border-gray-600 w-full text-center">1. Tanpa Lengan (Singlet)</p>
                             <div class="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded border border-gray-500 hidden md:block">Klik untuk Perbesar</div>
                         </div>
-
                         <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('Jersey-Lpk.jpeg')">
                             <img src="Jersey-Lpk.jpeg" class="w-full h-64 md:h-[450px] object-contain rounded-lg drop-shadow-xl mb-3" onerror="this.src='https://via.placeholder.com/400?text=Lengan+Pendek'">
                             <p class="text-sm md:text-lg font-black text-white uppercase tracking-widest bg-gray-900/80 px-4 py-2 rounded-lg border border-gray-600 w-full text-center">2. Lengan Pendek</p>
                             <div class="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded border border-gray-500 hidden md:block">Klik untuk Perbesar</div>
                         </div>
-
                         <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('Jersey-Lpg.jpeg')">
                             <img src="Jersey-Lpg.jpeg" class="w-full h-64 md:h-[450px] object-contain rounded-lg drop-shadow-xl mb-3" onerror="this.src='https://via.placeholder.com/400?text=Lengan+Panjang'">
                             <p class="text-sm md:text-lg font-black text-white uppercase tracking-widest bg-gray-900/80 px-4 py-2 rounded-lg border border-gray-600 w-full text-center">3. Lengan Panjang</p>
                             <div class="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded border border-gray-500 hidden md:block">Klik untuk Perbesar</div>
                         </div>
-
                         <div class="snap-center shrink-0 w-full flex flex-col items-center bg-gray-800/30 p-2 md:p-4 rounded-xl border border-gray-700 relative cursor-zoom-in" onclick="window.open('size-chart.jpeg')">
                             <img src="size-chart.jpeg" class="w-full h-64 md:h-[450px] object-contain rounded-lg drop-shadow-xl mb-3 bg-white" onerror="this.src='https://via.placeholder.com/400?text=Size+Chart'">
                             <p class="text-sm md:text-lg font-black text-orange-400 uppercase tracking-widest bg-gray-900/80 px-4 py-2 rounded-lg border border-orange-500/50 w-full text-center">📏 Panduan Ukuran (Size Chart)</p>
                             <div class="absolute top-4 right-4 bg-black/60 text-white text-[10px] px-2 py-1 rounded border border-gray-500 hidden md:block">Klik untuk Perbesar</div>
                         </div>
-
                     </div>
-
                     <div class="text-center mt-3">
                         <span class="text-[10px] md:text-xs text-gray-400 bg-gray-900 px-3 py-1.5 rounded-full border border-gray-700 font-bold uppercase tracking-widest shadow-lg inline-flex items-center gap-2">
-                            <svg class="w-3 h-3 animate-pulse text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                            Geser Gambar
-                            <svg class="w-3 h-3 animate-pulse text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            <svg class="w-3 h-3 animate-pulse text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg> Geser Gambar <svg class="w-3 h-3 animate-pulse text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </span>
                     </div>
                 </div>
-                <form id="jersey-form" class="flex flex-col gap-5" onsubmit="event.preventDefault(); submitJersey();">
 
+                <form id="jersey-form" class="flex flex-col gap-5" onsubmit="event.preventDefault(); submitJersey();">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 border-b border-gray-700 pb-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap</label>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Nama Lengkap Pemesan</label>
                             <input type="text" id="j-nama" required placeholder="Sesuai KTP/Panggilan" class="w-full bg-gray-900 border border-gray-700 p-3 rounded-xl text-white outline-none focus:border-orange-500" />
                         </div>
                         <div>
@@ -296,19 +347,19 @@
 
                     <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex justify-between items-center">
                         <div class="bg-orange-500/10 border border-orange-500/30 p-4 rounded-xl flex flex-col gap-2 w-full">
-                        <div class="flex justify-between items-center text-sm font-bold text-gray-300">
-                            <span>Subtotal:</span>
-                            <span id="j-subtotal-harga">Rp 135.000</span>
+                            <div class="flex justify-between items-center text-sm font-bold text-gray-300">
+                                <span>Subtotal:</span>
+                                <span id="j-subtotal-harga">Rp 135.000</span>
+                            </div>
+                            <div id="j-fee-qris-container" class="hidden justify-between items-center text-sm font-bold text-red-400">
+                                <span>Biaya QRIS (0.3%):</span>
+                                <span id="j-fee-qris">Rp 0</span>
+                            </div>
+                            <div class="border-t border-orange-500/30 pt-2 mt-1 flex justify-between items-center">
+                                <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Total Bayar:</span>
+                                <span id="j-total-harga" class="text-2xl font-black text-orange-400">Rp 135.000</span>
+                            </div>
                         </div>
-                        <div id="j-fee-qris-container" class="hidden justify-between items-center text-sm font-bold text-red-400">
-                            <span>Biaya QRIS (0.3%):</span>
-                            <span id="j-fee-qris">Rp 0</span>
-                        </div>
-                        <div class="border-t border-orange-500/30 pt-2 mt-1 flex justify-between items-center">
-                            <span class="text-sm font-bold text-gray-300 uppercase tracking-widest">Total Bayar:</span>
-                            <span id="j-total-harga" class="text-2xl font-black text-orange-400">Rp 135.000</span>
-                        </div>
-                    </div>
                     </div>
 
                     <div>
@@ -384,23 +435,75 @@
     </div>
 
     <script>
-        // === FUNGSI BARU: Kontrol Geser Carousel ===
+        // === FUNGSI: Kontrol Geser Carousel Jersey ===
         function scrollCarousel(direction) {
             const slider = document.getElementById('jersey-slider');
-            const scrollAmount = slider.clientWidth; // Geser sejauh lebar container
+            const scrollAmount = slider.clientWidth; 
             slider.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
         }
-        // ===========================================
 
         const API_URL = 'https://script.google.com/macros/s/AKfycby0v-8vDpnEYlw0uOe7yYg5rv30zWH6h8gNFlzePvcrSqz47Me_AzxnEHqaHuCZwvYBFw/exec';
-
         document.getElementById('btn-connect-strava').href = `https://www.strava.com/oauth/authorize?client_id=221203&response_type=code&redirect_uri=${API_URL}&approval_prompt=force&scope=activity:read_all`;
 
         let rawRunData = []; let profilesData = {}; let currentSortedData = []; let activeRunnerName = ""; let activeRunnerAllRuns = [];
 
-        // ----------------------------------------------------
-        // LOGIKA PEMESANAN JERSEY (UPDATE HARGA & ALAMAT)
-        // ----------------------------------------------------
+        // === FUNGSI SUBMIT FORM RBR 2026 ===
+        async function submitBhayangkara() {
+            const btn = document.getElementById('btn-submit-bhayangkara');
+            const status = document.getElementById('submit-status-bhayangkara');
+
+            const nama = document.getElementById('b-nama').value.trim();
+            const tglLahir = document.getElementById('b-tgllahir').value;
+            const noHp = document.getElementById('b-nohp').value.trim();
+            const email = document.getElementById('b-email').value.trim();
+            const ukuran = document.getElementById('b-ukuran').value;
+            const bersedia = document.getElementById('b-bersedia').checked;
+
+            if (nama === "" || tglLahir === "" || noHp === "" || email === "" || ukuran === "") {
+                alert("❌ Semua kolom wajib diisi!"); return;
+            }
+            if (!bersedia) {
+                alert("❌ Anda harus menyetujui pernyataan kesediaan hadir dan memakai jersey!"); return;
+            }
+
+            btn.innerHTML = `<span>⏳ Mengecek Kuota & Mengirim Data...</span>`; 
+            btn.disabled = true; 
+            status.classList.add('hidden');
+
+            try {
+                const payload = {
+                    action: "daftar_bhayangkara",
+                    namaLengkap: nama,
+                    tanggalLahir: tglLahir,
+                    email: email,
+                    noHp: noHp,
+                    ukuranJersey: ukuran,
+                    bersedia: "Ya"
+                };
+
+                const respon = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+                const hasil = await respon.json();
+
+                if (hasil.status === "success") { 
+                    status.innerText = "✅ Selamat! Anda berhasil terdaftar di Road To RBR 2026."; 
+                    status.className = "text-center text-green-400 font-bold mt-3 block p-3 bg-green-900/30 rounded-lg border border-green-500/50"; 
+                    document.getElementById('bhayangkara-form').reset();
+                } else if (hasil.status === "penuh") {
+                    status.innerText = "❌ Pendaftaran Gagal: " + hasil.message; 
+                    status.className = "text-center text-red-400 font-bold mt-3 block p-3 bg-red-900/30 rounded-lg border border-red-500/50"; 
+                } else {
+                    throw new Error("Gagal dari server");
+                }
+            } catch (e) { 
+                status.innerText = "❌ Terjadi kesalahan jaringan. Silakan coba lagi."; 
+                status.className = "text-center text-red-400 font-bold mt-3 block"; 
+            } finally { 
+                btn.innerHTML = `Daftar Sekarang`; 
+                btn.disabled = false; 
+            }
+        }
+
+        // === FUNGSI LOGIKA PEMESANAN JERSEY ===
         const HARGA_BASE = 135000;
 
         function toggleAlamat() {
@@ -417,7 +520,7 @@
             }
         }
 
-       function togglePembayaran() {
+        function togglePembayaran() {
             const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
             if(bayar === 'QRIS') {
                 document.getElementById('info-bri').style.display = 'none';
@@ -431,7 +534,6 @@
 
         function hitungTotal() {
             let subtotal = 0;
-            // Targetkan pembungkus '.jersey-item' agar bisa membaca model dan ukuran sekaligus
             let items = document.querySelectorAll('.jersey-item');
 
             items.forEach(item => {
@@ -443,12 +545,7 @@
                     let valUkuran = selUkuran.value;
                     let hargaSatuan = HARGA_BASE;
 
-                    // 1. Tambahan khusus Lengan Panjang
-                    if(valModel.includes('Lengan Panjang')) {
-                        hargaSatuan += 10000;
-                    }
-
-                    // 2. Tambahan ukuran oversize (berlaku untuk semua model)
+                    if(valModel.includes('Lengan Panjang')) hargaSatuan += 10000;
                     if(valUkuran === '2XL') hargaSatuan += 10000;
                     if(valUkuran === '3XL') hargaSatuan += 20000;
                     if(valUkuran === '4XL') hargaSatuan += 30000;
@@ -457,16 +554,14 @@
                 }
             });
 
-            // Tampilkan subtotal
             document.getElementById('j-subtotal-harga').innerText = 'Rp ' + subtotal.toLocaleString('id-ID');
 
-            // Cek metode pembayaran & logika fee QRIS
             let feeQris = 0;
             const bayar = document.querySelector('input[name="j-bayar"]:checked').value;
             const feeContainer = document.getElementById('j-fee-qris-container');
 
             if (bayar === 'QRIS' && subtotal > 500000) {
-                feeQris = subtotal * 0.003; // Biaya 0.3%
+                feeQris = subtotal * 0.003; 
                 document.getElementById('j-fee-qris').innerText = 'Rp ' + Math.round(feeQris).toLocaleString('id-ID');
                 feeContainer.classList.remove('hidden');
                 feeContainer.classList.add('flex');
@@ -475,10 +570,8 @@
                 feeContainer.classList.remove('flex');
             }
 
-            // Total Akhir
             let totalAkhir = subtotal + Math.round(feeQris);
             document.getElementById('j-total-harga').innerText = 'Rp ' + totalAkhir.toLocaleString('id-ID');
-
             return totalAkhir;
         }
 
@@ -529,8 +622,6 @@
         async function submitJersey() {
             const btn = document.getElementById('btn-submit-jersey');
             const status = document.getElementById('submit-status-jersey');
-
-            // 1. AMBIL NILAI & HILANGKAN SPASI KOSONG
             const nama = document.getElementById('j-nama').value.trim();
             const noHp = document.getElementById('j-nohp').value.trim();
             const qty = document.getElementById('j-qty').value;
@@ -538,7 +629,6 @@
             const alamatInput = document.getElementById('j-alamat').value.trim();
             const file = document.getElementById('j-bukti').files[0];
 
-            // 2. VALIDASI KETAT
             if (nama === "") { alert("❌ Nama Lengkap wajib diisi!"); document.getElementById('j-nama').focus(); return; }
             if (noHp === "") { alert("❌ Nomor WhatsApp wajib diisi!"); document.getElementById('j-nohp').focus(); return; }
             if (metode === 'Dikirim ke Tujuan' && alamatInput === "") { alert("❌ Alamat lengkap wajib diisi karena Anda memilih dikirim ke tujuan!"); document.getElementById('j-alamat').focus(); return; }
@@ -554,14 +644,10 @@
                     let mdl = div.querySelector('.j-model').value;
                     let uk = div.querySelector('.j-ukuran').value;
                     let nd = div.querySelector('.j-namadada').value.trim() || '-';
-                    
-                    // Bersihkan tulisan "+ Rp 10.000" agar rekap di Google Sheet terlihat rapi
                     let modelClean = mdl.includes("Panjang") ? "Lengan Panjang" : (mdl.includes("Tanpa") ? "Tanpa Lengan" : "Lengan Pendek");
-
                     detailJersey.push({ model: modelClean, ukuran: uk, namaDada: nd });
                 });
 
-                // Upload gambar ke Cloudinary
                 const CN = "dsai9btzj", UP = "ml_default"; 
                 const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", UP);
                 const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${CN}/image/upload`, { method: "POST", body: fd });
@@ -603,29 +689,29 @@
                 btn.disabled = false; 
             }
         }
-        // ----------------------------------------------------
 
+        // === FUNGSI MENU NAVIGASI PENGATUR HALAMAN ===
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
             document.getElementById('page-' + pageId).classList.add('page-active');
 
             document.querySelectorAll('nav button').forEach(btn => { 
-                btn.classList.remove('text-white', 'bg-white/10', 'text-orange-400', 'hover:bg-orange-500/10', 'border', 'border-orange-500/30'); 
-                btn.classList.add('text-gray-400'); 
+                btn.className = "text-gray-400 hover:text-white hover:bg-white/5 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap"; 
             });
 
             const activeBtn = document.getElementById('nav-' + pageId);
-            if(pageId === 'jersey') {
-                activeBtn.classList.add('text-orange-400', 'bg-orange-500/10', 'border', 'border-orange-500/30');
-                activeBtn.classList.remove('text-gray-400');
+            if(pageId === 'bhayangkara') {
+                activeBtn.className = "text-yellow-400 hover:text-yellow-300 bg-yellow-500/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap border border-yellow-500/30 font-bold";
+            } else if(pageId === 'jersey') {
+                activeBtn.className = "text-orange-400 hover:text-orange-300 bg-orange-500/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap border border-orange-500/30 font-bold";
             } else {
-                activeBtn.classList.add('text-white', 'bg-white/10');
-                activeBtn.classList.remove('text-gray-400');
+                activeBtn.className = "text-white bg-white/10 px-2 md:px-3 py-1.5 md:py-2 rounded-lg transition-colors whitespace-nowrap font-bold";
             }
 
             if (pageId === 'event') loadEventData();
         }
 
+        // === SISA FUNGSI LEADERBOARD STRAVA & POSTER ===
         async function loadLeaderboardData() {
             try {
                 const response = await fetch(API_URL + "?page=klasemen");
@@ -672,10 +758,7 @@
             const tbody = document.getElementById('leaderboard-body'); tbody.innerHTML = '';
 
             if (currentSortedData.length === 0) { 
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-12">
-                    <p class="text-gray-400 font-bold mb-2">Belum ada data terekam.</p>
-                </td></tr>`; 
-                return; 
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-12"><p class="text-gray-400 font-bold mb-2">Belum ada data terekam.</p></td></tr>`; return; 
             }
 
             currentSortedData.forEach((runner, i) => {
@@ -782,26 +865,26 @@
             } catch (e) { console.error("Gagal memuat kalender event:", e); }
         }
 
-        // FUNGSI LOGIK POTRET POSTER CANVAS
-        async function generatePosterIG(event) {
-            const tombol = event.currentTarget;
-            const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Melukis Poster...";
-            tombol.disabled = true;
+        function exportToExcel() {
+            if (currentSortedData.length === 0) return;
+            let csv = "Pos,Nama,Total Lari,Jarak(KM)\n";
+            currentSortedData.forEach((r, i) => csv += `${i+1},"${r.name}",${r.runs},${r.distance.toFixed(2)}\n`);
+            const link = document.createElement("a"); link.href = encodeURI("data:text/csv;charset=utf-8," + csv);
+            link.download = `Rekap_SR_${new Date().getTime()}.csv`; link.click();
+        }
 
+        async function generatePosterIG(event) {
+            const tombol = event.currentTarget; const teksAsli = tombol.innerHTML;
+            tombol.innerHTML = "⏳ Melukis Poster..."; tombol.disabled = true;
             try {
                 const sel = document.getElementById('time-filter');
                 document.getElementById('poster-tanggal').innerText = `PERIODE: ${sel.options[sel.selectedIndex].text}`;
-
-                const daftarJuara = document.getElementById('poster-daftar-juara');
-                daftarJuara.innerHTML = ''; 
+                const daftarJuara = document.getElementById('poster-daftar-juara'); daftarJuara.innerHTML = ''; 
                 let top5Data = currentSortedData.slice(0, 5); 
-
                 let htmlDaftar = '';
                 top5Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
-
                     htmlDaftar += `
                         <div style="background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); border-left: 6px solid #f97316; border-radius: 16px; padding: 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 25px;">
@@ -809,147 +892,79 @@
                                 <img src="${picUrl}" crossorigin="anonymous" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #ea580c; object-fit: cover; background: #1e293b;">
                                 <span style="font-size: 35px; font-weight: bold; color: #e6edf3;">${pelari.name}</span>
                             </div>
-                            <div style="text-align: right;">
-                                <span style="font-size: 45px; font-weight: 900; color: #58a6ff;">${pelari.distance.toFixed(2)} <span style="font-size: 24px; color:#9ca3af;">KM</span></span>
-                            </div>
-                        </div>
-                    `;
+                            <div style="text-align: right;"><span style="font-size: 45px; font-weight: 900; color: #58a6ff;">${pelari.distance.toFixed(2)} <span style="font-size: 24px; color:#9ca3af;">KM</span></span></div>
+                        </div>`;
                 });
                 daftarJuara.innerHTML = htmlDaftar;
-
-                const posterContainer = document.getElementById('poster-container');
-                const posterElemen = document.getElementById('poster-weekly');
-
-                posterContainer.classList.remove('hidden'); 
-                posterContainer.style.position = 'absolute';
-                posterContainer.style.left = '-9999px';
-                posterContainer.style.top = '0';
-
-                tombol.innerHTML = "📸 Memotret...";
-
+                const posterContainer = document.getElementById('poster-container'); const posterElemen = document.getElementById('poster-weekly');
+                posterContainer.classList.remove('hidden'); posterContainer.style.position = 'absolute'; posterContainer.style.left = '-9999px';
                 const daftarGambar = Array.from(posterElemen.getElementsByTagName('img'));
-                await Promise.all(daftarGambar.map(img => {
-                    if (img.complete) return Promise.resolve();
-                    return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
-                }));
+                await Promise.all(daftarGambar.map(img => { if (img.complete) return Promise.resolve(); return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; }); }));
                 await new Promise(r => setTimeout(r, 500)); 
-
                 const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0b0e14' });
-
-                posterContainer.classList.add('hidden');
-                posterContainer.style.position = 'fixed';
-                posterContainer.style.left = '0';
-
+                posterContainer.classList.add('hidden'); posterContainer.style.position = 'fixed'; posterContainer.style.left = '0';
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
-                    const blob = await (await fetch(imageURI)).blob();
-                    const file = new File([blob], 'Feed-Leaderboard.jpg', { type: 'image/jpeg' });
+                    const blob = await (await fetch(imageURI)).blob(); const file = new File([blob], 'Feed-Leaderboard.jpg', { type: 'image/jpeg' });
                     await navigator.share({ title: 'Siak Runners Leaderboard', files: [file] });
                 } else {
-                    const link = document.createElement('a'); link.download = 'SiakRunners-Feed.jpg';
-                    link.href = imageURI; link.click();
+                    const link = document.createElement('a'); link.download = 'SiakRunners-Feed.jpg'; link.href = imageURI; link.click();
                 }
-            } catch (err) {
-                console.error(err); alert("Gagal meracik poster.");
-                document.getElementById('poster-container').classList.add('hidden');
-            } finally {
-                tombol.innerHTML = teksAsli; tombol.disabled = false;
-            }
+            } catch (err) { alert("Gagal meracik poster."); } finally { tombol.innerHTML = teksAsli; tombol.disabled = false; }
         }
 
         async function generatePosterStory(event) {
-            const tombol = event.currentTarget;
-            const teksAsli = tombol.innerHTML;
-            tombol.innerHTML = "⏳ Melukis Poster...";
-            tombol.disabled = true;
-
+            const tombol = event.currentTarget; const teksAsli = tombol.innerHTML;
+            tombol.innerHTML = "⏳ Melukis Poster..."; tombol.disabled = true;
             try {
-                const filterVal = document.getElementById('time-filter').value;
-                const now = new Date(); let s, e, jenisPeriode = "KUSTOM";
+                const filterVal = document.getElementById('time-filter').value; const now = new Date(); let s, e, jenisPeriode = "KUSTOM";
                 if (filterVal === 'minggu_ini') { let d = now.getDay() || 7; s = new Date(now.getFullYear(), now.getMonth(), now.getDate() - d + 1); e = new Date(s); e.setDate(s.getDate() + 6); jenisPeriode = "MINGGUAN"; } 
                 else if (filterVal === 'bulan_ini') { s = new Date(now.getFullYear(), now.getMonth(), 1); e = new Date(now.getFullYear(), now.getMonth() + 1, 0); jenisPeriode = "BULANAN"; } 
                 else if (filterVal === 'bulan_lalu') { s = new Date(now.getFullYear(), now.getMonth() - 1, 1); e = new Date(now.getFullYear(), now.getMonth(), 0); jenisPeriode = "BULANAN"; } 
                 else if (filterVal === 'kustom') { s = new Date(document.getElementById('start-date').value); e = new Date(document.getElementById('end-date').value); } 
                 else { let [y, m] = filterVal.split('-'); s = new Date(y, m-1, 1); e = new Date(y, m, 0); jenisPeriode = "BULANAN"; }
-
                 const formatTgl = (tgl) => tgl.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
                 document.getElementById('poster-tanggal-story').innerText = `${jenisPeriode}: ${formatTgl(s)} - ${formatTgl(e)}`;
-
-                const daftarJuara = document.getElementById('poster-daftar-juara-story');
-                daftarJuara.innerHTML = ''; 
-                let top10Data = currentSortedData.slice(0, 10); 
-
+                const daftarJuara = document.getElementById('poster-daftar-juara-story'); daftarJuara.innerHTML = ''; let top10Data = currentSortedData.slice(0, 10); 
                 let htmlDaftarJuara = '';
                 top10Data.forEach((pelari, index) => {
                     let medali = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
                     let picUrl = profilesData[pelari.name]?.foto || 'https://via.placeholder.com/150';
-
                     htmlDaftarJuara += `
                         <div style="background: linear-gradient(90deg, #1e293b 0%, #0f172a 100%); border-left: 8px solid ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#b45309' : '#f97316'}; border-radius: 16px; padding: 18px 25px; display: flex; align-items: center; justify-content: space-between;">
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <span style="font-size: 35px; font-weight: bold; width: 45px; text-align: center;">${medali}</span>
                                 <img src="${picUrl}" crossorigin="anonymous" style="width: 75px; height: 75px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: #1e293b;">
-                                <div style="display: flex; flex-direction: column;">
-                                    <span style="font-size: 28px; font-weight: bold; color: #e6edf3;">${pelari.name}</span>
-                                    <span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span>
-                                </div>
+                                <div style="display: flex; flex-direction: column;"><span style="font-size: 28px; font-weight: bold; color: #e6edf3;">${pelari.name}</span><span style="font-size: 18px; color: #cbd5e1; margin-top: 2px;">${pelari.runs}x Aktivitas Lari</span></div>
                             </div>
-                            <div style="text-align: right;">
-                                <span style="font-size: 42px; font-weight: 900; color: #58a6ff;">${pelari.distance.toFixed(2)} <span style="font-size: 20px; color:#9ca3af;">KM</span></span>
-                            </div>
-                        </div>
-                    `;
+                            <div style="text-align: right;"><span style="font-size: 42px; font-weight: 900; color: #58a6ff;">${pelari.distance.toFixed(2)} <span style="font-size: 20px; color:#9ca3af;">KM</span></span></div>
+                        </div>`;
                 });
                 daftarJuara.innerHTML = htmlDaftarJuara;
-
-                const posterContainer = document.getElementById('poster-container-story');
-                const posterElemen = document.getElementById('poster-weekly-story');
-
-                posterContainer.classList.remove('hidden'); 
-                posterContainer.style.position = 'absolute';
-                posterContainer.style.left = '-9999px';
-                posterContainer.style.top = '0';
-
-                tombol.innerHTML = "📸 Memotret...";
-
+                const posterContainer = document.getElementById('poster-container-story'); const posterElemen = document.getElementById('poster-weekly-story');
+                posterContainer.classList.remove('hidden'); posterContainer.style.position = 'absolute'; posterContainer.style.left = '-9999px';
                 const daftarGambar = Array.from(posterElemen.getElementsByTagName('img'));
-                await Promise.all(daftarGambar.map(img => {
-                    if (img.complete) return Promise.resolve();
-                    return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
-                }));
+                await Promise.all(daftarGambar.map(img => { if (img.complete) return Promise.resolve(); return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; }); }));
                 await new Promise(r => setTimeout(r, 500)); 
-
                 const canvas = await html2canvas(posterElemen, { scale: 2, useCORS: true, backgroundColor: '#0b0e14' });
-
-                posterContainer.classList.add('hidden');
-                posterContainer.style.position = 'fixed';
-                posterContainer.style.left = '0';
-
+                posterContainer.classList.add('hidden'); posterContainer.style.position = 'fixed'; posterContainer.style.left = '0';
                 const imageURI = canvas.toDataURL("image/jpeg", 0.9);
                 if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
-                    const blob = await (await fetch(imageURI)).blob();
-                    const file = new File([blob], 'Top10-Leaderboard.jpg', { type: 'image/jpeg' });
+                    const blob = await (await fetch(imageURI)).blob(); const file = new File([blob], 'Top10-Leaderboard.jpg', { type: 'image/jpeg' });
                     await navigator.share({ title: 'Top 10 Siak Runners', files: [file] });
                 } else {
-                    const link = document.createElement('a'); link.download = 'SiakRunners-Top10.jpg';
-                    link.href = imageURI; link.click();
+                    const link = document.createElement('a'); link.download = 'SiakRunners-Top10.jpg'; link.href = imageURI; link.click();
                 }
-            } catch (err) {
-                console.error(err); alert("Gagal meracik poster story.");
-                document.getElementById('poster-container-story').classList.add('hidden');
-            } finally {
-                tombol.innerHTML = teksAsli; tombol.disabled = false;
-            }
+            } catch (err) { alert("Gagal meracik poster story."); } finally { tombol.innerHTML = teksAsli; tombol.disabled = false; }
         }
+
+        loadLeaderboardData();
     </script>
 
     <div id="poster-container" class="hidden fixed top-0 left-0 -z-50">
         <div id="poster-weekly" style="width: 1080px; height: 1350px; background: #0b0e14; padding: 60px; font-family: 'Helvetica', sans-serif; position: relative; overflow: hidden;">
-
-            <img id="gambar-personal-overlay" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: 0; width: 60%; z-index: 0; opacity: 0.7;">
-
             <div style="position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center;">
-                <img src="logo-siak-runners.png" style="width: 250px; height: auto; object-fit: contain; margin-bottom: 20px;">
+                <img src="Logo-SR-BGR.png" style="width: 320px; height: auto; object-fit: contain; margin-bottom: 20px;">
                 <h1 style="font-family: 'Helofone', sans-serif; font-size: 75px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 3px 5px 15px rgba(0,0,0,0.4);">
                     <span style="color: white;">SIAK</span> <span style="color: #dc2626;">RUNNERS</span>
                 </h1>
@@ -957,9 +972,7 @@
                     <span id="poster-tanggal"></span>
                 </div>
             </div>
-
             <div id="poster-daftar-juara" style="position: relative; z-index: 10; margin-top: 50px; display: flex; flex-direction: column; gap: 20px;"></div>
-
             <div style="position: absolute; bottom: 50px; left:0; width: 100%; text-align: center; z-index: 10;">
                 <p style="color: #64748b; font-size: 22px; font-weight: 600;">Terus Bergerak, Terus Berlari! | siakrunners.vercel.app</p>
             </div>
@@ -968,22 +981,17 @@
 
     <div id="poster-container-story" class="hidden fixed top-0 left-0 -z-50">
         <div id="poster-weekly-story" style="width: 1080px; height: 1920px; background: #0b0e14; padding: 100px 60px; font-family: 'Helvetica', sans-serif; position: relative; box-sizing: border-box; overflow: hidden;">
-
-            <img id="gambar-personal-overlay-story" src="" crossorigin="anonymous" style="display: none; position: absolute; bottom: 0; left: -50px; width: 75%; z-index: 0; opacity: 0.85;">
-
             <div style="position: relative; z-index: 10; text-align: center; margin-bottom: 80px; display: flex; flex-direction: column; align-items: center;">
-                <h2 style="font-size: 40px; color: #8b949e; letter-spacing: 8px; margin-bottom: 30px; text-transform: uppercase;">LEADERBOARD</h2>
-                <img src="logo-siak-runners.png" style="width: 400px; height: auto; object-fit: contain; margin-bottom: 40px;">
-                <h1 style="font-family: 'Helofone', sans-serif; font-size: 110px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 4px 8px 12px rgba(0,0,0,0.5);">
+                <h2 style="font-size: 40px; color: #8b949e; letter-spacing: 8px; margin-bottom: 30px; text-transform: uppercase;">Top 10 Leaderboard</h2>
+                <img src="Logo-SR-BGR.png" style="width: 450px; height: auto; object-fit: contain; margin-bottom: 40px;">
+                <h1 style="font-family: 'Helofone', sans-serif; font-size: 100px; font-weight: 900; margin: 10px 0; text-transform: uppercase; text-shadow: 4px 8px 12px rgba(0,0,0,0.5);">
                     <span style="color: white;">SIAK</span> <span style="color: #dc2626;">RUNNERS</span>
                 </h1>
                 <div style="background: rgba(255,255,255,0.08); padding: 20px 60px; border-radius: 50px; margin-top: 40px; border: 1px solid #30363d;">
                     <p id="poster-tanggal-story" style="font-size: 35px; color: #e6edf3; font-weight: 600; margin: 0;"></p>
                 </div>
             </div>
-
             <div id="poster-daftar-juara-story" style="position: relative; z-index: 10; display: flex; flex-direction: column; gap: 25px;"></div>
-
             <div style="position: absolute; bottom: 100px; left:0; width: 100%; text-align: center; z-index: 10;">
                 <p style="color: #c9d1d9; font-size: 35px; font-weight: 700; margin-bottom: 15px;">Terus Bergerak, Terus Berlari!</p>
                 <p style="color: #8b949e; font-size: 25px; margin: 0;">siakrunners.vercel.app</p>
